@@ -133,8 +133,8 @@ echo_log "install dev tool (unzip)"
 sudo pacman -S unzip
 
 echo_log "install dev tool (tig, tmux, xsel, ripgrep, ranger, jq, jre-openjdk, jdk-openjdk)"
-sudo pacman -S tig tmux xsel ripgrep ranger jq  \
-               jre-openjdk jdk-openjdk
+sudo pacman -S tig tmux xsel ripgrep ranger jq
+sudo pacman -S jre-openjdk jdk-openjdk
 
 echo_log "install dev tool (vlc, blender, conky, mpv, flameshot, feh, rofi)"
 sudo pacman -S vlc blender conky mpv flameshot feh rofi
