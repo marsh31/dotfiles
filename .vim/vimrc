@@ -1,0 +1,50 @@
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" File: vimrc
+" Author: marsh31
+" Description: vimrc
+" Last Modified: August 15, 2020
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+" Set setting files path and load the files.
+" runtime! testconfig/*.vim
+
+function s:read_config(path)
+  let filelist = glob(a:path)
+  let splitted = split(filelist, "\n")
+
+  for l:file in splitted
+    " echo l:file
+    exe 'source' l:file
+  endfor
+endfunction
+
+
+" config list {{{
+source $HOME/.vim/config/plugins.vim
+source $HOME/.vim/config/base.vim
+source $HOME/.vim/config/commandline.vim
+source $HOME/.vim/config/diff.vim
+source $HOME/.vim/config/files.vim
+source $HOME/.vim/config/fold.vim
+source $HOME/.vim/config/indent.vim
+source $HOME/.vim/config/mark.vim
+source $HOME/.vim/config/plugins.vim
+source $HOME/.vim/config/qf.vim
+source $HOME/.vim/config/search.vim
+source $HOME/.vim/config/session.vim
+source $HOME/.vim/config/tabpage.vim
+source $HOME/.vim/config/keys.vim
+source $HOME/.vim/config/statusline.vim
+source $HOME/.vim/config/color.vim
+source $HOME/.vim/config/abbreviation.vim
+
+call s:read_config("$HOME/.vim/config/plugged/*.vim")
+call s:read_config("$HOME/.vim/config/keys/*.vim")
+" }}}
+
+" source $HOME/.vim/vimrc-tiny
+
+
+
+inoremap jj <ESC>
+command! W execute 'w !sudo tee % > /dev/null' <bar> edit!

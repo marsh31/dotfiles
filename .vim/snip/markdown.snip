@@ -1,0 +1,9 @@
+snippet     init_memo
+abbr        information of the memo
+options     head
+  ${1:title}
+  ----------------------
+  Date: `strftime('%Y-%m-%d %H:%M')`
+  Tags: [${2}]
+  ----------------------
+  ${0}

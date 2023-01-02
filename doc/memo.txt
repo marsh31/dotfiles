@@ -1,0 +1,52 @@
+# memo
+
+$HOME/
+    bash...
+        -> bash
+    .dir_colors
+        -> color setting for ls.
+    .dmenurc
+        -> launcher.
+    .dmrc
+        -> ..?..
+    ersion -> ..?..
+    .gimp-2.8/
+    .lesshst
+        -> less history file.
+    .local
+    .makepkg.conf
+    .moc/
+        -> MOC Player config.
+    .profile
+    .urxvt
+    .vim
+    .Xauthority
+    .Xclients
+    .xinitrc
+    .Xresources
+    .Xmodmap
+
+
+
+$HOME/.config/
+    Kvantum/
+        -> theme engine
+    dmenu-recent/
+    dunst/
+    epdfview/
+    gconf/desktop/
+    gtk-3.0/
+    hexchat/
+    libfm/
+    morc_menu/
+    nitrogen/
+    pcmanfm/default/
+    qt5ct/
+    volumeicon/
+    xfce/
+    mimeapps.list
+    picom.conf
+
+
+下記のようなコマンドでranger.desktopを記載して、ファイルを扱うようにするのもありかも
+> st -c Ranger -n Ranger ranger

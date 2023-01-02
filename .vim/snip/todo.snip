@@ -1,0 +1,11 @@
+snippet     todo
+abbr        add new todo.
+options     head
+  `strftime('%Y-%m-%d')` ${1:todo} +${2:project} @${0:context}
+
+
+snippet     todo_priority
+abbr        add new todo with priority.
+options     head
+  (${1:A}) `strftime('%Y-%m-%d')` ${2:todo} +${3:project} @${0:context}
+

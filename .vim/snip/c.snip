@@ -1,0 +1,15 @@
+snippet     inc
+abbr        #include <...>
+options     head
+  #include <${1:stdio.h}>$0
+
+snippet     init
+abbr        init
+options     head
+  #include <${1:stdio.h}>
+
+  int main(int argc, char *argv[])
+  {
+  ${0}
+  return 0;
+  }

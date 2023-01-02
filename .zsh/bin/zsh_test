@@ -1,0 +1,14 @@
+zsh_test() {
+  echo "tes"
+  echo "test"
+  echo "TEST"
+}
+
+main() {
+  echo "this is test of main"
+}
+
+zsh_test $@
+main $@
+
+# vim: ft=sh

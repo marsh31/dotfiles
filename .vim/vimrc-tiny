@@ -1,0 +1,32 @@
+
+scriptencoding utf-8
+function! s:modename() abort
+	let m = mode()
+	if m =~ 'i'
+		return 'INSERT'
+	elseif m =~ 'n'
+		return 'NORMAL'
+	elseif m =~ 'v'
+		return 'VISUAL'
+	elseif m =~ 'V'
+		return 'V-LINE'
+	endif
+endfunction
+
+function! s:statusline() abort
+    return join([
+	\ s:modename(),
+        \ '%f%m%r%h%w',
+        \ '%{exists("w:quickfix_title") ? w:quickfix_title : ""}',
+        \ '%=',
+        \ '%{&fileencoding}',
+        \ '%{&filetype}',
+	\ '[%n]',
+	\ '%p%%',
+	\ '%l:%c',
+        \])
+endfunction
+
+let &statusline=printf("%%!%s()", get(function("s:statusline"), "name"))
+set laststatus=2
+

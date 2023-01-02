@@ -1,0 +1,13 @@
+--column
+
+--hidden
+
+--line-number
+--no-heading
+
+--glob
+!git/*
+
+--color=always
+
+--smart-case

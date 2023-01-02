@@ -1,0 +1,14 @@
+snippet function "function"
+function! ${1:name}($2)
+	$0
+endfunction
+endsnippet
+snippet plug_config_header "plugin config header"
+" NAME: $1
+" PATH: $0
+endsnippet	
+
+
+snippet abbr.cmd "description"
+cabbrev <expr> $1 (getcmdtype() ==# ":" && getcmdline() ==# "$1" ) ? "$2" : "$1"$0
+endsnippet

@@ -1,0 +1,39 @@
+#!/bin/bash
+#
+# 
+
+
+alert() {
+    if [[ "$(uname -s)" = "Linux" ]]; then
+        notify-send -u low -i terminal "$1" "$2"
+
+    elif [[ "$(uname -s)" = "Darwin" ]]; then
+        osascript -e "display notification \"$1\" with title \"$2\""
+    fi
+}
+
+main() {
+    local title=" "
+    local body=" "
+
+    for OPT in "$@"; do
+        case $OPT in
+            '-t' )
+            title="$2"
+            shift 2
+            ;;
+
+            * )
+            body="$OPT"
+            shift
+            ;;
+
+        esac
+    done
+
+    alert "$title" "$body"
+}
+
+main "$@"
+
+

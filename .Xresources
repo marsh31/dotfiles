@@ -1,0 +1,17 @@
+! 
+!
+!
+! NOTE:
+!     Update `xrdb -merge ~/.Xresources`
+!     check class `xporp` and click window.
+
+
+
+
+
+! St.font: xft:SauceCodePro Nerd Font Mono:style=Regular:size=12
+
+
+
+
+

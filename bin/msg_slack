@@ -1,0 +1,107 @@
+#!/usr/bin/bash
+# 
+# https://hooks.slack.com/services/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
+# This web_hook send msg to general channel on default.
+
+_VERSION=1.0.0
+_CHANNEL="general"
+_MESSAGE="text"
+_USERNAME="msg_slack"
+_ARGS=()
+
+
+# MARK: - version
+version() {
+  echo "$(basename $0) version $_VERSION"
+}
+
+# MARK: - usage
+usage() {
+cat << EOF >&2
+Usage: $(basename $0) [<options>] [<args>]
+
+Arguments           Set the message to send to slack
+
+Options:
+  -c, --channel     Set the channel for sending msg to slack
+  -u, --user        Set the user name
+
+  -h, --help        Display the help of this script
+  -v, --version     Display the version of this script
+
+EOF
+}
+
+
+_parse() {
+  while [[ $# -gt 0 ]]; do
+    case "$1" in
+      '-c' | '--channel')
+        if [[ -n "$2" ]] && [[ "$2" =~ ^[^-]+ ]]; then
+          _CHANNEL="$2"
+
+        else
+          usage
+          exit 1
+
+        fi
+        shift
+        ;;
+
+
+      '-u' | '--user' )
+        if [[ -z "$2" ]] || [[ "$2" =~ ^-+ ]]; then
+          usage
+          exit 1
+
+        else
+          _USERNAME="$2"
+
+        fi
+        shift
+        ;;
+
+      '-h' | '--help')
+        usage
+        exit 0
+        ;;
+
+      '-v' | '--version')
+        version
+        exit 0
+        ;;
+
+      *)
+        _ARGS=(${_ARGS[@]} "$1")
+        ;;
+    esac
+    shift 1
+  done
+
+
+  _MESSAGE="${_ARGS[@]}"
+}
+
+main() {
+  _parse $@
+
+  web_hook="https://hooks.slack.com/services/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"
+  payload=$(cat << EOF
+{
+  "username": "$_USERNAME",
+  "channel": "#$_CHANNEL",
+  "text": "$_MESSAGE"
+}
+EOF
+)
+  # echo "$payload"
+  result=$(curl -Ss -X POST -H "Contents-type: application/json" --data "$payload" $web_hook)
+
+  if [[ "$result" != "ok" ]]; then
+    echo "illegal paramator"
+  fi
+}
+
+
+main $@
+# vim: ft=sh

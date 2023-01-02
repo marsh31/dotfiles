@@ -1,0 +1,188 @@
+# * sequence 
+#   sequence use `seq` prefix.
+
+
+#######################################################################
+#                                theme                                #
+#######################################################################
+snippet theme_monochrome "monochrome theme" b
+skinparam monochrome true${0}
+endsnippet
+
+
+
+#######################################################################
+#                               config                                #
+#######################################################################
+snippet set_seq_number "set sequence number" b
+autonumber${0}
+endsnippet
+
+snippet title "title of uml"
+title ${0:title}
+endsnippet
+
+
+#######################################################################
+#                                tools                                #
+#######################################################################
+snippet init "init uml"
+@startuml
+${0}
+@enduml
+endsnippet
+
+
+#######################################################################
+#                               object
+#######################################################################
+snippet participant "participant of uml"
+participant ${0}
+endsnippet
+
+snippet actor "actor of uml"
+actor ${0}
+endsnippet
+
+snippet boundary "boundary of uml"
+boundary ${0}
+endsnippet
+
+snippet control "control of uml"
+control ${0}
+endsnippet
+
+snippet entity "entity of uml"
+entity ${0}
+endsnippet
+
+snippet database "database of uml"
+database ${0}
+endsnippet
+
+snippet collections "collections of uml"
+collections ${0}
+endsnippet
+
+snippet as "as"
+as ${0}
+endsnippet
+
+
+#######################################################################
+#                              sequence                               #
+#######################################################################
+snippet seq_create "create instance"
+${1:src} -> ${2:dest} ** : ${3:class}
+endsnippet
+
+snippet seq_delete "delete instance"
+${1:src} -> ${2:dest} !! : ${3:class}
+endsnippet
+
+
+snippet seq_request "src send request" b
+${1:src} -> ${2:dest} : ${3:action}
+endsnippet
+
+
+# activate is "src -> dest ++ : msg"
+snippet seq_request_with_activate "activate function" b
+${1:src} -> ${2:dest} : ${3:action}
+activate $2${0}
+endsnippet
+
+
+snippet seq_response "dest send response" b
+${1:src} <-- ${2:dest} : ${3:action}
+endsnippet
+
+# activate is "src <-- dest -- : msg"
+snippet seq_response_with_deactivate "deactivate" b
+${1:src} <-- ${2:dest} : ${3:action}
+deactivate $2${0}
+endsnippet
+
+
+snippet seq_return "return of sequence" b
+return ${0:message}
+endsnippet
+
+
+snippet seq_if-else "if-else of sequence" b
+alt ${1:condition}
+	${0:body}
+else ${2:condition}
+	
+end
+endsnippet
+
+snippet seq_else "else of sequence" b
+else ${1:condition}
+	${0:body}
+endsnippet
+
+snippet seq_if "only if of sequence" b
+opt ${1:condition}
+	${0:body}
+end
+endsnippet
+
+snippet seq_loop "loop of sequence" b
+loop ${1:condition}
+	${0:body}
+end
+endsnippet
+
+snippet seq_break "break with condition of sequence" b
+break ${1:condition}
+	${0:body}
+end
+endsnippet
+
+
+snippet seq_group "group of sequence" b
+group ${1:title}
+	${0:body}
+end
+endsnippet
+
+
+snippet seq_note "note of sequence" b
+note ${1:direction}
+	${0:note_body}
+end note
+endsnippet
+
+
+snippet seq_ref "reference of sequence" b
+ref ${1:direction}
+	${0:body}
+endref
+endsnippet
+
+
+snippet seq_bar "horizontal bar of sequence" b
+== ${0} ==
+endsnippet
+
+snippet seq_interval "interval ... of sequence" b
+...${0:interval}...
+endsnippet
+
+
+snippet seq_in_left "input from left" b
+[-> ${1:class} : ${0:msg}
+endsnippet
+
+snippet seq_out_left "output to left" b
+[<-- ${1:class} : ${0:msg}
+endsnippet
+
+snippet seq_in_right "input from right" b
+${1:class} <--] : ${0:msg}
+endsnippet
+
+snippet seq_out_right "output to right" b
+${1:class} -->] : ${0:msg}
+endsnippet

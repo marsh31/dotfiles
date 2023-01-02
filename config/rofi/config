@@ -1,0 +1,14 @@
+rofi.show-icons:        true
+rofi.modi:              drun,run,window,ssh,system:~/.config/rofi/system.sh
+rofi.lines:             10
+rofi.line-padding:      7
+rofi.matching:          fuzzy
+rofi.font:              Roboto 14
+rofi.line-margin:       0
+rofi.sidebar-mode:      true
+rofi.kb-cancel:         Escape,Control+c
+rofi.kb-mode-previous:  Alt+h
+rofi.kb-mode-next:      Alt+l,Control+l
+rofi.hide-scrollbar:    true
+rofi.separator-style:   none
+rofi.theme:             /usr/share/rofi/themes/Arc-Dark.rasi

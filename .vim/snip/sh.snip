@@ -1,0 +1,24 @@
+snippet     init
+abbr        init
+options     head
+  #!/usr/bin/env ${1:env}
+
+  main() {
+    ${1::}
+  }
+
+  main $@
+
+snippet     cat_eof
+abbr        cat << EOF
+options     head
+  cat << EOF >&2
+  $0
+  EOF
+
+snippet     if_type
+abbr        type_check
+options     head
+  if type ${1:target} >/dev/null 2>&1; then
+    ${0}
+  fi

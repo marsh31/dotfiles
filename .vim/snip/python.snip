@@ -1,0 +1,31 @@
+snippet     init
+abbr        init
+options     head
+  # -*- coding: utf-8 -*-
+
+
+  def main():
+      ${0}
+
+
+  if __name__ == '__main__':
+      main()
+
+
+snippet     import
+abbr        import package
+options     head
+  import ${0}
+
+
+snippet     from_import
+abbr        from_import
+options     head
+  from ${1:package} import ${0}
+
+snippet     open_with
+abbr        open_with
+options     head
+  with open(${1:filename}, "${2:r}") as ${3:f}:
+    ${0}
+

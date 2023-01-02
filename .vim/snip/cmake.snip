@@ -1,0 +1,15 @@
+snippet     init
+abbr        init
+options     head
+  cmake_minimum_required(VERSION ${1:Version})
+
+  project(
+    ${2}
+    )
+  ${0}
+
+snippet     set
+abbr        set_variable
+options     head
+  set(${1:name} ${0:value})
+

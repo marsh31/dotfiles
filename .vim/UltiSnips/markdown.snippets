@@ -1,0 +1,40 @@
+snippet "h([1-6])" "header" br
+`!p snip.rv = ("#" * int(match.group(1)))` ${0:section}
+endsnippet
+
+
+snippet cb "checkbox" b
+- [ ]: ${0}
+endsnippet
+
+
+snippet bar "horizontal rules"
+--------------------${0}
+endsnippet
+
+
+snippet inlink "inline link" b
+[${1:title}](${2:url})${0}
+endsnippet
+
+
+snippet code_block "code block" b
+\`\`\`${1:filetype}:${2:title}
+${0}
+\`\`\`
+endsnippet
+
+
+#######################################################################
+#                              html code                              #
+#######################################################################
+snippet color_font "color word"
+<font color="${1:color}">${0}</font>
+endsnippet
+
+
+snippet detail "detail"
+<details><summary>${1:summary}</summary><div>
+${0}
+</div></details>
+endsnippet

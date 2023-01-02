@@ -1,0 +1,66 @@
+#!/bin/bash
+
+VERSION="1.0.0"
+
+version() {
+  echo "$(basename $0) $VERSION"
+}
+
+
+usage() {
+  version
+cat << EOF >&2
+
+Register item to dest directory and make link.
+
+Usage:
+  $(basename $0) <src> <dest>
+
+  src is item is file or directory.
+  dest is directory.
+EOF
+}
+
+
+# register
+# arg 1 is src item
+# arg 2 is dest directory name.
+register() {
+  src="$1"
+  dest="$2"
+
+  echo "$src => $dest"
+
+  # cd ${src%/*}
+  # cp -r ${basename $src} $dest
+  # rm -Rf ${basename $src}
+  # ln -sfnv $dest/$(basename $src) .
+  cp -r $src $dest
+  rm -Rf $src
+  ln -sfnv $dest/$(basename $src) ${src%/*}
+}
+
+
+# main
+# arg 1 is src item
+# arg 2 is dest directory name.
+# if not have 2 argments, the function is return 1.
+# if input is not right, the function is return 2.
+main() {
+  if [[ $# -eq 2 ]]; then
+    if [[ -e "$1" && -d "$2" ]]; then
+      register "$1" "$2"
+
+    else
+      usage
+      exit 2
+    fi
+  else
+    usage
+    exit 1
+  fi
+}
+
+
+main $@
+# vim: ft=sh

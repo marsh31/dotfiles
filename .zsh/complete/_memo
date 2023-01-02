@@ -1,0 +1,28 @@
+_memo() {
+  
+  _arguments '1: :->first' \
+             '*: :->second' \
+             {-i,--info}'[Display the information]' \
+             {-v,--version}'[Display the script version]' \
+             {-h,--help}'[Display this help text]'
+     
+
+  case "$state" in
+    first)
+      _values 'main command' \
+        'new[Create a new memo file]' \
+        'edit[Edit the memo file]' \
+        'list[Display the list of memo files]' \
+        'grep[Display the grep result that target is contents]' \
+        'tags[Display the search result of tags]' \
+        'info[Display this script env values]' \
+        'version[Display current script version]' \
+        'help[Display this help text]'
+      ;;
+
+    *);;
+  esac
+}
+
+compdef _memo memo
+# vim:ft=sh

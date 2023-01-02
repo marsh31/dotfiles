@@ -1,0 +1,8 @@
+
+_zsh_test() {
+  # _values "test" "this"
+  compadd aaa bbb ccc
+}
+
+compdef _zsh_test zsh_test
+# vim: ft=sh

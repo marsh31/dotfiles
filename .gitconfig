@@ -1,0 +1,45 @@
+[user]
+  email = marsh22h53@gmail.com
+  name = marsh31
+
+[url "github:"]
+  InsteadOf = https://github.com/
+  InsteadOf = git@github.com:
+
+[ghq]
+  root = ~/src
+
+[pager]
+  diff = diff-so-fancy | less --tabs=4 -RFX
+	config = false
+
+[diff]
+  # tool = vimdiff
+  tool = nvimdiff
+
+[difftool]
+  prompt = false
+
+[merge]
+  tool = vimdiff
+  conflictStyle = diff3
+
+[mergetool]
+  prompt = false
+
+[difftool "nvimdiff"]
+  cmd = nvim -d $LOCAL $REMOTE
+
+
+[alias]
+  alias = "!git config --list | grep '^alias'"
+  back = "reset --hard HEAD"
+  find = "!git ls-files | grep -i"
+  first = commit --allow-empty -m \"First commit\"
+  fixit = commit --amend
+  graph = log --graph --date=short --decorate=short --pretty=format:'%Cgreen%h %creset%cd %Cblue%cn %Cred%d %Creset%s'
+  refresh =  !git fetch origin && git remote prune origin
+  template = !git clone https://github.com/marsh31/github.git && rm -rf github/.git && mv github .github
+
+[core]
+  autocrlf = input

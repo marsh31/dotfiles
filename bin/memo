@@ -1,0 +1,200 @@
+#!/bin/bash
+# 
+# This is memo.sh
+# This is developed src/bash/memo.sh
+# 
+
+VERSION=1.0.0
+MEMO_SAVING_DIRECTORY=$MEMO_HOME
+MEMO_FILE_EXTENSION="md"
+MEMO_HEADER_SIZE=10
+MEMO_TAGS_FORMAT="Tags: [{{__TAGS__}}]"
+
+
+# MARK: - Info
+info() {
+cat << EOF >&2
+Environment values:
+MEMO_HOME=$MEMO_SAVING_DIRECTORY
+
+MEMO_EXTENSION=$MEMO_FILE_EXTENSION
+MEMO_TAGS_FORMAT=$MEMO_TAGS_FORMAT
+EOF
+}
+
+# MARK: - Version
+version() {
+  echo "$(basename $0) version $VERSION"
+}
+
+
+# MARK: - Usage
+usage() {
+cat << EOF >&2
+Usage: $(basename $0) [command]
+
+Commands:
+    new                   Create a new memo file
+    edit                  Edit the memo file
+    list                  Display the list of memo file
+    grep                  Diaplay the grep result that target is contents
+    tags                  Display the search result of tags
+
+    info                  Display this script env values
+    version               Display current script version
+    help                  Display this help text
+
+Options:
+    -i, --info            Display this script env values
+    -v, --version         Display current script version
+    -h, --help            Display this help text
+
+EOF
+}
+
+
+# MARK: - init setting
+init_setting() {
+  [[ "${MEMO_SAVING_DIRECTORY: -1}" = "/" ]] && MEMO_SAVING_DIRECTORY=${MEMO_SAVING_DIRECTORY/%?/}
+}
+
+
+# MARK: - New command
+new() {
+  local title_wu file_name file_path
+
+  for item in $@; do
+    title_wu="$title_wu""_$item"
+  done
+  title_wu="${title_wu:1}"
+
+  file_name=$(date +%Y-%m-%d)
+  [[ -n "$title_wu" ]] && file_name="$file_name@$title_wu"
+  file_name=$file_name.$MEMO_FILE_EXTENSION
+  file_path="$MEMO_SAVING_DIRECTORY/$file_name"
+
+
+  if [[ -f $file_path ]]; then
+    echo "> $file_name is existed."
+
+  else 
+    echo "==> $file_path"
+    $EDITOR $file_path
+
+  fi
+}
+
+
+# MARK: - Edit command
+edit() {
+  if [[ $# -gt 1 ]]; then
+    echo "Argument Error."
+    exit 1
+  fi
+  
+  if [[ "$1" =~ [^(.*\.md)]$ ]]; then
+    echo "File extension error."
+    echo "This file is not memo file."
+    exit 1
+  fi
+
+
+  if [[ $# -eq 0 ]]; then
+    selected=$(list | fzf)
+    [[ -n "$selected" ]] && $EDITOR ${selected//\$MEMO_HOME/$MEMO_HOME}
+  fi
+
+  if [[ "$1" =~ ^$MEMO_SAVING_DIRECTORY && -f $1 ]]; then 
+    $EDITOR $1 
+
+  elif [[ "$1" =~ ^\$MEMO_HOME ]]; then 
+    $EDITOR ${1//\$MEMO_HOME/$MEMO_HOME}
+
+  fi
+}
+
+
+# MARK: - List command
+list() {
+  if [[ $# -gt 1 ]]; then
+    echo "Argument Error"
+    exit 1
+  fi
+
+
+  if [[ $# -eq 0 ]]; then
+    find $MEMO_SAVING_DIRECTORY -type f -name \*.md | sort | \
+      sed "s/${MEMO_SAVING_DIRECTORY//\//\\\/}/\$MEMO_HOME/"
+
+  elif [[ $# -eq 1 ]]; then
+    find $MEMO_SAVING_DIRECTORY -type f -name \*$1\*.md | sort | \
+      sed "s/${MEMO_SAVING_DIRECTORY//\//\\\/}/\$MEMO_HOME/"
+  fi
+}
+
+
+# MARK: Grep command
+grepc() {
+  echo "grep"
+}
+
+
+# MARK: Tags command
+tags() {
+  local search_words
+  search_words=${MEMO_TAGS_FORMAT//\{\{__TAGS__\}\}/\.\*}
+  search_words=${search_words//\[/\\\[}
+  search_words=${search_words//\]/\\\]}
+
+
+  local result base
+  for file in $(find $MEMO_SAVING_DIRECTORY -type f -name \*.md | sort); do
+    result=$(cat $file | head -n 10 | grep "$search_words")
+    
+    for arg in $@; do
+      result=$(echo $result | grep $arg)
+    done
+
+    base=$(basename $file)
+    if [[ -n "$result" ]]; then
+      if [[ -p /dev/stdout ]]; then
+        echo "$base:${result:6}"
+
+      else
+        echo -e "\e[32;1m$base\e[0m"
+        echo $result
+        echo 
+      fi
+    fi
+  done
+}
+
+# MARK: - Main
+main() {
+  init_setting
+
+  case "$1" in 
+    new       ) new   ${@:2} ;;
+    edit      ) edit  ${@:2} ;;
+    list      ) list  ${@:2} ;;
+    grep      ) grepc ${@:2} ;;
+    tags      ) tags  ${@:2} ;;
+
+    -i        ) info         ;;
+    info      ) info         ;;
+
+    -v        ) version      ;;
+    --version ) version      ;;
+    version   ) version      ;;
+
+    -h        ) usage        ;;
+    --help    ) usage        ;;
+    help      ) usage        ;;
+    *         ) usage        ;;
+  esac
+}
+
+
+main $@
+
+# vim: ft=sh

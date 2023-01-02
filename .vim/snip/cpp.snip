@@ -1,0 +1,30 @@
+snippet     init
+abbr        init
+options     head
+  /*
+   */
+  #include <iostream>
+
+  int main(int argc, char *argv[])
+  {
+    ${0}
+    return 0;
+  }
+
+
+snippet     cout_endl
+abbr        std::cout << vlaue << endl;
+options     head
+  std::cout << ${0:vlaue} << std::endl;
+
+snippet     cout
+abbr        std::cout << value
+options     head
+  std::cout << ${0:value}
+
+snippet     for_each
+abbr        for (auto item : list_value) {}
+options     head
+  for (${1:auto item} : ${2:list_value}) {
+    ${0}
+  }

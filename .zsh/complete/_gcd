@@ -1,0 +1,21 @@
+_gcd_pathes() {
+  for file in $(ghq list); do
+    echo $(basename $file)
+  done
+}
+
+_gcd() {
+  _arguments '1: :->first'
+
+  case "$state" in
+    first)
+      _values 'project names' \
+        $(_gcd_pathes)
+      ;;
+
+    *);;
+  esac
+}
+
+compdef _gcd gcd
+# vim:ft=zsh

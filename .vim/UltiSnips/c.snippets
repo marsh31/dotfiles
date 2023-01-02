@@ -1,0 +1,26 @@
+snippet for_loop
+for (int i = 0; i < max; i++) {
+	${0:${VISUAL:test}}
+}
+endsnippet
+
+snippet	init
+#include <stdio.h>
+
+int main(int argc, char *argv[])
+{
+	${0:code}
+	return 0;
+}
+endsnippet
+
+snippet "(\S+).int" "int (post)" r
+int `!p snip.rv = match.group(1)` = 0;
+endsnippet
+
+
+snippet "\((.+)\).for" "for (post)" r
+for (`!p snip.rv = match.group(1)`) {
+	${0}
+}
+endsnippet

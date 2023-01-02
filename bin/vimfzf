@@ -1,0 +1,125 @@
+#!/usr/bin/bash
+
+
+_VERSION=1.0.0
+_PROMPT="selector> "
+_SELECTOR_OPTION="-m"
+_SELECTOR=""
+
+
+_DEPTH=1
+_TARGET="."
+
+# implements
+_is_tmux() { [[ -n "$TMUX" ]] && echo 1 || echo 0; }
+
+
+# interface
+# MARK: - Version 
+version() {
+  echo "$(basename $0) version $_VERSION"
+}
+
+
+# MARK: - Usage
+usage() {
+cat << EOF >&2
+Usage: $(basename $0) [<options>] [<args>]
+This is file selector for vim.
+The default list of choise is current dir files.
+
+Arguments:
+    1st                  Set the root directory of searching.
+
+Option:
+    -d, --depth [digit]  Set the depth of search directory.
+
+    -h, --help           Display the help of this script.
+    -v, --version        Display the version of this script.
+EOF
+}
+
+
+
+_init_setting() {
+  _FZF_OPTION="-m $_FZF_OPTION"
+
+  if [[ $(_is_tmux) -eq 0 ]]; then
+    _SELECTOR="fzf"
+  else
+    _SELECTOR="fzf-tmux"
+  fi
+
+  if type "$_SELECTOR" >/dev/null 2>&1; then
+    [[ "$_SELECTOR" = "fzf" ]] && _SELECTOR=($_SELECTOR --exit-0 --select-1 --ansi --prompt=$_PROMPT)
+    [[ "$_SELECTOR" = "fzf-tmux" ]] && _SELECTOR=($_SELECTOR --exit-0 --select-1 --ansi --prompt=$_PROMPT)
+
+    return 0
+  fi
+  echo "Need fuzzy finder such as fzf."
+  exit 1
+}
+
+
+_parse() {
+  args=()
+  while [[ $# -gt 0 ]]; do
+    case "$1" in
+      '-d' | '--depth' )
+        shift
+        if [[ -n "$1" ]] && [[ "$1" =~ ^[0-9]+$ ]]; then
+          _DEPTH="$1"
+
+        else
+          usage
+          exit 1
+        fi
+        ;;
+
+      '-h' | '--help' )
+        usage
+        exit 0
+        ;;
+
+
+      '-v' | '--version' )
+        version
+        exit 0
+        ;;
+
+      -*)
+        echo "$PROGNAME: illegal option -- $(echo $1 | sed "s/^-*//")"
+        usage
+        exit 1
+        ;;
+
+      *)
+        args=("${args[@]}" "$1")
+        ;;
+
+    esac
+    shift 
+  done
+
+  if [[ ${#args[@]} -gt 1 ]]; then
+    usage
+    exit 1
+  fi
+
+  _TARGET="${args[0]}"  
+}
+
+# MARK: - Main
+main() {
+  _init_setting
+  _parse $@
+  
+
+  Selected_files=$(find $_TARGET -maxdepth $_DEPTH -type f | ${_SELECTOR[@]} $_SELECTOR_OPTION)
+  [[ -n $Selected_files ]] && $EDITOR $Selected_files
+}
+
+
+main $@
+
+# vim: ft=sh

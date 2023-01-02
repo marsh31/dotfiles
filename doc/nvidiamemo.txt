@@ -1,0 +1,95 @@
+最新のドライバを入れる場合
+NVIDIA GeForce
+
+    NVIDIA サイトから Linux 向けドライバをダウンロードします。OS で Linux を選択
+        http://www.nvidia.co.jp/Download/index.aspx
+    インストーラが含まれているのでダウンロードしたファイル “*.bin” を実行します。インストーラの指示に従い最後に reboot
+        インストールには一旦 X server を止める必要があります。CTRL + ALT + F1 (～F6) で consle に降りるか ssh 等で他の PC からログインします。
+
+$ export LANG=en
+$ sudo service lightdm stop
+$ chmod 755 NVIDIA-Linux-x86_64-346.22.run
+$ sudo ./NVIDIA-linux-x86_64-346.22.run
+$ sudo reboot
+
+    -lGL がエラーになる場合
+        libGL.so のリンクが外れている場合があるので、その場合は手動で直す必要あり
+            cd /usr/lib/x86_64-linux-gnu
+            sudo mv libGL.so libGL.so.bak
+            sudo ln -s libGL.so.346.22 libGL.so
+
+問題が起こった時に元のドライバに戻す
+
+$ sudo apt-get install nvidia-331
+$ sudo reboot
+
+GeForce と RADEON のドライバは衝突するため同時に install できないようです。 以前のドライバのアンインストールが必要で、ドライバが無い場合表示に問題が生じる場合があります。 頻繁にビデオカードを差し替える場合は HDD を分割して 2個 OS を入れるなどの対策をおすすめします。
+AMD RADEON
+
+    distribution 毎にパッケージとしてダウンロード可能となっています。RHEL と Ubuntu
+        http://support.amd.com/ja-jp/download
+            Ubuntu の場合下記より 14.04LTS, 12.04LTS の 2種類あります。
+            http://support.amd.com/ja-jp/download/desktop?os=Ubuntu+x86+64
+    ダウンロードしたパッケージを install します。
+        依存しているパッケージがある場合は先に install しておきます。
+
+$ sudo apt-get install dkms libc6-i386 lib32gcc1
+$ sudo dpkg -i fglrx-core_14.501-0ubuntu1_amd64_UB_14.01.deb
+$ sudo dpkg -i fglrx_14.501-0ubuntu1_amd64_UB_14.01.deb
+$ sudo dpkg -i fglrx-dev_14.501-0ubuntu1_amd64_UB_14.01.deb
+$ sudo dpkg -i fglrx-amdcccle_14.501-0ubuntu1_amd64_UB_14.01.deb
+$ sudo reboot
+
+Windows 同様に HDMI 出力ではオーバースキャン対応の黒フチがある状態となっています。 PC モニタに接続している場合は不要なので、Catalyst Control Center を install したのち amdcccle コマンドで変更できます。
+
+    amdcccle を実行
+    ディスプレイマネージャー → DTV(1) → 調整のタブ → スケーリングオプション をオーバースキャン側 0% へ
+
+参考にしたページ
+
+    旧ID:itiriのブログ Ubuntuに最新のRadeon用ドライバーをインストールした時のメモ
+    DeVlog – 銀の翼で翔べ - Ubuntu 14.10 で Genymotion の仮想デバイスがフリーズする現象の対処
+
+ビデオカードの入れ替え
+
+GeForce と RADEON を入れ替える場合は事前にドライバのアンインストールが必要となります。 そのままではコンソールに降りても画面が正しく描画されない可能性があるので、ssh 等リモートでアクセスして作業することをおすすめします。
+
+RADEON driver の削除
+
+$ sudo apt-get remove 'fglrx*'
+
+
+
+
+
+## Memo
+ 
+WARNING: apt does not have a stable CLI interface. Use with caution in scripts.
+
+boinc-client-nvidia-cuda/focal 7.16.6+dfsg-1 amd64
+bumblebee-nvidia/focal 3.2.1-22 amd64
+libnvidia-cfg1-470/now 470.74-0ubuntu0.20.04.1 amd64 [installed,local]
+libnvidia-common-470/now 470.74-0ubuntu0.20.04.1 all [installed,local]
+libnvidia-compute-470/now 470.74-0ubuntu0.20.04.1 amd64 [installed,local]
+libnvidia-compute-470/now 470.74-0ubuntu0.20.04.1 i386 [installed,local]
+libnvidia-decode-470/now 470.74-0ubuntu0.20.04.1 amd64 [installed,local]
+libnvidia-decode-470/now 470.74-0ubuntu0.20.04.1 i386 [installed,local]
+libnvidia-egl-wayland-dev/focal 1:1.1.3-1ubuntu1 amd64
+libnvidia-egl-wayland1/focal 1:1.1.3-1ubuntu1 amd64
+libnvidia-encode-470/now 470.74-0ubuntu0.20.04.1 amd64 [installed,local]
+libnvidia-encode-470/now 470.74-0ubuntu0.20.04.1 i386 [installed,local]
+libnvidia-extra-470/now 470.74-0ubuntu0.20.04.1 amd64 [installed,local]
+libnvidia-fbc1-470/now 470.74-0ubuntu0.20.04.1 amd64 [installed,local]
+libnvidia-fbc1-470/now 470.74-0ubuntu0.20.04.1 i386 [installed,local]
+libnvidia-gl-470/now 470.74-0ubuntu0.20.04.1 amd64 [installed,local]
+libnvidia-gl-470/now 470.74-0ubuntu0.20.04.1 i386 [installed,local]
+libnvidia-ifr1-470/now 470.74-0ubuntu0.20.04.1 amd64 [installed,local]
+libnvidia-ifr1-470/now 470.74-0ubuntu0.20.04.1 i386 [installed,local]
+mate-sensors-applet-nvidia/focal 1.24.0-1 amd64
+mir-graphics-drivers-nvidia/focal 1.7.1-0ubuntu2 amd64
+nvidia-common/focal 1:0.8.1 amd64
+nvidia-prime/focal,focal 0.8.14 all
+nvidia-settings/focal 440.64-0ubuntu1 amd64
+nvidia-settings/focal 440.64-0ubuntu1 i386
+primus-nvidia/focal 0~20150328-10 amd64
+xserver-xorg-video-nvidia-470/now 470.74-0ubuntu0.20.04.1 amd64 [installed,local]

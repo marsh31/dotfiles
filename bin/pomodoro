@@ -1,0 +1,132 @@
+#!/usr/bin/bash
+#
+# 
+
+_VERSION=1.0.0
+_TIMER_INTERVAL_MINUTES=25
+_MESSAGE="done"
+
+
+# MARK: - timestamp
+_timestamp() {
+  echo "$(date +%H:%M:%S)"
+}
+
+
+# MARK: - alert
+_alert() {
+  title="$1"
+  message="$2"
+
+  msg_slack -c pomodoro -u $title $message
+}
+
+
+# MARK: - action
+_action() {
+  msg="$@"
+  timer_interval_sec=$(($_TIMER_INTERVAL_MINUTES * 60))
+  now_timestamp=$(_timestamp)
+
+
+  sleep $timer_interval_sec &&   \
+    end_timestamp=$(_timestamp); \
+    _alert "Pomodoro" "$(date +%F) [$now_timestamp ~ $end_timestamp ($timer_interval_sec)]: $_MESSAGE"
+}
+
+
+# MARK: - usage
+usage() {
+cat << EOF >&2
+Usage: $(basename $0) [<options>] [<args>]
+This is pomodoro timer script.
+The default timer time is 25 minutes.
+
+Arguments:
+  1st     Message of the alert.
+
+Options:
+  -t, --time [num]     Set the time interval that unit is minutes.
+  
+EOF
+}
+
+
+# MARK: - version
+version() {
+  echo "$(basename $0) version $_VERSION"
+  echo 
+}
+
+
+# MARK: - info 
+info() {
+  version
+cat << EOF >&2
+The default timer inteval is $_TIMER_INTERVAL_MINUTES(minutes)
+
+EOF
+}
+
+
+
+# MARK: - parse
+_parse() {
+  while [[ $# -gt 0 ]]; do
+    case "$1" in
+      '-h' | '--help')
+        usage
+        exit 0
+        ;;
+
+      '-v' | '--version')
+        version
+        exit 0
+        ;;
+
+      '--info' )
+        info
+        exit 0
+        ;;
+
+      '-t' | '--time' )
+        shift
+        if [[ "$1" =~ ^[1-9][0-9]*$ ]]; then
+          _TIMER_INTERVAL_MINUTES=$1
+
+        else 
+          echo "$(basename $0): illegal argument of t, time option -- $1"
+          echo "The argument must be number"
+          echo 
+          exit 1
+        fi
+        ;;
+
+      * )
+        args=(${args[@]} "$1")
+        ;;
+    esac
+    shift 1
+  done
+
+  if [[ ${#args[@]} -gt 0 ]]; then 
+    _MESSAGE="${args[@]} $_MESSAGE"
+  fi
+
+}
+
+
+_init() {
+  echo "ini"
+}
+
+
+main() {
+  _init 
+  _parse $@
+  _action "${args[@]}"
+}
+
+main $@ &
+
+# vim: ft=sh

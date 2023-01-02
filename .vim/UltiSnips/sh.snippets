@@ -1,0 +1,19 @@
+snippet #! "environment"
+#!${1:/usr/bin/bash}
+${0}
+endsnippet
+
+snippet init "init shell script"
+#!${1:/usr/bin/bash}
+
+main() {
+	${0}
+}
+
+main $@
+endsnippet
+
+
+snippet "(\S+)./" "remove suffix slash" r
+${`!p snip.rv = match.group(1)`%/}/${0}
+endsnippet

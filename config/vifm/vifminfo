@@ -1,0 +1,95 @@
+# You can edit this file by hand, but it's recommended not to do that.
+
+# Marks:
+'H
+	/home/marsh/
+	..
+1619859866
+'b
+	/home/marsh/bin/
+	..
+1619859866
+'h
+	/home/marsh/
+	..
+1619859866
+'z
+	/home/marsh/.config/vifm
+	..
+1619859866
+
+# Bookmarks:
+
+# TUI:
+al
+q0
+v2
+ov
+m-1
+l2
+r2
+
+# Left window history (oldest to newest):
+d/home/marsh/src/rust/workbook/rust-sample
+	src
+1
+d/home/marsh/src/rust/workbook/rust-sample/src
+	main.rs
+1
+d/home/marsh/src/rust
+	arg_parse_sample
+2
+d/home/marsh/src/rust/arg_parse_sample
+	..
+0
+d/home/marsh/src/rust
+	ws_parser
+12
+d/home/marsh/src/rust/ws_parser
+	target
+2
+d/home/marsh/src/rust/ws_parser/target
+	debug
+1
+d/home/marsh/src/rust/ws_parser
+	src
+1
+d/home/marsh/src/rust/ws_parser/src
+	v1.rs
+2
+d
+
+# Right window history (oldest to newest):
+D/home/marsh/src/rust/workbook/rust-sample
+	..
+0
+D/home/marsh/src/rust
+	..
+0
+D
+
+# Command line history (oldest to newest):
+:q
+
+# Search history (oldest to newest):
+
+# Prompt history (oldest to newest):
+
+# Local filter history (oldest to newest):
+
+# Registers:
+
+# Directory stack (oldest to newest):
+
+# Trash content:
+
+# State:
+f
+i1
+[.1
+[F
+F
+I1
+].1
+]F
+s0
