@@ -28,8 +28,8 @@ sudo pacman-mirrors --fasttrack && sudo pacman -Syyu
 # install aur helper
 #
 echo_log "install yay, base, base-devel..."
-yes | sudo pacman -S yay
-yes | sudo pacman -S base base-devel
+sudo pacman -S yay
+sudo pacman -S base base-devel
 
 
 #
@@ -38,7 +38,7 @@ yes | sudo pacman -S base base-devel
 echo_log "checking git exist..."
 if !(type git > /dev/null 2>&1); then
   echo_log "install git..."
-  yes | pacman -S git
+  pacman -S git
 fi
 
 
@@ -48,7 +48,7 @@ fi
 echo_log "checking vim exist..."
 if !(type vim > /dev/null 2>&1); then
   echo_log "install vim..."
-	yes | pacman -S vim
+	pacman -S vim
 fi
 sudo vim /home/marsh/dotfiles/doc/compressxz.md
 
@@ -57,7 +57,7 @@ sudo vim /home/marsh/dotfiles/doc/compressxz.md
 # font
 #
 echo_log "install font adobe-source-han-sans-jp-fonts, noto, nerd-font..."
-yes | sudo pacman -S adobe-source-han-sans-jp-fonts
+sudo pacman -S adobe-source-han-sans-jp-fonts
 ~/dotfiles/etc/01_installer/install_font_noto.sh
 ~/dotfiles/etc/01_installer/install_font_nerd-font.sh
 
@@ -101,7 +101,7 @@ echo_log "install virtual machine ()"
 # Graphic method.
 #
 echo_log "install graphic method (graphviz, plantuml)"
-yes | sudo pacman -S graphviz plantuml
+sudo pacman -S graphviz plantuml
 
 
 #
@@ -115,32 +115,32 @@ echo_log "install system version manager (asdf)"
 # Web browser
 #
 echo_log "install web browser (firefox, google-chrome)"
-yes | sudo pacman -S firefox
-yes | yay -S google-chrome
+sudo pacman -S firefox
+yay -S google-chrome
 
 
 #
 # audio
 #
 echo_log "install audio (pulseaudio, pavucontrol)"
-yes | sudo pacman -S pulseaudio pavucontrol
+sudo pacman -S pulseaudio pavucontrol
 
 
 #
 # dev tool (cli)
 #
 echo_log "install dev tool (unzip)"
-yes | sudo pacman -S unzip
+sudo pacman -S unzip
 
 echo_log "install dev tool (tig, tmux, xsel, ripgrep, ranger, jq, jre-openjdk, jdk-openjdk)"
-yes | sudo pacman -S tig tmux xsel ripgrep ranger jq  \
+sudo pacman -S tig tmux xsel ripgrep ranger jq  \
                jre-openjdk jdk-openjdk
 
 echo_log "install dev tool (vlc, blender, conky, mpv, flameshot, feh, rofi)"
-yes | sudo pacman -S vlc blender conky mpv flameshot feh rofi
+sudo pacman -S vlc blender conky mpv flameshot feh rofi
 
 echo_log "install dev tool (android-studio, ghq)"
-yes | yay -S android-studio ghq
+yay -S android-studio ghq
 
 ~/dotfiles/etc/01_installer/install_dev_docker.sh
 ~/dotfiles/etc/01_installer/install_dev_gibo.sh
@@ -156,7 +156,7 @@ yes | yay -S android-studio ghq
 # Change Local in home dir
 # ~/dotfiles/etc/01_installer/
 #
-yes | sudo pacman -S xdg-user-dirs-gtk
+sudo pacman -S xdg-user-dirs-gtk
 LANG=C xdg-user-dirs-gtk-update
 
 # vim: set ts=4 sw=4 sts=4 et

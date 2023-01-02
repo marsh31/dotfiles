@@ -5,4 +5,4 @@
 # NOTE:
 #   install noto font in arch env.
 
-yes | sudo pacman -S noto-fonts noto-fonts-cjk noto-fonts-emoji noto-fonts-extra
+sudo pacman -S noto-fonts noto-fonts-cjk noto-fonts-emoji noto-fonts-extra

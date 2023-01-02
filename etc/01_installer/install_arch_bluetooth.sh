@@ -1,6 +1,6 @@
 #!/bin/bash
 
 
-yes | sudo pacman -S bluez bluez-utils bluez-cups bluez-hid2hci bluez-plugins bluez-tools python-bluepy python-pybluez blueman
+sudo pacman -S bluez bluez-utils bluez-cups bluez-hid2hci bluez-plugins bluez-tools python-bluepy python-pybluez blueman
 sudo systemctl enable bluetooth
 

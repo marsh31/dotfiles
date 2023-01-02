@@ -1,7 +1,7 @@
 #!/usr/bin/bash
 
 
-yes | sudo pacman -S fcitx fcitx-im fcitx-configtool fcitx-mozc fcitx-gtk2 fcitx-gtk3 fcitx-qt5
+sudo pacman -S fcitx fcitx-im fcitx-configtool fcitx-mozc fcitx-gtk2 fcitx-gtk3 fcitx-qt5
 
 cat<<'EOF'
 > You should write below:

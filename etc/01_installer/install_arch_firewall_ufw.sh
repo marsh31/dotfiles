@@ -10,7 +10,7 @@ check_ufw() {
 
 
 if [[ $(check_ufw) -eq 0 ]]; then
-	yes | sudo pacman -S ufw
+	sudo pacman -S ufw
 fi
 
 sudo ufw default deny
