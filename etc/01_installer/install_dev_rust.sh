@@ -49,7 +49,7 @@ install_cargo_tools() {
 
   echo "[INFO] installing rust-analyzer..."
   rustup component add rls rust-analysis rust-src
-  sudo pacman -S rust-analyzer
+  yes | sudo pacman -S rust-analyzer
 
 }
 

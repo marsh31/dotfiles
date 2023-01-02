@@ -8,7 +8,7 @@
 #
 
 if !(type "yay" >/dev/null 2>&1); then
-  sudo pacman -S base-devel git go
+  yes | sudo pacman -S base-devel git go
   git clone https://aur.archlinux.org/yay.git
   cd yay
   makepkg -si
