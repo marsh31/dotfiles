@@ -129,18 +129,8 @@ sudo pacman -S pulseaudio pavucontrol
 #
 # dev tool (cli)
 #
-echo_log "install dev tool (unzip)"
-sudo pacman -S unzip
-
-echo_log "install dev tool (tig, tmux, xsel, ripgrep, ranger, jq, jre-openjdk, jdk-openjdk)"
-sudo pacman -S tig tmux xsel ripgrep ranger jq
-sudo pacman -S jre-openjdk jdk-openjdk
-
-echo_log "install dev tool (vlc, blender, conky, mpv, flameshot, feh, rofi)"
-sudo pacman -S vlc blender conky mpv flameshot feh rofi
-
-echo_log "install dev tool (android-studio, ghq)"
-yay -S android-studio ghq
+echo_log "install dev tool"
+~/dotfiles/etc/01_installer/install_arch_dev_tool.sh
 
 ~/dotfiles/etc/01_installer/install_dev_docker.sh
 ~/dotfiles/etc/01_installer/install_dev_gibo.sh
