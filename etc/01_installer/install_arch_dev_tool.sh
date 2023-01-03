@@ -9,6 +9,11 @@
 #
 
 
+############################################################
+# Config
+#
+############################################################
+
 # <command_name>;<package_name>(:<package_name>)*;<handler:null or func_name>
 #
 pacman_install_items=(
@@ -38,26 +43,49 @@ yay_install_items=(
 )
 
 
+############################################################
+# handler
+#
+############################################################
+handler_docker() {
+  is_exist_command "docker"
+  if [[ $? -eq 1 ]]; then
+    echo "sudo systemctl start docker; systemctl enable docker"
+    sudo systemctl start docker
+    sudo systemctl enable docker
+  else
+    echo "docker install failed!!!"
+    echo "intrupt docker setup!"
+  fi
+}
+
+
+############################################################
+# proc
+#
+############################################################
+
+#
+# is_exist_command
+#
 is_exist_command() {
   local command
   command="${1}"
 
   if type "${command}" >/dev/null 2>&1; then
+    # found
     return 1
 
   else
+    # not found
     return 0
   fi
 }
 
 
-handler_docker() {
-  echo "handler_docker"
-#  sudo systemctl start docker
-#  sudo systemctl enable docker
-}
-
-
+#
+# install_items
+#
 install_items() {
   local arr
   local item
@@ -83,6 +111,9 @@ install_items() {
 }
 
 
+#
+# handler_items
+#
 handler_items() {
   local arr
   local item
@@ -109,43 +140,9 @@ handler_items() {
 }
 
 
-do_install_pacman_items() {
-  local package_list handler_list
-  local func_arr
-
-  package_list=$(install_items "${pacman_install_items[*]}")
-  handler_list=$(handler_items "${pacman_install_items[*]}")
-
-  if [[ -n "$package_list" ]]; then
-    echo "sudo pacman -S $package_list"
-    #sudo pacman -S $list
-  fi
-
-  func_arr=(${handler_list})
-  for func in "${func_arr[@]}"; do
-    ${func}
-  done
-
-}
-
-
-do_install_yay_items() {
-  local package_list handler_list
-  package_list=$(install_items "${yay_install_items[*]}")
-  handler_list=$(handler_items "${yay_install_items[*]}")
-
-  if [[ -n "$package_list" ]]; then
-    echo "yay -S $package_list"
-    #yay -S $list
-  fi
-
-  func_arr=(${handler_list})
-  for func in "${func_arr[@]}"; do
-    ${func}
-  done
-}
-
-
+#
+# do_install
+#
 do_install() {
   local cmd data_list
   local package_list handler_list
@@ -167,10 +164,19 @@ do_install() {
   done
 }
 
+
+#
+# main process
+#
 main() {
   do_install "sudo pacman -S" "${pacman_install_items[*]}"
   do_install "yay -S" "${yay_install_items[*]}"
 }
 
+
+############################################################
+# main
+#
+############################################################
 
 main

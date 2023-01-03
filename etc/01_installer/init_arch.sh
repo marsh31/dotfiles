@@ -131,8 +131,6 @@ sudo pacman -S pulseaudio pavucontrol
 #
 echo_log "install dev tool"
 ~/dotfiles/etc/01_installer/install_arch_dev_tool.sh
-
-~/dotfiles/etc/01_installer/install_dev_docker.sh
 ~/dotfiles/etc/01_installer/install_dev_gibo.sh
 ~/dotfiles/etc/01_installer/install_dev_rust.sh
 ~/dotfiles/etc/01_installer/install_dev_st.sh
