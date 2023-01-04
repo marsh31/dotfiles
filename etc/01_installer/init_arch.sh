@@ -52,7 +52,7 @@ sudo pacman -S base base-devel
 echo_log "checking git exist..."
 if !(type git > /dev/null 2>&1); then
   echo_log "install git..."
-  pacman -S git
+  sudo pacman -S git
 fi
 
 
@@ -62,7 +62,7 @@ fi
 echo_log "checking vim exist..."
 if !(type vim > /dev/null 2>&1); then
   echo_log "install vim..."
-	pacman -S vim
+  sudo pacman -S vim
 fi
 sudo vim /home/marsh/dotfiles/doc/compressxz.md
 
@@ -116,20 +116,6 @@ echo_log "install virtual machine ()"
 
 
 #
-# System Version Manager
-#
-echo_log "install system version manager (asdf)"
-~/dotfiles/etc/01_installer/install_dev_asdf.sh
-
-
-#
-# audio
-#
-echo_log "install audio (pulseaudio, pavucontrol)"
-sudo pacman -S pulseaudio pavucontrol
-
-
-#
 # dev tool (cli)
 #
 echo_log "install dev tool"
@@ -139,7 +125,16 @@ echo_log "install dev tool"
 ~/dotfiles/etc/01_installer/install_dev_st.sh
 ~/dotfiles/etc/01_installer/install_dev_tmux_tpm.sh
 
-~/dotfiles/etc/01_installer/install_dev_asdf_plugins.sh
+
+#
+# System Version Manager
+#
+echo_log "install system version manager (asdf)"
+~/dotfiles/etc/01_installer/install_dev_asdf.sh
+if [[ -e $HOME/.asdf/asdf.sh ]]; then
+  . /home/marsh/.asdf/asdf.sh
+  ~/dotfiles/etc/01_installer/install_dev_asdf_plugins.sh
+fi
 
 
 #

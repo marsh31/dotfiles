@@ -17,6 +17,10 @@
 # <command_name>;<package_name>(:<package_name>)*;<handler:null or func_name>
 #
 pacman_install_items=(
+  # audio
+  # "pulseaudio;pulseaudio;"
+  "pavucontrol;pavucontrol;"
+
   # web browser
   "firefox;firefox;"
 

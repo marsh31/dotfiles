@@ -14,7 +14,8 @@ cmd="asdf"
 url="https://github.com/asdf-vm/asdf.git ~/.asdf --branch v0.10.2"
 
 if !(type "$cmd" >/dev/null 2>&1); then
-  git clone "$url"
+  echo "git clone $url"
+  git clone https://github.com/asdf-vm/asdf.git ~/.asdf --branch v0.10.2
 
 else
   echo "$cmd is exist."
