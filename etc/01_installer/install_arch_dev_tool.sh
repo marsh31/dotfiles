@@ -17,6 +17,10 @@
 # <command_name>;<package_name>(:<package_name>)*;<handler:null or func_name>
 #
 pacman_install_items=(
+  # web browser
+  "firefox;firefox;"
+
+  # dev tools
   "blender;blender;"
   "conky;conky;"
   "docker;docker;handler_docker"
@@ -34,12 +38,20 @@ pacman_install_items=(
   "unzip;unzip;"
   "vlc;vlc;"
   "xsel;xsel;"
+
+  # graphic
+  "graphviz;graphviz;"
+  "plantuml;plantuml;"
 )
 
 
 yay_install_items=(
+  # web browser
+  "google-chrome-stable;google-chrome;"
+
+  # dev tools
   "android-studio;android-studio;"
-  "ghq;ghq;"
+  "man-pages-ja;man-pages-ja;"
 )
 
 

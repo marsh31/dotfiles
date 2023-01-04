@@ -116,25 +116,10 @@ echo_log "install virtual machine ()"
 
 
 #
-# Graphic method.
-#
-echo_log "install graphic method (graphviz, plantuml)"
-sudo pacman -S graphviz plantuml
-
-
-#
 # System Version Manager
 #
 echo_log "install system version manager (asdf)"
 ~/dotfiles/etc/01_installer/install_dev_asdf.sh
-
-
-#
-# Web browser
-#
-echo_log "install web browser (firefox, google-chrome)"
-sudo pacman -S firefox
-yay -S google-chrome
 
 
 #
@@ -154,14 +139,13 @@ echo_log "install dev tool"
 ~/dotfiles/etc/01_installer/install_dev_st.sh
 ~/dotfiles/etc/01_installer/install_dev_tmux_tpm.sh
 
+~/dotfiles/etc/01_installer/install_dev_asdf_plugins.sh
+
 
 #
 # study
 #
 ~/dotfiles/etc/01_installer/install_anki.sh
-
-
-# neovim, npm, go
 
 
 #
