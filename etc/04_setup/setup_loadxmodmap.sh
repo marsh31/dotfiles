@@ -2,10 +2,12 @@
 
 xmodmap_file="$HOME/dotfiles/.Xmodmap"
 
-if [[ ! -e $xmodmap_file ]]; then
+if [ ! -e "~/.Xmodmap" ]; then
+	echo "ln -s $xmodmap_file $HOME"
 	ln -s $xmodmap_file $HOME
 fi
 
+echo "xmodmap $HOME/.Xmodmap"
 xmodmap $HOME/.Xmodmap
 
 cat<<'EOF'

@@ -7,9 +7,5 @@
 #   initial setup in arch linux.
 #
 
-./setup_keyrepeat.sh
-./setup_loadxmodmap.sh
-
-./setup_pacman_update.sh   # unused
-./setup_homeDirLocalJ2E.sh # unused
-
+~/dotfiles/etc/04_setup/setup_loadxmodmap.sh
+~/dotfiles/etc/04_setup/setup_keyrepeat.sh
