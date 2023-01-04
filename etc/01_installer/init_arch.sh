@@ -88,20 +88,6 @@ echo_log "install bluetooth ()"
 
 
 #
-# Firewall
-#
-echo_log "install firewall ()"
-~/dotfiles/etc/01_installer/install_arch_firewall_ufw.sh
-
-
-#
-# Virtual machine
-#
-echo_log "install virtual machine ()"
-~/dotfiles/etc/01_installer/install_arch_virtmachine.sh
-
-
-#
 # dev tool (cli)
 #
 echo_log "install dev tool"
@@ -127,6 +113,13 @@ fi
 # study
 #
 ~/dotfiles/etc/01_installer/install_anki.sh
+
+
+#
+# Virtual machine
+#
+echo_log "install virtual machine ()"
+~/dotfiles/etc/01_installer/install_arch_virtmachine.sh
 
 
 #

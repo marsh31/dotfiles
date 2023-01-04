@@ -24,6 +24,9 @@ pacman_install_items=(
   # antivirus
   "freshclam;clamav;handler_clamav"
 
+  # firewall ufw
+  "ufw;ufw;handler_ufw"
+
   # im(input method)
   "fcitx;fcitx:fcitx-im:fcitx-configtool:fcitx-mozc:fcitx-gtk2:fcitx-gtk3:fcitx-qt5;"
 
@@ -74,6 +77,12 @@ handler_clamav() {
 
   sudo systemctl enable --now clamav-daemon
   sudo systemctl enable --now clamav-freshclam
+}
+
+
+handler_ufw() {
+  sudo ufw default deny
+  sudo ufw enable
 }
 
 
