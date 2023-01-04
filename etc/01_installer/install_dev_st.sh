@@ -1,9 +1,13 @@
 #!/bin/bash
-
+# 
+# NAME:   install_dev_st.sh
+# AUTHOR: marsh
+# NOTE:
+#
+#   install st.
 
 patchfiles=( https://st.suckless.org/patches/xresources/st-xresources-20200604-9ba7ecf.diff
 	)
-
 src_config=~/dotfiles/etc/st/config.def.h
 
 download_st() {
