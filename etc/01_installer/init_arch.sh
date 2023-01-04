@@ -88,13 +88,6 @@ echo_log "install IM (fcitx)"
 
 
 #
-# Antivirus
-#
-echo_log "install antivirus ()"
-~/dotfiles/etc/01_installer/install_arch_antivirus.sh
-
-
-#
 # Bluetooth
 #
 echo_log "install bluetooth ()"

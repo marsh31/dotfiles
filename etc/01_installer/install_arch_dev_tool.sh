@@ -21,6 +21,9 @@ pacman_install_items=(
   # "pulseaudio;pulseaudio;"
   "pavucontrol;pavucontrol;"
 
+  # antivirus
+  "freshclam;clamav;handler_clamav"
+
   # web browser
   "firefox;firefox;"
 
@@ -63,6 +66,14 @@ yay_install_items=(
 # handler
 #
 ############################################################
+handler_clamav() {
+  sudo freshclam
+
+  sudo systemctl enable --now clamav-daemon
+  sudo systemctl enable --now clamav-freshclam
+}
+
+
 handler_docker() {
   is_exist_command "docker"
   if [[ $? -eq 1 ]]; then
