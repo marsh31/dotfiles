@@ -21,14 +21,28 @@ echo_log() {
 # update mirror site list and update package
 #
 echo_log "update pacman..."
-sudo pacman-mirrors --fasttrack && sudo pacman -Syyu
+sudo pacman-mirrors --fasttrack
+sudo pacman -Syyu
 
 
 #
 # install aur helper
 #
-echo_log "install yay, base, base-devel..."
-sudo pacman -S yay
+echo_log "if yay is not installed, install yay."
+if !(type yay > /dev/null 2>&1); then
+  echo_log "install yay..." 
+  sudo pacman -S yay
+
+else
+  echo_log "yay installed."
+fi
+
+
+
+#
+# base
+#
+echo_log "install base, base-devel..."
 sudo pacman -S base base-devel
 
 
@@ -57,7 +71,11 @@ sudo vim /home/marsh/dotfiles/doc/compressxz.md
 # font
 #
 echo_log "install font adobe-source-han-sans-jp-fonts, noto, nerd-font..."
-sudo pacman -S adobe-source-han-sans-jp-fonts
+font="adobe-source"
+list=$(fc-list | grep "$font")
+if [[ -z "$list" ]]; then
+  sudo pacman -S adobe-source-han-sans-jp-fonts
+fi
 ~/dotfiles/etc/01_installer/install_font_noto.sh
 ~/dotfiles/etc/01_installer/install_font_nerd-font.sh
 
@@ -135,6 +153,12 @@ echo_log "install dev tool"
 ~/dotfiles/etc/01_installer/install_dev_rust.sh
 ~/dotfiles/etc/01_installer/install_dev_st.sh
 ~/dotfiles/etc/01_installer/install_dev_tmux_tpm.sh
+
+
+#
+# study
+#
+~/dotfiles/etc/01_installer/install_anki.sh
 
 
 # neovim, npm, go
