@@ -359,6 +359,7 @@ set shell=zsh
 set isfname-==
 set isfname+=\\ 
 set diffopt=filler,algorithm:patience,indent-heuristic,iwhite
+set laststatus=3
 
 set mouse=n
 set splitright
