@@ -81,13 +81,6 @@ fi
 
 
 #
-# IM(input method) framework
-#
-echo_log "install IM (fcitx)"
-~/dotfiles/etc/01_installer/install_arch_im.sh
-
-
-#
 # Bluetooth
 #
 echo_log "install bluetooth ()"

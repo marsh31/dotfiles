@@ -24,6 +24,9 @@ pacman_install_items=(
   # antivirus
   "freshclam;clamav;handler_clamav"
 
+  # im(input method)
+  "fcitx;fcitx:fcitx-im:fcitx-configtool:fcitx-mozc:fcitx-gtk2:fcitx-gtk3:fcitx-qt5;"
+
   # web browser
   "firefox;firefox;"
 
