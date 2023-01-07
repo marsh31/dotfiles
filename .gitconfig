@@ -3,8 +3,8 @@
   name = marsh31
 
 [url "github:"]
-  InsteadOf = https://github.com/
-  InsteadOf = git@github.com:
+#   InsteadOf = https://github.com/
+#   InsteadOf = git@github.com:
 
 [ghq]
   root = ~/src
