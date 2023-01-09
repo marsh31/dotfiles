@@ -471,79 +471,79 @@ set tabline=%!MyTabLine()
 " SubSection: @LSP {{{
 
 " ~/.config/nvim/lua/rc/lsp.lua
-lua require('rc.lsp')
+" lua require('rc.lsp')
 
 " }}}
 " SubSection: @Treesitter {{{
 
-if jetpack#tap('nvim-treesitter')
-lua <<EOF
-  require('nvim-treesitter.configs').setup {
-      ensure_installed = "all",
-      highlight = {
-          enable = true,
-          disable = { "markdown" },
-      },
-
-
-      incremental_selection = {
-          enable = true,
-          keymaps = {
-              init_selection    = "gnn",
-              node_incremental  = "grn",
-              node_decremental  = "grm",
-              scope_incremental = "grc",
-          },
-      },
-      indent = { enable = false },
-
-      refactor = {
-          highlight_definitions   = { enable = false },
-          highlight_current_scope = { enable = false },
-          smart_rename = {
-              enable = true,
-              keymaps = {
-                  smart_rename = "grr",
-              },
-          },
-
-          navigation = {
-              enable = true,
-              keymaps = {
-                  goto_definition = "gnd",
-                  list_definitions = "gnD",
-                  list_definitions_toc = "gO",
-                  goto_next_usage = "gnu",
-                  goto_previous_usage = "gpu",
-              },
-          },
-      },
-
-      textobjects = {
-          select = {
-              enable = true,
-              keymaps = {
-                  ["af"] = "@function.outer",
-                  ["if"] = "@function.inner",
-                  ["ac"] = "@class.outer",
-                  ["ic"] = "@class.inner",
-              },
-          },
-      },
-
-      rainbow = {
-          enable = true,
-          extended_mode = true,
-      },
-
-      pairs = {
-          enable = true,
-          disable = {},
-      },
-  }
-EOF
-endif
-colorscheme github_dark
+" if jetpack#tap('nvim-treesitter')
+" lua <<EOF
+"   require('nvim-treesitter.configs').setup {
+"       ensure_installed = "all",
+"       highlight = {
+"           enable = true,
+"           disable = { "markdown" },
+"       },
+" 
+" 
+"       incremental_selection = {
+"           enable = true,
+"           keymaps = {
+"               init_selection    = "gnn",
+"               node_incremental  = "grn",
+"               node_decremental  = "grm",
+"               scope_incremental = "grc",
+"           },
+"       },
+"       indent = { enable = false },
+" 
+"       refactor = {
+"           highlight_definitions   = { enable = false },
+"           highlight_current_scope = { enable = false },
+"           smart_rename = {
+"               enable = true,
+"               keymaps = {
+"                   smart_rename = "grr",
+"               },
+"           },
+" 
+"           navigation = {
+"               enable = true,
+"               keymaps = {
+"                   goto_definition = "gnd",
+"                   list_definitions = "gnD",
+"                   list_definitions_toc = "gO",
+"                   goto_next_usage = "gnu",
+"                   goto_previous_usage = "gpu",
+"               },
+"           },
+"       },
+" 
+"       textobjects = {
+"           select = {
+"               enable = true,
+"               keymaps = {
+"                   ["af"] = "@function.outer",
+"                   ["if"] = "@function.inner",
+"                   ["ac"] = "@class.outer",
+"                   ["ic"] = "@class.inner",
+"               },
+"           },
+"       },
+" 
+"       rainbow = {
+"           enable = true,
+"           extended_mode = true,
+"       },
+" 
+"       pairs = {
+"           enable = true,
+"           disable = {},
+"       },
+"   }
+" EOF
+" endif
+" colorscheme github_dark
 
 " }}}
 " SubSection: @Highlight {{{
@@ -561,7 +561,7 @@ endif
 if jetpack#tap('nvim-cmp') && jetpack#tap('vim-vsnip') && jetpack#tap('LuaSnip')
 
   " $HOME/dotfiles/.config/nvim/lua/rc/completion.lua
-  lua require('rc.completion')
+  " lua require('rc.completion')
 
 endif
 
@@ -674,7 +674,7 @@ nnoremap q? <cmd>lua require('cmdbuf').split_open(vim.o.cmdwinheight, {type = "v
 " SubSection: @Comment {{{
 
 if jetpack#tap('Comment.nvim')
-  lua require('rc.comment-nvim')
+  " lua require('rc.comment-nvim')
 endif
 
 " }}}
@@ -793,11 +793,11 @@ if jetpack#tap('vim-searchx')
 endif
 
 
-if jetpack#tap('hop.nvim')
-lua <<EOF
-require('hop').setup {  }
-EOF
-endif
+" if jetpack#tap('hop.nvim')
+" lua <<EOF
+" require('hop').setup {  }
+" EOF
+" endif
 
 " }}}
 " SubSection: @OpenBrowser {{{
@@ -816,22 +816,22 @@ endif
 if jetpack#tap('lexima.vim')
   let g:lexima_accept_pum_with_enter = v:false
   let g:lexima_no_default_rules = v:true
-  call lexima#set_default_rules()
+  " call lexima#set_default_rules()
 
-  call lexima#add_rule({ 'char': '<', 'input_after': '>' })
-  call lexima#add_rule({ 'char': '>', 'at': '\%#>', 'leave': 1 })
-  call lexima#add_rule({ 'char': '<BS>', 'at': '<\%#>', 'delete': 1 })
-  call lexima#add_rule({ 'char': '<BS>', 'at': '< \%# >', 'delete': 1 })
-  call lexima#add_rule({ 'char': '<Space>', 'at': '<\%#>', 'input_after': '<Space>' })
-  call lexima#add_rule({ 'char': '<CR>', 'at': '>\%#<', 'input': '<CR><Up><End><CR>' })
+  " call lexima#add_rule({ 'char': '<', 'input_after': '>' })
+  " call lexima#add_rule({ 'char': '>', 'at': '\%#>', 'leave': 1 })
+  " call lexima#add_rule({ 'char': '<BS>', 'at': '<\%#>', 'delete': 1 })
+  " call lexima#add_rule({ 'char': '<BS>', 'at': '< \%# >', 'delete': 1 })
+  " call lexima#add_rule({ 'char': '<Space>', 'at': '<\%#>', 'input_after': '<Space>' })
+  " call lexima#add_rule({ 'char': '<CR>', 'at': '>\%#<', 'input': '<CR><Up><End><CR>' })
 
-  call lexima#add_rule({ 'char': '<Tab>', 'at': '\%#\s*)',   'input': '<Left><C-o>f)<Right>' })
-  call lexima#add_rule({ 'char': '<Tab>', 'at': '\%#\s*\}',  'input': '<Left><C-o>f}<Right>' })
-  call lexima#add_rule({ 'char': '<Tab>', 'at': '\%#\s*\]',  'input': '<Left><C-o>f]<Right>' })
-  call lexima#add_rule({ 'char': '<Tab>', 'at': '\%#\s*>',   'input': '<Left><C-o>f><Right>' })
-  call lexima#add_rule({ 'char': '<Tab>', 'at': '\%#\s*`',   'input': '<Left><C-o>f`<Right>' })
-  call lexima#add_rule({ 'char': '<Tab>', 'at': '\%#\s*"',   'input': '<Left><C-o>f"<Right>' })
-  call lexima#add_rule({ 'char': '<Tab>', 'at': '\%#\s*' . "'", 'input': '<Left><C-o>f' . "'" . '<Right>' })
+  " call lexima#add_rule({ 'char': '<Tab>', 'at': '\%#\s*)',   'input': '<Left><C-o>f)<Right>' })
+  " call lexima#add_rule({ 'char': '<Tab>', 'at': '\%#\s*\}',  'input': '<Left><C-o>f}<Right>' })
+  " call lexima#add_rule({ 'char': '<Tab>', 'at': '\%#\s*\]',  'input': '<Left><C-o>f]<Right>' })
+  " call lexima#add_rule({ 'char': '<Tab>', 'at': '\%#\s*>',   'input': '<Left><C-o>f><Right>' })
+  " call lexima#add_rule({ 'char': '<Tab>', 'at': '\%#\s*`',   'input': '<Left><C-o>f`<Right>' })
+  " call lexima#add_rule({ 'char': '<Tab>', 'at': '\%#\s*"',   'input': '<Left><C-o>f"<Right>' })
+  " call lexima#add_rule({ 'char': '<Tab>', 'at': '\%#\s*' . "'", 'input': '<Left><C-o>f' . "'" . '<Right>' })
 endif
 
 if jetpack#tap('vim-matchup')
