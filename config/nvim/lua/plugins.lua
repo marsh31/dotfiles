@@ -11,8 +11,14 @@
 -- 1. start plugins. load in start time.
 -- 2. opt plugin. lazy load using packadd.
 --
+-- lua:
+-- https://zenn.dev/slin/articles/2020-11-03-neovim-lua2#ex%E3%82%B3%E3%83%9E%E3%83%B3%E3%83%89
+-- https://github.com/nanotee/nvim-lua-guide
+--
 --
 -- packer.nvim:
+-- https://github.com/wbthomason/packer.nvim
+--
 -- https://qiita.com/delphinus/items/8160d884d415d7425fcc
 --
 -- https://qiita.com/delphinus/items/fb905e452b2de72f1a0f
@@ -115,7 +121,6 @@ return require("packer").startup(function(use)
     use({ "jayp0521/mason-null-ls.nvim" }) -- linter and formatter
 
     use({ "tami5/lspsaga.nvim" })
-    -- use({ "onsails/lspkind-nvim" })
     use({
         "ray-x/lsp_signature.nvim",
         config = function()
@@ -124,7 +129,6 @@ return require("packer").startup(function(use)
     })
     use({ "stevearc/dressing.nvim" })
     use({ "j-hui/fidget.nvim" })
-
     use({ "folke/trouble.nvim" })
 
     -- @complete
@@ -152,9 +156,9 @@ return require("packer").startup(function(use)
         },
         config = function()
             local luasnip = require("luasnip")
+
             local cmp = require("cmp")
             local cmp_autopairs = require("nvim-autopairs.completion.cmp")
-
             cmp.event:on("confirm_done", cmp_autopairs.on_confirm_done())
 
             local has_words_before = function()
@@ -239,12 +243,14 @@ return require("packer").startup(function(use)
                     { name = "nvim_lsp" },
                     { name = "nvim_lsp_signature_help" },
                     { name = "nvim_lua" },
+                    { name = "luasnip" },
                     { name = "path" },
                     { name = "buffer" },
                 },
             })
 
-            require("modules/lsp")
+            -- ~/.config/nvim/lua/snippets/init.lua
+            require("snippets")
         end,
     })
 
@@ -403,11 +409,10 @@ return require("packer").startup(function(use)
     })
     use({ -- vgit.nvim
         "tanvirtin/vgit.nvim",
+        disable = true,
         config = function()
             require("vgit").setup({
-                settings = {
-
-                },
+                settings = {},
             })
         end,
     })
@@ -468,6 +473,16 @@ return require("packer").startup(function(use)
     })
 
     -- @quickfix
+    use({ -- vim-qfreplace
+        "thinca/vim-qfreplace",
+        cmd = "Qfreplace",
+    })
+    use({ -- QFGrep
+        "sk1418/QFGrep",
+        ft = { "qf" },
+        -- keymap: <leader>g, <leader>v, <leader>r
+    })
+
     -- use({ -- nvim-bqf
     --     "kevinhwang91/nvim-bqf",
     --
@@ -484,14 +499,6 @@ return require("packer").startup(function(use)
     --         })
     --     end,
     -- })
-    -- use({ -- qf_helper.nvim
-    --     "stevearc/qf_helper.nvim",
-    -- })
-    -- use({ -- vim-qfreplace
-    --     "thinca/vim-qfreplace",
-    --     cmd = "Qfreplace",
-    -- })
-    -- use({ "sk1418/QFGrep" })
     -- use({ "gabrielpoca/replacer.nvim" })
 
     -- @filer
