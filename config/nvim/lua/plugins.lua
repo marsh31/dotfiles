@@ -356,6 +356,32 @@ return require("packer").startup(function(use)
         end,
     })
 
+    -- @quickfix
+    -- use({ -- nvim-bqf
+    --     "kevinhwang91/nvim-bqf",
+    --
+    --     -- lazyload
+    --     ft = { "qf" },
+    --
+    --     -- config
+    --     config = function()
+    --         require("bqf").setup({
+    --             preview = {
+    --                 win_height = 7,
+    --                 win_vheight = 7,
+    --             },
+    --         })
+    --     end,
+    -- })
+    -- use({ -- qf_helper.nvim
+    --     "stevearc/qf_helper.nvim",
+    -- })
+    -- use({ -- vim-qfreplace
+    --     "thinca/vim-qfreplace",
+    --     cmd = "Qfreplace",
+    -- })
+    -- use({ "sk1418/QFGrep" })
+    -- use({ "gabrielpoca/replacer.nvim" })
 
     -- @filer
     use({ -- nvim-tree.lua
