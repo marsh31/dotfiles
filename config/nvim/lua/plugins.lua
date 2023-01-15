@@ -248,14 +248,8 @@ return require("packer").startup(function(use)
         end,
     })
 
-    -- @colorscheme
-    use({ "sainnhe/everforest", opt = true })
-    use({ "bluz71/vim-nightfly-guicolors", opt = true })
-    use({ "christianchiarulli/nvcode-color-schemes.vim", opt = true })
-    use({ "projekt0n/github-nvim-theme", opt = true })
-
     -- @treesitter
-    use({
+    use({ -- nvim-treesitter
         "nvim-treesitter/nvim-treesitter",
         run = [[:TSUpdate]],
         requires = {
@@ -268,7 +262,20 @@ return require("packer").startup(function(use)
             { "nvim-treesitter/nvim-treesitter-refactor" },
             { "theHamsta/nvim-treesitter-pairs" },
             { "p00f/nvim-ts-rainbow" },
+            { "Dkendal/nvim-treeclimber" },
+
+            -- colorscheme
+            { "sainnhe/everforest" },
+            { "bluz71/vim-nightfly-guicolors" },
+            { "navarasu/onedark.nvim" },
+            { "folke/tokyonight.nvim" },
+            { "catppuccin/nvim" },
+            { "rebelot/kanagawa.nvim" },
+            { "christianchiarulli/nvcode-color-schemes.vim" },
+            { "EdenEast/nightfox.nvim" },
+            { "projekt0n/github-nvim-theme" },
         },
+
         config = function()
             local configs = require("nvim-treesitter.configs")
             configs.setup({
