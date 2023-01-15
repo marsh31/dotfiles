@@ -26,6 +26,7 @@ return require("packer").startup(function(use)
 
     -- @framework
     use({ "nvim-lua/plenary.nvim" })
+    use({ "nvim-tree/nvim-web-devicons" })
 
     -- @lsp
     use({ "neovim/nvim-lspconfig" })
@@ -354,6 +355,14 @@ return require("packer").startup(function(use)
             })
         end,
     })
+
+
+    -- @filer
+    use({ -- nvim-tree.lua
+        "nvim-tree/nvim-tree.lua",
+        requires = {
+            "nvim-tree/nvim-web-devicons",
+        },
 
     -- @statusline
     use({
