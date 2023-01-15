@@ -29,26 +29,106 @@ return require("packer").startup(function(use)
     use({ "nvim-tree/nvim-web-devicons" })
 
     -- @lsp
-    use({ "neovim/nvim-lspconfig" })
-    use({ "williamboman/mason.nvim" }) -- installer
-    use({ "williamboman/mason-lspconfig.nvim" })
-    -- requires = {
-    --   'williamboman/mason.nvim',
-    -- }
+    use({ -- lspconfig
+        "neovim/nvim-lspconfig",
+        requires = {
+            { "williamboman/mason.nvim" },
+            { "williamboman/mason-lspconfig.nvim" },
+        },
+        wants = {
+            "mason.nvim",
+            "mason-lspconfig.nvim",
 
+            "cmp-nvim-lsp",
+        },
+        config = function()
+            local lsp_config = require("lspconfig")
+
+            -- installer
+            local mason = require("mason")
+            local mason_lspconfig = require("mason-lspconfig")
+
+            -- linter and formatter
+            local mason_null_ls = require("mason-null-ls")
+            local null_ls = require("null-ls")
+
+            -- other
+            require("lspsaga").setup()
+            -- require('lspkind-nvim').init({ ... })
+            require("lsp_signature").setup({ hint_enable = false })
+            require("dressing").setup()
+            require("fidget").setup()
+
+            mason.setup()
+
+            --
+            -- lsp
+            --
+            mason_lspconfig.setup({
+                ensure_installed = {
+                    "sumneko_lua",
+                },
+
+                automatic_installation = true,
+            })
+
+            mason_lspconfig.setup_handlers({
+                function(server_name)
+                    local opts = {
+                        -- capabilities = require('cmp_nvim_lsp').update_capabilities(vim.lsp.protocol.make_client_capabilities()),
+                        capabilities = require("cmp_nvim_lsp").default_capabilities(),
+
+                        handlers = {
+                            ["textDocument/publishDiagnostics"] = vim.lsp.with(
+                                vim.lsp.diagnostic.on_publish_diagnostics,
+                                {
+                                    virtual_text = false,
+                                }
+                            ),
+                        },
+                    }
+
+                    lsp_config[server_name].setup(opts)
+                end,
+            })
+
+            --
+            -- linter and formatter
+            --   null-ls
+            --
+            mason_null_ls.setup({
+                ensure_installed = {
+                    "stylua",
+                    "jq",
+                },
+                automatic_installation = true,
+            })
+
+            null_ls.setup({
+                sources = {
+                    null_ls.builtins.formatting.stylua,
+                },
+            })
+        end,
+    })
     use({ "jose-elias-alvarez/null-ls.nvim" }) -- linter and formatter
     use({ "jayp0521/mason-null-ls.nvim" }) -- linter and formatter
 
     use({ "tami5/lspsaga.nvim" })
-    use({ "onsails/lspkind-nvim" })
-    use({ "ray-x/lsp_signature.nvim" })
+    -- use({ "onsails/lspkind-nvim" })
+    use({
+        "ray-x/lsp_signature.nvim",
+        config = function()
+            require("lsp_signature").setup()
+        end,
+    })
     use({ "stevearc/dressing.nvim" })
     use({ "j-hui/fidget.nvim" })
 
     use({ "folke/trouble.nvim" })
 
     -- @complete
-    use({
+    use({ -- nvim-cmp
         "hrsh7th/nvim-cmp",
         module = { "cmp" },
         requires = {
