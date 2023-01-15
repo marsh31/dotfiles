@@ -281,6 +281,12 @@ return require("packer").startup(function(use)
         end,
         config = function()
             require("telescope").setup()
+
+    -- @search
+    use({ -- nvim-hlslens
+        "kevinhwang91/nvim-hlslens",
+        config = function()
+            require("hlslens").setup()
         end,
     })
 
