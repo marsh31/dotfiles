@@ -136,36 +136,26 @@ return require("packer").startup(function(use)
             { "hrsh7th/cmp-cmdline", event = { "InsertEnter" } },
             { "hrsh7th/cmp-path", event = { "InsertEnter" } },
 
-            { "hrsh7th/cmp-nvim-lsp" }, -- event = { "InsertEnter" } },
+            { "hrsh7th/cmp-nvim-lsp" }, --, event = { "InsertEnter" } },
             { "hrsh7th/cmp-nvim-lua", event = { "InsertEnter" } },
 
             { "hrsh7th/cmp-nvim-lsp-document-symbol", event = { "InsertEnter" } },
             { "hrsh7th/cmp-nvim-lsp-signature-help", event = { "InsertEnter" } },
+            { "onsails/lspkind-nvim" },
+
+            { "saadparwaiz1/cmp_luasnip", event = { "InsertEnter" } },
+            { "L3MON4D3/LuaSnip" },
+        },
+        wants = {
+            "lspkind-nvim",
+            "LuaSnip",
         },
         config = function()
-            local lsp_config = require("lspconfig")
-            local lspkind = require("lspkind")
+            local luasnip = require("luasnip")
             local cmp = require("cmp")
+            local cmp_autopairs = require("nvim-autopairs.completion.cmp")
 
-            require("mason-lspconfig").setup_handlers({
-                function(server_name)
-                    local opts = {
-                        -- capabilities = require('cmp_nvim_lsp').update_capabilities(vim.lsp.protocol.make_client_capabilities()),
-                        capabilities = require("cmp_nvim_lsp").default_capabilities(),
-
-                        handlers = {
-                            ["textDocument/publishDiagnostics"] = vim.lsp.with(
-                                vim.lsp.diagnostic.on_publish_diagnostics,
-                                {
-                                    virtual_text = false,
-                                }
-                            ),
-                        },
-                    }
-
-                    lsp_config[server_name].setup(opts)
-                end,
-            })
+            cmp.event:on("confirm_done", cmp_autopairs.on_confirm_done())
 
             local has_words_before = function()
                 local line, col = unpack(vim.api.nvim_win_get_cursor(0))
@@ -173,24 +163,36 @@ return require("packer").startup(function(use)
                     and vim.api.nvim_buf_get_lines(0, line - 1, line, true)[1]:sub(col, col):match("%s") == nil
             end
             cmp.setup({
+                snippet = {
+                    expand = function(args)
+                        require("luasnip").lsp_expand(args.body)
+                    end,
+                },
+                window = {
+                    completion = {
+                        winhighlight = "Normal:Pmenu,FloatBorder:Pmenu,Search:None",
+                        col_offset = -3,
+                        side_padding = 0,
+                    },
+                },
                 formatting = {
-                    format = lspkind.cmp_format({
-                        mode = "symbol",
-                        maxwidth = 50,
-                        ellipsis_char = "...",
-                    }),
+                    fields = { "kind", "abbr", "menu" },
+                    format = function(entry, vim_item)
+                        local kind =
+                        require("lspkind").cmp_format({ mode = "symbol_text", maxwidth = 50 })(entry, vim_item)
+                        local strings = vim.split(kind.kind, "%s", { trimempty = true })
+                        kind.kind = " " .. (strings[1] or "") .. " "
+                        kind.menu = "    (" .. (strings[2] or "") .. ")"
+                        return kind
+                    end,
                 },
                 mapping = {
-                    ["<C-k>"] = cmp.mapping(cmp.mapping.complete(), { "i", "s" }),
+                    ["<C-x><C-o>"] = cmp.mapping(cmp.mapping.complete(), { "i", "s" }),
                     ["<C-n>"] = cmp.mapping(function(fallback)
                         if cmp.visible() then
                             cmp.select_next_item()
                         else
                             cmp.complete()
-                            -- elseif has_words_before() then
-                            --     cmp.complete()
-                            -- else
-                            --     fallback()
                         end
                     end, { "i", "s" }),
 
@@ -199,10 +201,26 @@ return require("packer").startup(function(use)
                             cmp.select_prev_item()
                         else
                             cmp.complete()
-                            -- elseif has_words_before() then
-                            --     cmp.complete()
-                            -- else
-                            --     fallback()
+                        end
+                    end, { "i", "s" }),
+
+                    ["<Tab>"] = cmp.mapping(function(fallback)
+                        if luasnip.expand_or_jumpable() then
+                            luasnip.expand_or_jump()
+                        elseif cmp.visible() then
+                            cmp.select_next_item()
+                        else
+                            fallback()
+                        end
+                    end, { "i", "s" }),
+
+                    ["<S-Tab>"] = cmp.mapping(function(fallback)
+                        if luasnip.expand_or_jumpable(-1) then
+                            luasnip.jump(-1)
+                        elseif cmp.visible() then
+                            cmp.select_prev_item()
+                        else
+                            fallback()
                         end
                     end, { "i", "s" }),
 
