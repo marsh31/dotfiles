@@ -61,30 +61,31 @@ vim.opt.foldlevel      = 1
 ------------------------------------------------------------
 -- Editor feature
 ------------------------------------------------------------
-vim.opt.autoread    = true                      -- auto read when change current buffer file
-vim.opt.backup      = false                     -- nobackup
-vim.opt.clipboard   = "unnamedplus"             -- clipboard on.
-vim.opt.hidden      = true                      -- enable to move the other buffer when change current buffer.
-vim.opt.lazyredraw  = true                      -- lazyredraw
-vim.opt.mouse       = "n"                       -- mouse
-vim.opt.shell       = "bash"                    -- bash, neovim terminal shell
-vim.opt.splitbelow  = true                      -- split below
-vim.opt.splitright  = true                      -- split right
-vim.opt.swapfile    = false                     -- noswapfile
-vim.opt.undofile    = true                      -- undofile
-vim.opt.undodir     = vim.fn.expand("~/.local/state/nvim")
-vim.opt.undolevels  = 1000
-vim.opt.updatetime  = 200                       -- cursor hold time
-vim.opt.virtualedit = "block"                   -- virtualedit. move on blank on visual mode.
-vim.opt.writebackup = false                     -- nowritebackup
+vim.opt.autoread       = true                      -- auto read when change current buffer file
+vim.opt.backup         = false                     -- nobackup
+vim.opt.clipboard      = "unnamedplus"             -- clipboard on.
+vim.opt.hidden         = true                      -- enable to move the other buffer when change current buffer.
+vim.opt.lazyredraw     = false                     -- lazyredraw
+vim.opt.mouse          = "n"                       -- mouse
+vim.opt.sessionoptions = "blank,buffers,curdir,folds,help,tabpages,winsize,winpos,terminal"
+vim.opt.shell          = "bash"                    -- bash, neovim terminal shell
+vim.opt.splitbelow     = true                      -- split below
+vim.opt.splitright     = true                      -- split right
+vim.opt.swapfile       = false                     -- noswapfile
+vim.opt.undofile       = true                      -- undofile
+vim.opt.undodir        = vim.fn.expand("~/.local/state/nvim")
+vim.opt.undolevels     = 1000
+vim.opt.updatetime     = 200                       -- cursor hold time
+vim.opt.virtualedit    = "block"                   -- virtualedit. move on blank on visual mode.
+vim.opt.writebackup    = false                     -- nowritebackup
 
-vim.opt.autoindent  = true
-vim.opt.cindent     = true
-vim.opt.smartindent = true
-vim.opt.expandtab   = true
-vim.opt.tabstop     = 2
-vim.opt.softtabstop = 2
-vim.opt.shiftwidth  = 2
+vim.opt.autoindent     = true
+vim.opt.cindent        = true
+vim.opt.smartindent    = true
+vim.opt.expandtab      = true
+vim.opt.tabstop        = 2
+vim.opt.softtabstop    = 2
+vim.opt.shiftwidth     = 2
 
 
 vim.opt.formatoptions:append {
