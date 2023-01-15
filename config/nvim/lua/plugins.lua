@@ -388,18 +388,33 @@ return require("packer").startup(function(use)
     })
 
     -- @git
-    use({
+    use({ -- gitsigns.nvim
         "lewis6991/gitsigns.nvim",
         config = function()
-            require("gitsigns").setup {
+            require("gitsigns").setup({
                 signcolumn = false,
                 numhl = true,
-            }
-        end
+            })
+        end,
     })
+    use({ -- neogit
+        "TimUntersberger/neogit",
+        cmd = "Neogit",
+    })
+    use({ -- vgit.nvim
+        "tanvirtin/vgit.nvim",
+        config = function()
+            require("vgit").setup({
+                settings = {
+
+                },
+            })
+        end,
+    })
+    use({ "sindrets/diffview.nvim" })
 
     -- @foldtext
-    use({
+    use({ -- pretty-fold.nvim
         "anuvyklack/pretty-fold.nvim",
         config = function()
             require("pretty-fold").setup({
@@ -486,17 +501,173 @@ return require("packer").startup(function(use)
             "nvim-tree/nvim-web-devicons",
         },
 
+        config = function()
+            require("nvim-tree").setup({})
+        end,
+    })
+
+    -- @edit
+    use({ -- vim-partedit
+        "thinca/vim-partedit",
+        config = function()
+            vim.g["partedit#opener"] = "vsplit"
+
+            -- prefix
+            -- filetype
+        end,
+    })
+    use({ -- winresizer
+        "simeji/winresizer",
+        -- cmd :WinResizerStartResize
+        config = function()
+            vim.g.winresizer_start_key = "<C-w><C-e>"
+            vim.g.winresizer_vert_resize = 10
+            vim.g.winresizer_horiz_resize = 5
+        end,
+    })
+    use({ -- nvim-surround
+        "kylechui/nvim-surround",
+        config = function()
+            require("nvim-surround").setup({
+                keymaps = {
+                    -- normal add
+                    normal = "sa", -- general operation
+                    normal_cur = "sas", -- line
+                    normal_line = "sA", -- general operation, insert new line.
+                    normal_cur_line = "sAS", -- line, and insert new line.
+
+                    delete = "sd",
+                    change = "sc",
+
+                    insert = "<C-g>s",
+                    insert_line = "<C-g>S",
+
+                    visual = "S",
+                    visual_line = "gS",
+                },
+            })
+        end,
+    })
+    use({ -- nvim-autopairs
+        "windwp/nvim-autopairs",
+        config = function()
+            require("nvim-autopairs").setup({
+                disable_filetype = { "TelescopePrompt" },
+            })
+
+            local rule = require("nvim-autopairs.rule")
+            local npairs = require("nvim-autopairs")
+
+            -- ... add rules ...
+        end,
+    })
+    use({ -- Comment.nvim
+        "numToStr/Comment.nvim",
+        config = function()
+            require("Comment").setup()
+        end,
+    })
+    use({ -- auto-session
+        "rmagatti/auto-session",
+        config = function()
+            require("auto-session").setup({
+                -- :SaveSession, :RestoreSession, :DeleteSession
+                auto_session_root_dir = vim.fn.stdpath("data") .. "/sessions/",
+            })
+        end,
+    })
+
+    -- @keyassistant
+    use({ -- which-key
+        "folke/which-key.nvim",
+        config = function()
+            require("which-key").setup({
+                plugins = {
+                    registers = false,
+                },
+            })
+        end,
+    })
+    use({ "mrjones2014/legendary.nvim", wants = { "telescope", "dressing" } })
+
     -- @statusline
-    use({
+    use({ -- lualine.nvim
         "nvim-lualine/lualine.nvim",
         config = function()
             require("lualine").setup({
                 options = {
                     globalstatus = true,
                 },
+                extensions = {
+                    "nvim-tree",
+                    "quickfix",
+                },
             })
         end,
     })
+
+    -- @tabline
+    use({ "nanozuki/tabby.nvim" })
+
+    -- @startup
+    use({ -- alpha-nvim
+        "goolord/alpha-nvim",
+        requires = {
+            "nvim-tree/nvim-web-devicons",
+        },
+        config = function()
+            local alpha = require("alpha")
+            local startify = require("alpha.themes.startify")
+
+            alpha.setup(startify.config)
+        end,
+    })
+    use({ "ahmedkhalf/project.nvim" })
+
+    -- @motion
+    use({ -- neoscroll.nvim
+        "karb94/neoscroll.nvim",
+        config = function()
+            require("neoscroll").setup()
+        end,
+    })
+    use({ -- hop.nvim
+        "phaazon/hop.nvim",
+    })
+
+    -- @hex
+    use({ "RaafatTurki/hex.nvim" })
+
+    -- @notify
+    --     use({ -- noice.nvim
+    --         "folke/noice.nvim",
+    --         requires = {
+    --             "MunifTanjim/nui.nvim",
+    --             "rcarriga/nvim-notify",
+    --         },
+    --         config = function()
+    --             require("noice").setup({
+    --                 lsp = {
+    --                     override = {
+    --                         ["vim.lsp.util.convert_input_to_markdown_lines"] = true,
+    --                         ["vim.lsp.util.stylize_markdown"] = true,
+    --                         ["cmp.entry.get_documentation"] = true,
+    --                     },
+    --                     signature = {
+    --                         enabled = false,
+    --                     },
+    --                 },
+    --
+    --                 presets = {
+    --                     bottom_search = true,
+    --                     command_palette = true,
+    --                     long_message_to_split = true,
+    --                     inc_rename = false,
+    --                     lsp_doc_border = true,
+    --                 },
+    --             })
+    --         end,
+    --     })
 end)
 
 -- vim: sw=4 sts=4 expandtab fenc=utf-8

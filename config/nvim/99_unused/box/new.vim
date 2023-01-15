@@ -146,16 +146,6 @@ call jetpack#add('tyru/open-browser.vim')
 call jetpack#add('tyru/open-browser-github.vim')
 
 " }}}
-" SubSection: @Quickfix {{{
-
-call jetpack#add('sk1418/QFGrep')
-call jetpack#add('thinca/vim-qfreplace')
-call jetpack#add('kevinhwang91/nvim-bqf')
-call jetpack#add('skanehira/qfopen.vim')
-call jetpack#add('stevearc/qf_helper.nvim')
-call jetpack#add('gabrielpoca/replacer.nvim')
-
-" }}}
 " SubSection: @Tag {{{
 
 " call jetpack#add('windwp/nvim-autopairs')
@@ -570,10 +560,6 @@ endif
 if jetpack#tap('open-browser.vim')
   " nmap <Leader><Leader><CR> <Plug>(openbrowser-smart-search)
 endif
-
-" }}}
-" SubSection: @Quickfix {{{
-
 
 " }}}
 " SubSection: @Tag {{{
