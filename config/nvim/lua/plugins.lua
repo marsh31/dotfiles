@@ -343,50 +343,41 @@ return require("packer").startup(function(use)
 
             vim.opt.foldmethod = "expr"
             vim.opt.foldexpr = "nvim_treesitter#foldexpr()"
+
             vim.cmd.colorscheme([[gruvbox]])
         end,
     })
 
-    -- @fuzzyfinder
+    -- @outline
     use({
-        "nvim-telescope/telescope.nvim",
+        "stevearc/aerial.nvim",
+        requires = {
+            { "nvim-telescope/telescope.nvim" },
+        },
+        wants = {
+            "telescope.nvim",
+        },
+        config = function()
+            require("aerial").setup()
+            require("telescope").load_extension("aerial")
+        end,
+    })
+    use({ "simrat39/symbols-outline.nvim" })
 
+    -- @fuzzyfinder
+    use({ -- telescope.nvim
+        "nvim-telescope/telescope.nvim",
         requires = {
             { "nvim-lua/plenary.nvim" },
 
             -- other plugins
-            { "nvim-telescope/telescope-ghq.nvim", opt = true },
+            { "nvim-telescope/telescope-ghq.nvim" },
         },
-
-        wants = {
-            "telescope-ghq.nvim",
-        },
-
-        setup = function()
-            local function builtin(name)
-                return function(opt)
-                    return function()
-                        return require("telescope.builtin")[name](opt or {})
-                    end
-                end
-            end
-
-            local function extensions(name, prop)
-                return function(opt)
-                    return function()
-                        local telescope = require("telescope")
-                        telescope.load_extension(name)
-                        return telescope.extensions[name][prop](opt or {})
-                    end
-                end
-            end
-
-            vim.keymap.set("n", "<Leader>f:", builtin("command_history"), {})
-            vim.keymap.set("n", "<Leader>fg", builtin("grep_string"), {})
-            vim.keymap.set("n", "<Leader>fq", extensions("ghq", "list"), {})
-        end,
         config = function()
             require("telescope").setup()
+            require("telescope").load_extension("ghq")
+        end,
+    })
 
     -- @search
     use({ -- nvim-hlslens
