@@ -23,8 +23,15 @@
 --
 -- https://qiita.com/delphinus/items/fb905e452b2de72f1a0f
 --
+--
+-- plugin:
+-- https://github.com/rcarriga/nvim-notify
+-- https://github.com/MunifTanjim/nui.nvim
+-- https://github.com/folke/noice.nvim
+-- https://github.com/Shatur/neovim-session-manager
+--
+--
 
--- vim.cmd [[packadd packer.nvim]]
 vim.cmd.packadd("packer.nvim")
 return require("packer").startup(function(use)
     -- @package_manager
@@ -156,6 +163,21 @@ return require("packer").startup(function(use)
         },
         config = function()
             local luasnip = require("luasnip")
+            local types = require("luasnip.util.types")
+            luasnip.config.setup({
+                ext_opts = {
+                    [types.choiceNode] = {
+                        active = {
+                            virt_text = { { "    ⮃", "GruvboxOrange" } }
+                        }
+                    },
+                    [types.insertNode] = {
+                        active = {
+                            virt_text = { { "    ⮄", "GruvboxBlue" } }
+                        }
+                    }
+                },
+            })
 
             local cmp = require("cmp")
             local cmp_autopairs = require("nvim-autopairs.completion.cmp")
@@ -200,6 +222,14 @@ return require("packer").startup(function(use)
                         end
                     end, { "i", "s" }),
 
+                    ["<C-e>"] = cmp.mapping(function(fallback)
+                        if luasnip.choice_active() then
+                            luasnip.change_choice(1)
+                        else
+                            fallback()
+                        end
+                    end, {"i", "s"}),
+
                     ["<C-p>"] = cmp.mapping(function(fallback)
                         if cmp.visible() then
                             cmp.select_prev_item()
@@ -209,20 +239,20 @@ return require("packer").startup(function(use)
                     end, { "i", "s" }),
 
                     ["<Tab>"] = cmp.mapping(function(fallback)
-                        if luasnip.expand_or_jumpable() then
+                        if luasnip.expand_or_locally_jumpable() then
                             luasnip.expand_or_jump()
-                        elseif cmp.visible() then
-                            cmp.select_next_item()
+                            -- elseif cmp.visible() then
+                            --     cmp.select_next_item()
                         else
                             fallback()
                         end
                     end, { "i", "s" }),
 
                     ["<S-Tab>"] = cmp.mapping(function(fallback)
-                        if luasnip.expand_or_jumpable(-1) then
+                        if luasnip.jumpable(-1) then
                             luasnip.jump(-1)
-                        elseif cmp.visible() then
-                            cmp.select_prev_item()
+                            -- elseif cmp.visible() then
+                            --     cmp.select_prev_item()
                         else
                             fallback()
                         end
@@ -560,6 +590,18 @@ return require("packer").startup(function(use)
         config = function()
             require("nvim-autopairs").setup({
                 disable_filetype = { "TelescopePrompt" },
+
+                -- ... fast wrap ...
+                fast_wrap = {
+                    map = "<M-e>",
+                    chars = { "{", "[", "(", '"', "'" },
+                    pattern = [=[[%'%"%)%>%]%)%}%,]]=],
+                    end_key = "$",
+                    keys = "qwertyuiiopzxcvnmasdfghkl",
+                    check_comma = true,
+                    highlight = "Search",
+                    highligh_grey = "Comment",
+                },
             })
 
             local rule = require("nvim-autopairs.rule")
@@ -616,6 +658,18 @@ return require("packer").startup(function(use)
     -- @tabline
     use({ "nanozuki/tabby.nvim" })
 
+    -- @undo
+    use({
+        "kevinhwang91/nvim-fundo",
+        requires = "kevinhwang91/promise-async",
+        run = function()
+            require("fundo").install()
+        end,
+        config = function()
+            require("fundo").setup()
+        end,
+    })
+
     -- @startup
     use({ -- alpha-nvim
         "goolord/alpha-nvim",
@@ -624,9 +678,9 @@ return require("packer").startup(function(use)
         },
         config = function()
             local alpha = require("alpha")
-            local startify = require("alpha.themes.startify")
+            local theme = require("alpha.themes.dashboard")
 
-            alpha.setup(startify.config)
+            alpha.setup(theme.config)
         end,
     })
     use({ "ahmedkhalf/project.nvim" })
@@ -640,6 +694,12 @@ return require("packer").startup(function(use)
     })
     use({ -- hop.nvim
         "phaazon/hop.nvim",
+        config = function()
+            local hop = require("hop")
+            hop.setup({
+                keys = "asdfqwerzxcv",
+            })
+        end
     })
 
     -- @hex
