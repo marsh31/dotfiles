@@ -78,6 +78,8 @@ vim.opt.undolevels     = 1000
 vim.opt.updatetime     = 200                       -- cursor hold time
 vim.opt.virtualedit    = "block"                   -- virtualedit. move on blank on visual mode.
 vim.opt.writebackup    = false                     -- nowritebackup
+vim.opt.timeout        = true
+vim.opt.timeoutlen     = 300
 
 vim.opt.autoindent     = true
 vim.opt.cindent        = true
