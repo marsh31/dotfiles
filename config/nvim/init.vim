@@ -1,1 +1,0 @@
-/home/marsh/.config/nvim/box/new.vim

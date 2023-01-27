@@ -6,81 +6,87 @@
 # NOTE:
 #
 # 	install rust and other tools.
-# tools:
+# tools
 # 
 # if you want to uninstall rust, then do below cmd.
 # `rustup self uninstall`
 #
+# 
+# flow:
+#   install rustup
+#   read env
+#   install wasm-pack
+#   install env
+#   install dev tools
+#   install cargo tools
 
 
-install_rust() {
-  echo "[INFO] installing rust..."
-	curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
-}
+#
+# install rustup
+#
+echo "[INFO] checking rustup..."
+if !(type rustup > /dev/null 2>&1); then
+  echo "[INFO] installing rustup..."
+  curl https://sh.rustup.rs -sSf | sh
+fi
 
-install_cargo_tools() {
-  export CARGO_NET_FETCH_WITH_CLI=true
-  echo "[INFO] installing rust tools..."
-  echo 
 
-  echo "[INFO] installing cargo-watch..."
-  cargo install cargo-watch
-
-  echo "[INFO] installing cargo-generate..."
-  cargo install cargo-generate
-
-  echo "[INFO] installing cargo-update..."
-  cargo install cargo-update
-
-  echo "[INFO] installing cargo-tree..."
-  cargo install cargo-tree
-
-  echo "[INFO] installing cargo-graph..."
-  cargo install cargo-graph
-
-  echo "[INFO] installing cargo-benchcmp..."
-  cargo install cargo-benchcmp
-
-  echo "[INFO] installing cargo-make..."
-  cargo install cargo-make
-
-  echo "[INFO] installing wasm-pack..."
-  cargo install wasm-pack
-
-  echo "[INFO] installing rust-analyzer..."
-  rustup component add rls rust-analysis rust-src
-  sudo pacman -S rust-analyzer
-
-}
-
-install_wasm_pack() {
-  curl https://rustwasm.github.io/wasm-pack/installer/init.sh -sSf | sh
-}
-
-install_rustup() {
-  echo "[INFO] installing env..."
-	rustup target add wasm32-unknown-unknown
-
-  read -n1 -p "change default (stable) to nightly? (Y/n): " yn
-  echo 
-  if [[ $yn = [yY] ]]; then
-    rustup install nightly
-    rustup default nightly
-  fi
-}
-
-main() {
-	install_rust
-
+#
+# read env
+#
+if [[ -f $HOME/.cargo/env ]]; then
   echo "[INFO] read env for rust"
   source $HOME/.cargo/env
-
-  install_wasm_pack
-  
-	install_rustup
-
-	install_cargo_tools
-}
+else
+  echo "[ERROR] $HOME/.cargo/env is not found."
+  echo "[ERROR] rustup is not installed. Please install it."
+fi
 
 
-main
+#
+# install wasm-pack
+#
+echo "[INFO] checking wasm-pack..."
+if !(type wasm-pack > /dev/null 2>&1); then
+  echo "[INFO] installing wasm-pack..."
+  curl https://rustwasm.github.io/wasm-pack/installer/init.sh -sSf | sh
+fi
+
+
+#
+# install env
+#
+echo "[INFO] installing env..."
+rustup target add wasm32-unknown-unknown
+rustup install nightly
+rustup default nightly
+
+
+#
+# install dev tools
+#
+echo "[INFO] installing rust-analyzer..."
+if !(type rust-analyzer > /dev/null 2>&1); then
+  rustup component add rls rust-analysis rust-src
+  sudo pacman -S rust-analyzer
+fi
+
+
+#
+# install cargo tool
+#
+echo "[INFO] ckecking cargo..."
+if (type cargo > /dev/null 2>&1); then
+  echo "[INFO] ok. install cargo tools"
+  echo "[INFO] if you use [url \"github:\"] config in .gitconfig, please down the setting."
+  read -n1 -p "plsease push the button. Then enter the ~/.gitconfig file."
+  export CARGO_NET_FETCH_WITH_CLI=true
+  cargo install cargo-watch
+  cargo install cargo-generate
+  cargo install cargo-update
+  cargo install cargo-tree
+  cargo install cargo-graph
+  cargo install cargo-benchcmp
+  cargo install cargo-make
+  cargo install wasm-pack
+fi

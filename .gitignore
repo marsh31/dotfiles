@@ -7,9 +7,13 @@
 .zsh/.zcompdump
 .zsh/.zsh_history
 
-.config/nvim/plugged/**/*
-.config/nvim/undo/**/*
-.config/nvim/sessions/**/*
+config/nvim/plugged/**/*
+config/nvim/undo/**/*
+config/nvim/sessions/**/*
+
+etc/99_default/*
+!etc/99_default/.gitkeep
+
 
 ### https://raw.github.com/github/gitignore/0d7600fc30271e84deb4b52b3562ee57a350567b/Global/Linux.gitignore
 
