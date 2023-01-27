@@ -25,8 +25,6 @@
 --
 --
 -- plugin:
--- https://github.com/rcarriga/nvim-notify
--- https://github.com/MunifTanjim/nui.nvim
 -- https://github.com/folke/noice.nvim
 -- https://github.com/Shatur/neovim-session-manager
 --
@@ -40,6 +38,9 @@ return require("packer").startup(function(use)
     -- @framework
     use({ "nvim-lua/plenary.nvim" })
     use({ "nvim-tree/nvim-web-devicons" })
+    use({ "nvim-lua/popup.nvim" })
+    use({ "MunifTanjim/nui.nvim" })
+    use({ "rcarriga/nvim-notify" })
 
     -- @lsp
     use({ -- lspconfig

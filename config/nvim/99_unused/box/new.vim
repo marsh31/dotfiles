@@ -15,8 +15,6 @@
 call jetpack#begin(g:vimrc.pkg.plugins)
 " SubSection: @Framework {{{
 
-call jetpack#add('nvim-lua/popup.nvim')
-call jetpack#add('MunifTanjim/nui.nvim')
 call jetpack#add('antoinemadec/FixCursorHold.nvim')
 
 call jetpack#add('tpope/vim-repeat')
@@ -28,7 +26,6 @@ call jetpack#add('lambdalisue/glyph-palette.vim')
 call jetpack#add('lambdalisue/nerdfont.vim')
 call jetpack#add('kyazdani42/nvim-web-devicons')
 
-call jetpack#add('rcarriga/nvim-notify')
 " }}}
 " SubSection: @Completion {{{
 
@@ -116,11 +113,6 @@ call jetpack#add('mbbill/undotree')
 call jetpack#add('notomo/cmdbuf.nvim')
 
 " }}}
-" SubSection: @Comment {{{
-
-call jetpack#add('numToStr/Comment.nvim')
-
-" }}}
 " SubSection: @FileManager {{{
 
 call jetpack#add('lambdalisue/fern-bookmark.vim')
@@ -176,7 +168,6 @@ call jetpack#add('machakann/vim-sandwich')
 " }}}
 " SubSection: @VCS {{{
 
-call jetpack#add('junegunn/gv.vim')
 call jetpack#add('tanvirtin/vgit.nvim')
 call jetpack#add('akinsho/git-conflict.nvim')
 " call jetpack#add('lambdalisue/gina.vim')
@@ -426,13 +417,6 @@ nnoremap q/ <cmd>lua require('cmdbuf').split_open(vim.o.cmdwinheight, {type = "v
 nnoremap q? <cmd>lua require('cmdbuf').split_open(vim.o.cmdwinheight, {type = "vim/search/backward"})<CR>
 
 " }}}
-" SubSection: @Comment {{{
-
-if jetpack#tap('Comment.nvim')
-  " lua require('rc.comment-nvim')
-endif
-
-" }}}
 " SubSection: @FileManager {{{
 if jetpack#tap('fern.vim')
   let g:fern#default_hidden                               = 1
@@ -638,11 +622,6 @@ if jetpack#tap('vim-operator-user')
     xmap r <Plug>(operator-replace)
   endif
 endif
-
-
-
-" }}}
-" SubSection: @VCS {{{
 
 
 

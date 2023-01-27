@@ -12,7 +12,6 @@ local keymap = vim.keymap.set
 ------------------------------------------------------------
 -- @global
 ------------------------------------------------------------
-
 keymap("", "<MiddleMouse>", "<Nop>", { silent = true, nowait = true, remap = true })
 keymap("i", "<middleMouse>", "<Nop>", { silent = true, nowait = true, remap = true })
 keymap("i", "jj", "<ESC>", { silent = true, nowait = true, remap = true })
@@ -59,6 +58,8 @@ wk.register({
 
         ["g"] = { -- go
             name = "go",
+
+            ["q"] = { "<cmd>copen<CR>", "go quickfix window" },
         },
 
         ["r"] = { "<cmd>source %<CR>", "load the buffer file" },
