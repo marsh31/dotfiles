@@ -15,6 +15,7 @@ local keymap = vim.keymap.set
 keymap("", "<MiddleMouse>", "<Nop>", { silent = true, nowait = true, remap = true })
 keymap("i", "<middleMouse>", "<Nop>", { silent = true, nowait = true, remap = true })
 keymap("i", "jj", "<ESC>", { silent = true, nowait = true, remap = true })
+keymap("n", "<Leader>f", vim.lsp.buf.format)
 
 wk.register({
     ["<C-c"] = { "<ESC>", "escape" },
@@ -52,9 +53,9 @@ wk.register({
 
         ["d"] = { name = "disable feature" },
         ["dc"] = { "<cmd>nohlsearch<CR>", "Disable Highlight" },
+        ["de"] = { "<cmd>NvimTreeClose<CR>", "Close Nvimtree" },
 
-        ["e"] = { "<cmd>NvimTreeToggle<CR>", "Toggle NvimTree" },
-        ["f"] = { "<cmd>lua vim.lsp.buf.formatting()<CR>", "formatting" },
+        ["e"] = { "<cmd>NvimTreeOpen<CR>", "Open NvimTree" },
 
         ["g"] = { -- go
             name = "go",
