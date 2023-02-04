@@ -86,7 +86,18 @@ return require("packer").startup(function(use)
             --
             mason_lspconfig.setup({
                 ensure_installed = {
-                    "sumneko_lua",
+                    -- lsp
+                    "bashls",                   -- bash
+                    "clangd",                   -- clang
+                    "dockerls",                 -- docker
+                    "dotls",                    -- dot
+                    "sumneko_lua",              -- lua
+                    "gopls",                    -- go
+                    "html",                     -- html
+                    "jsonls",                   -- json
+                    "tsserver",                 -- javascript/typescript
+                    "rust_analyzer",            -- rust
+                    "sqls",                     -- sql
                 },
 
                 automatic_installation = true,
@@ -110,6 +121,19 @@ return require("packer").startup(function(use)
 
                     lsp_config[server_name].setup(opts)
                 end,
+
+
+                ["sumneko_lua"] = function ()
+                    lsp_config.sumneko_lua.setup({
+                        settings = {
+                            Lua = {
+                                diagnostics = {
+                                    globals = { "vim" }
+                                }
+                            }
+                        }
+                    })
+                end
             })
 
             mason_null_ls.setup({
