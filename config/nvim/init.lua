@@ -47,11 +47,28 @@ vim.api.nvim_create_autocmd("QuickFixCmdPost", {
     end,
 })
 
+
+vim.api.nvim_create_augroup("KeepLastPos", {})
+vim.api.nvim_create_autocmd("Bufread", {
+    group = "KeepLastPos",
+    pattern = "*",
+    callback = function ()
+        if vim.fn.line("'\"") > 0 and vim.fn.line("'\"") <= vim.fn.line("$") then
+            vim.cmd("normal g`\"zz")
+        end
+    end
+})
+
+
 if vim.fn.executable("rg") then
     vim.opt.grepprg = "rg --vimgrep --hidden"
     vim.opt.grepformat = "%f:%l:%c:%m"
 end
 
+------------------------------------------------------------
+-- quickfix window alignment.
+--
+--
 local fn = vim.fn
 function _G.qftf(info)
     local items
