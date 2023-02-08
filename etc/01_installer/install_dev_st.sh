@@ -8,7 +8,7 @@
 
 patchfiles=( https://st.suckless.org/patches/xresources/st-xresources-20200604-9ba7ecf.diff
 	)
-src_config=~/dotfiles/etc/st/config.def.h
+src_config=~/dotfiles/etc/01_installer/config.def.h
 
 download_st() {
 	git clone https://github.com/Shourai/st.git

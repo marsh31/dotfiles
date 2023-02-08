@@ -562,6 +562,19 @@ return require("packer").startup(function(use)
                 end
             end
 
+            local function edit_or_open_and_not_close ()
+                local action = "edit"
+                local node = lib.get_node_at_cursor()
+
+                if node.link_to and node.nodes then
+                    require("nvim-tree.actions.node.open-file").fn(action, node.link_to)
+                elseif node.nodes ~= nil then
+                    lib.expand_or_collapse(node)
+                else
+                    require("nvim-tree.actions.node.open-file").fn(action, node.absolute_path)
+                end
+            end
+
             local function vsplit_preview()
                 local action = "vsplit"
                 local node = lib.get_node_at_cursor()
@@ -583,7 +596,8 @@ return require("packer").startup(function(use)
                     mappings = {
                         custom_only = true,
                         list = {
-                            { key = { "<CR>", "o" }, action = "edit" },
+                            { key = "<CR>" , action = "edit", action_cb = edit_or_open_and_not_close },
+                            { key = "o", action = "open" },
                             { key = "<C-e>", action = "edit_in_place" },
                             { key = "O", action = "edit_no_picker" },
                             { key = "<C-]>", action = "cd" },
@@ -653,6 +667,12 @@ return require("packer").startup(function(use)
                     indent_markers = {
                         enable = true,
                     },
+                },
+
+                actions = {
+                    open_file = {
+                        quit_on_open = false,
+                    }
                 },
             })
         end,
