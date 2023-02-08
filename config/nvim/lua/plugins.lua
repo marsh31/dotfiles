@@ -135,6 +135,10 @@ return require("packer").startup(function(use)
                             Lua = {
                                 diagnostics = {
                                     globals = { "vim" }
+                                },
+
+                                runtime = {
+                                    version = "Lua 5.1"
                                 }
                             }
                         }

@@ -32,12 +32,41 @@ local parse = require("luasnip.util.parser").parse_snippet
 
 local utils = {}
 
-
-utils.date_input = function (args, state, fmt)
-  local fmt = fmt or "%Y-%m-%d"
-  return sn(nil, i(1, os.date(fmt)))
+utils.date_input = function(_, _, _fmt)
+  local date_fmt = _fmt or "%Y-%m-%d"
+  return sn(nil, i(1, os.date(date_fmt)))
 end
 
+utils.bash = function(_, _, command)
+  local file = io.popen(command, "r")
+  local res = {}
+
+  if file == nil then
+    return res
+  end
+
+  for line in file:lines() do
+    table.insert(res, line)
+  end
+  return res
+end
+
+utils.part = function(func, ...)
+  local args = { ... }
+  return function()
+    return func(unpack(args))
+  end
+end
+
+utils.pair = function(pair_begin, pair_end, expand_func, ...)
+  return s({ trig = pair_begin, wordTrig = false }, {
+    t({ pair_begin }),
+    i(1),
+    t({ pair_end }),
+  }, {
+    condition = utils.part(expand_func, utils.part(..., pair_begin, pair_end)),
+  })
+end
 
 utils.random0x16x = function(cnt)
   math.randomseed(os.time())
@@ -53,20 +82,14 @@ utils.random0x16x = function(cnt)
   end)
 end
 
-
 utils.generate_uuid = function()
   math.randomseed(os.time())
   local random = math.random
   local template = "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"
-  -- return template
   return string.gsub(template, "x", function()
     local v = random(0, 0xf)
     return string.format("%x", v)
   end)
-  --   local v = random(0, 0xf)
-  --   return string.format("%x", v)
-  -- end)
 end
-
 
 return utils

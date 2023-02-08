@@ -32,6 +32,10 @@ local parse = require("luasnip.util.parser").parse_snippet
 local utils = require("snippets.utils")
 
 local snippets = {
+    s("anki_clozen", {
+      t("{{c"), i(1, "1"), t("::"), i(2, "word"), t("}}")
+    }),
+
     s("anki_eng", {
       t("{"),
       t({"", "\t"}), t("\"id\": \""), i(1, "uuid"), t("\","),
@@ -46,6 +50,7 @@ local snippets = {
       t({"", "\t"}), t("]"),
       t({"", "}"})
     }),
+
 }
 
 return snippets
