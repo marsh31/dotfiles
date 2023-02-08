@@ -16,6 +16,7 @@ keymap("", "<MiddleMouse>", "<Nop>", { silent = true, nowait = true, remap = tru
 keymap("i", "<middleMouse>", "<Nop>", { silent = true, nowait = true, remap = true })
 keymap("i", "jj", "<ESC>", { silent = true, nowait = true, remap = true })
 keymap("n", "<Leader>f", vim.lsp.buf.format)
+keymap("t", "<A-j><A-j>", "<C-\\><C-n>", { silent = true, nowait = true, remap = true })
 
 wk.register({
     ["<C-c"] = { "<ESC>", "escape" },
