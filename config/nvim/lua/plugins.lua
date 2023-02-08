@@ -79,6 +79,13 @@ return require("packer").startup(function(use)
             require("dressing").setup()
             require("fidget").setup()
 
+
+            vim.diagnostic.config({
+                virtual_text = {
+                    severity = { min = vim.diagnostic.severity.WARN }
+                }
+            })
+
             mason.setup()
 
             --
@@ -113,7 +120,6 @@ return require("packer").startup(function(use)
                                 vim.lsp.diagnostic.on_publish_diagnostics,
                                 {
                                     virtual_text = false,
-                                    signs = false,
                                 }
                             ),
                         },
@@ -592,7 +598,7 @@ return require("packer").startup(function(use)
 
             require("nvim-tree").setup({
                 view = {
-                    width = 20,
+                    width = 30,
                     mappings = {
                         custom_only = true,
                         list = {
