@@ -1,4 +1,4 @@
--- NAME:   lua/snippets/init.lua
+-- NAME:   lua/snippets/python3.lua
 -- AUTHOR: marsh
 -- NOTE:
 --
@@ -29,14 +29,33 @@ local conds = require("luasnip.extras.expand_conditions")
 local postfix = require("luasnip.extras.postfix").postfix
 local types = require("luasnip.util.types")
 local parse = require("luasnip.util.parser").parse_snippet
+local utils = require("snippets.utils")
 
-ls.add_snippets("all", require("snippets.all"))
-ls.add_snippets("json", require("snippets.json"))
-ls.add_snippets("lua", require("snippets.lua"))
-ls.add_snippets("markdown", require("snippets.markdown"))
-ls.add_snippets("python", require("snippets.python3"))
-ls.add_snippets("sh", require("snippets.sh"))
-ls.add_snippets("typescript", require("snippets.typescript"))
-ls.add_snippets("vim", require("snippets.vim"))
+local snippets = {
+    s("shebang", {
+        t("#!/usr/bin/env python3"),
+    }),
 
--- vim: sw=4 sts=4 expandtab fenc=utf-8
+    s("main", {
+        t("def main():"),
+        t({ "", "\t" }),
+        i(1, "pass"),
+        i(0),
+        t({ "", "" }),
+        t({ "", "if __name__ == '__main__':" }),
+        t({ "", "\tmain()" }),
+    }),
+
+    s("fn", {
+        t("def "), i(1), t("("), c(2, {
+            sn(nil, { i(1, "args") }),
+            sn(nil, { i(1, "") }),
+        }),
+        t("):"),
+        t({ "", "\t" }),
+        i(3, "process"),
+        i(0),
+    }),
+}
+
+return snippets

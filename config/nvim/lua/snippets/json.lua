@@ -1,4 +1,4 @@
--- NAME:   lua/snippets/init.lua
+-- NAME:   lua/snippets/json.lua
 -- AUTHOR: marsh
 -- NOTE:
 --
@@ -29,14 +29,23 @@ local conds = require("luasnip.extras.expand_conditions")
 local postfix = require("luasnip.extras.postfix").postfix
 local types = require("luasnip.util.types")
 local parse = require("luasnip.util.parser").parse_snippet
+local utils = require("snippets.utils")
 
-ls.add_snippets("all", require("snippets.all"))
-ls.add_snippets("json", require("snippets.json"))
-ls.add_snippets("lua", require("snippets.lua"))
-ls.add_snippets("markdown", require("snippets.markdown"))
-ls.add_snippets("python", require("snippets.python3"))
-ls.add_snippets("sh", require("snippets.sh"))
-ls.add_snippets("typescript", require("snippets.typescript"))
-ls.add_snippets("vim", require("snippets.vim"))
+local snippets = {
+    s("anki_eng", {
+      t("{"),
+      t({"", "\t"}), t("\"id\": \""), i(1, "uuid"), t("\","),
+      t({"", "\t"}), t("\"front\": ["),
+      t({"", "\t\t"}), i(2, "front"),
+      t({"", "\t"}), t("],"),
+      t({"", "\t"}), t("\"back\": ["),
+      t({"", "\t\t"}), i(3, "back"),
+      t({"", "\t"}), t("],"),
+      t({"", "\t"}), t("\"tags\": ["),
+      t({"", "\t\t"}), i(4, "tag"),
+      t({"", "\t"}), t("]"),
+      t({"", "}"})
+    }),
+}
 
--- vim: sw=4 sts=4 expandtab fenc=utf-8
+return snippets

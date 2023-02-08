@@ -35,7 +35,10 @@ local snippets = {
         t("function "),
         i(1),
         t("("),
-        i(2, "args"),
+        c(2, {
+          sn(nil, { i(1, "args") } ),
+          sn(nil, { i(1, "") } )
+        }),
         t(")"),
         t({ "", "\t" }),
         i(3, "process"),

@@ -29,6 +29,7 @@ local conds = require("luasnip.extras.expand_conditions")
 local postfix = require("luasnip.extras.postfix").postfix
 local types = require("luasnip.util.types")
 local parse = require("luasnip.util.parser").parse_snippet
+local utils = require("snippets.utils")
 
 local function count(_, _, old_state)
     old_state = old_state or {
@@ -43,12 +44,14 @@ local function count(_, _, old_state)
     return snip
 end
 
-
-
 local snippets = {
     s("trig", {
         i(1, "change to update"),
         d(2, count, { 1 }),
+    }),
+
+    s("date", {
+        utils.date_input(),
     }),
 
     s("pnode", {
@@ -62,7 +65,18 @@ local snippets = {
             ["user_text"] = i(1, "default_text"),
         },
     }),
-}
 
+    s("rand", {
+      f(function (_, _, _)
+        return utils.random0x16x(4)
+      end, {}, {})
+    }),
+
+    s("uuid", {
+      f(function (_, _, _)
+        return utils.generate_uuid()
+      end, {}, {})
+    }),
+}
 
 return snippets

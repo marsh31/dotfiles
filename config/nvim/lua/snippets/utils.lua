@@ -1,4 +1,4 @@
--- NAME:   lua/snippets/init.lua
+-- NAME:   lua/snippets/utils.lua
 -- AUTHOR: marsh
 -- NOTE:
 --
@@ -30,13 +30,43 @@ local postfix = require("luasnip.extras.postfix").postfix
 local types = require("luasnip.util.types")
 local parse = require("luasnip.util.parser").parse_snippet
 
-ls.add_snippets("all", require("snippets.all"))
-ls.add_snippets("json", require("snippets.json"))
-ls.add_snippets("lua", require("snippets.lua"))
-ls.add_snippets("markdown", require("snippets.markdown"))
-ls.add_snippets("python", require("snippets.python3"))
-ls.add_snippets("sh", require("snippets.sh"))
-ls.add_snippets("typescript", require("snippets.typescript"))
-ls.add_snippets("vim", require("snippets.vim"))
+local utils = {}
 
--- vim: sw=4 sts=4 expandtab fenc=utf-8
+
+utils.date_input = function (args, state, fmt)
+  local fmt = fmt or "%Y-%m-%d"
+  return sn(nil, i(1, os.date(fmt)))
+end
+
+
+utils.random0x16x = function(cnt)
+  math.randomseed(os.time())
+  local random = math.random
+  local template = ""
+  for i = 1, cnt, 1 do
+    template = template .. "x"
+  end
+
+  return string.gsub(template, "x", function()
+    local v = random(0, 0xf)
+    return string.format("%x", v)
+  end)
+end
+
+
+utils.generate_uuid = function()
+  math.randomseed(os.time())
+  local random = math.random
+  local template = "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"
+  -- return template
+  return string.gsub(template, "x", function()
+    local v = random(0, 0xf)
+    return string.format("%x", v)
+  end)
+  --   local v = random(0, 0xf)
+  --   return string.format("%x", v)
+  -- end)
+end
+
+
+return utils
