@@ -42,6 +42,23 @@ local snippets = {
             return ret
         end, {}),
     }),
+
+    s("codeblock", {
+        t("```"), i(1, "lang"), t(":"), i(2, "filename"),
+        t({"", ""}), i(0),
+        t({"", "```"})
+    }),
+
+    s("mermaid_seq", {
+        t("```mermaid"),
+        t({"", "sequenceDiagram", ""}), i(0),
+        t({"", "```"})
+    }),
+
+    s("box", {
+        t("- [ ] "), i(0)
+    }),
+
     s("->>", {
         i(1, "send"),
         t(" ->> "),

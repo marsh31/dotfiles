@@ -867,6 +867,17 @@ return require("packer").startup(function(use)
 
     -- @hex
     use({ "RaafatTurki/hex.nvim" })
+    use({ 
+        "kat0h/bufpreview.vim",
+        run = 'deno task prepare',
+        requires = {
+            "vim-denops/denops.vim"
+        },
+
+        config = function ()
+            vim.g.bufpreview_browser = "firefox"
+        end
+    })
 
     -- @notify
     --     use({ -- noice.nvim
