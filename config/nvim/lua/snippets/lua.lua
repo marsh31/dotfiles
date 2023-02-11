@@ -62,6 +62,7 @@ local snippets = {
         i(0),
     }),
 
+    -- if-elseif-else
     s("if", {
         t("if "),
         i(1, "condition"),
@@ -77,7 +78,6 @@ local snippets = {
         t({ "", "end" }),
         i(0),
     }),
-
     s("elif", {
         t("elseif "),
         i(1, "condition"),
@@ -91,18 +91,18 @@ local snippets = {
             sn(nil, { t(""), i(1) }),
         }),
     }),
-
     s("else", {
         t("else"),
         t({ "", "\t" }),
-        i(2, "process"),
-        t({ "", "" }),
-        c(3, {
-            sn(nil, { t("elif"), i(1) }),
-            sn(nil, { t("else"), i(1) }),
-            sn(nil, { t(""), i(1) }),
-        }),
+        i(1, "process"),
     }),
+
+    s("while", {
+      t("while "), i(1, "condition"), t({ " do", "\t" }),
+      i(2, "process"), t({ "", "end" })
+    })
+
+
 }
 
 return snippets

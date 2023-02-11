@@ -67,15 +67,15 @@ local snippets = {
     }),
 
     s("rand", {
-      f(function (_, _, _)
-        return utils.random0x16x(4)
-      end, {}, {})
+        f(function(_, _, _)
+            return utils.random0x16x(4)
+        end, {}, {}),
     }),
 
     s("uuid", {
-      f(function (_, _, _)
-        return utils.generate_uuid()
-      end, {}, {})
+        f(function(_, _, _)
+            return utils.generate_uuid()
+        end, {}, {}),
     }),
 }
 
