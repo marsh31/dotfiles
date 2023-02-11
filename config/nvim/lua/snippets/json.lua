@@ -117,33 +117,17 @@ local snippets = {
 
     s("obj", {
         c(1, {
-            obj(1, nil, r(1, "value"), 0, nil), -- nil, nil
-            obj(1, nil, r(1, "value"), 1, nil), -- [, ]
-            obj(1, nil, r(1, "value"), 2, nil), -- {, }
+            obj(1, r(1, "key"), r(2, "value"), 0, nil), -- nil, nil
+            obj(1, r(1, "key"), r(2, "value"), 1, nil), -- [, ]
+            obj(1, r(1, "key"), r(2, "value"), 2, nil), -- {, }
         }),
-    }, { stored = { ["value"] = i(1, "value") } }),
-    s(",o", {
-        t({ ",", "" }),
-        c(1, {
-            obj(1, nil, r(1, "value"), 0, nil), -- nil, nil
-            obj(1, nil, r(1, "value"), 1, nil), -- [, ]
-            obj(1, nil, r(1, "value"), 2, nil), -- {, }
-        }),
-    }, { stored = { ["value"] = i(1, "value") } }),
+    }, { stored = {
+        ["key"]   = i(1, "key"),
+        ["value"] = i(2, "value"),
+    } }),
 
     s("anki_eng", {
         t({ "{", "" }),
-        obj(1, "id", i(1, "uuid"), 0, 1),
-        t({ ",", "" }),
-        obj(2, "front", i(1, "front"), 1, 1),
-        t({ ",", "" }),
-        obj(3, "back", i(1, "back"), 1, 1),
-        t({ ",", "" }),
-        obj(4, "tags", i(1, "tags"), 1, 1),
-        t({ "", "}" }),
-    }),
-    s(",a", {
-        t({ ",", "{", "" }),
         obj(1, "id", i(1, "uuid"), 0, 1),
         t({ ",", "" }),
         obj(2, "front", i(1, "front"), 1, 1),
@@ -161,6 +145,8 @@ local snippets = {
         i(2, "word"),
         t("}}"),
     }),
+
+    s(",", { t({ ",", "" }) }),
 }
 
 return snippets
