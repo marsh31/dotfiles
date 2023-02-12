@@ -275,11 +275,19 @@ return require("packer").startup(function(use)
                         end
                     end, { "i", "s" }),
 
+                    ["<C-k>"] = cmp.mapping(function(fallback)
+                        if luasnip.expandable() then
+                            luasnip.expand()
+                        else
+                            fallback()
+                        end
+                    end),
+
                     ["<Tab>"] = cmp.mapping(function(fallback)
-                        if luasnip.expand_or_locally_jumpable() then
-                            luasnip.expand_or_jump()
-                            -- elseif cmp.visible() then
-                            --     cmp.select_next_item()
+                        if luasnip.jumpable(1) then
+                            luasnip.jump(1)
+                        elseif luasnip.expandable() then
+                            luasnip.expand()
                         else
                             fallback()
                         end
