@@ -74,9 +74,8 @@ local snippets = {
             sn(nil, { t("elif"), i(1) }),
             sn(nil, { t("else"), i(1) }),
             sn(nil, { t(""), i(1) }),
-        }),
+        }), i(0),
         t({ "", "end" }),
-        i(0),
     }),
     s("elif", {
         t("elseif "),
