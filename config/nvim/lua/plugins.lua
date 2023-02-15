@@ -867,7 +867,7 @@ return require("packer").startup(function(use)
 
     -- @hex
     use({ "RaafatTurki/hex.nvim" })
-    use({ 
+    use({ -- bufpreview
         "kat0h/bufpreview.vim",
         run = 'deno task prepare',
         requires = {
