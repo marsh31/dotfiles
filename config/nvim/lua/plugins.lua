@@ -74,16 +74,15 @@ return require("packer").startup(function(use)
             require("lspsaga").setup({
                 code_action_prompt = {
                     virtual_text = false,
-                }
+                },
             })
             require("dressing").setup()
             require("fidget").setup()
 
-
             vim.diagnostic.config({
                 virtual_text = {
-                    severity = { min = vim.diagnostic.severity.WARN }
-                }
+                    severity = { min = vim.diagnostic.severity.WARN },
+                },
             })
 
             mason.setup()
@@ -94,17 +93,17 @@ return require("packer").startup(function(use)
             mason_lspconfig.setup({
                 ensure_installed = {
                     -- lsp
-                    "bashls",                   -- bash
-                    "clangd",                   -- clang
-                    "dockerls",                 -- docker
-                    "dotls",                    -- dot
-                    "sumneko_lua",              -- lua
-                    "gopls",                    -- go
-                    "html",                     -- html
-                    "jsonls",                   -- json
-                    "tsserver",                 -- javascript/typescript
-                    "rust_analyzer",            -- rust
-                    "sqls",                     -- sql
+                    "bashls", -- bash
+                    "clangd", -- clang
+                    "dockerls", -- docker
+                    "dotls", -- dot
+                    "sumneko_lua", -- lua
+                    "gopls", -- go
+                    "html", -- html
+                    "jsonls", -- json
+                    "tsserver", -- javascript/typescript
+                    "rust_analyzer", -- rust
+                    "sqls", -- sql
                 },
 
                 automatic_installation = true,
@@ -128,22 +127,21 @@ return require("packer").startup(function(use)
                     lsp_config[server_name].setup(opts)
                 end,
 
-
-                ["sumneko_lua"] = function ()
+                ["sumneko_lua"] = function()
                     lsp_config.sumneko_lua.setup({
                         settings = {
                             Lua = {
                                 diagnostics = {
-                                    globals = { "vim" }
+                                    globals = { "vim" },
                                 },
 
                                 runtime = {
-                                    version = "Lua 5.1"
-                                }
-                            }
-                        }
+                                    version = "Lua 5.1",
+                                },
+                            },
+                        },
                     })
-                end
+                end,
             })
 
             mason_null_ls.setup({
@@ -242,7 +240,7 @@ return require("packer").startup(function(use)
                     fields = { "kind", "abbr", "menu" },
                     format = function(entry, vim_item)
                         local kind =
-                        require("lspkind").cmp_format({ mode = "symbol_text", maxwidth = 50 })(entry, vim_item)
+                            require("lspkind").cmp_format({ mode = "symbol_text", maxwidth = 50 })(entry, vim_item)
                         local strings = vim.split(kind.kind, "%s", { trimempty = true })
                         kind.kind = " " .. (strings[1] or "") .. " "
                         kind.menu = "    (" .. (strings[2] or "") .. ")"
@@ -284,7 +282,7 @@ return require("packer").startup(function(use)
                     end),
 
                     ["<Tab>"] = cmp.mapping(function(fallback)
-                        if luasnip.jumpable(1) then
+                        if luasnip.locally_jumpable(1) then
                             luasnip.jump(1)
                         elseif luasnip.expandable() then
                             luasnip.expand()
@@ -580,7 +578,7 @@ return require("packer").startup(function(use)
                 end
             end
 
-            local function edit_or_open_and_not_close ()
+            local function edit_or_open_and_not_close()
                 local action = "edit"
                 local node = lib.get_node_at_cursor()
 
@@ -614,7 +612,7 @@ return require("packer").startup(function(use)
                     mappings = {
                         custom_only = true,
                         list = {
-                            { key = "<CR>" , action = "edit", action_cb = edit_or_open_and_not_close },
+                            { key = "<CR>", action = "edit", action_cb = edit_or_open_and_not_close },
                             { key = "o", action = "open" },
                             { key = "<C-e>", action = "edit_in_place" },
                             { key = "O", action = "edit_no_picker" },
@@ -690,7 +688,7 @@ return require("packer").startup(function(use)
                 actions = {
                     open_file = {
                         quit_on_open = false,
-                    }
+                    },
                 },
             })
         end,
@@ -875,16 +873,16 @@ return require("packer").startup(function(use)
 
     -- @hex
     use({ "RaafatTurki/hex.nvim" })
-    use({ 
+    use({
         "kat0h/bufpreview.vim",
-        run = 'deno task prepare',
+        run = "deno task prepare",
         requires = {
-            "vim-denops/denops.vim"
+            "vim-denops/denops.vim",
         },
 
-        config = function ()
+        config = function()
             vim.g.bufpreview_browser = "firefox"
-        end
+        end,
     })
 
     -- @notify
