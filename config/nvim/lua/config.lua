@@ -55,7 +55,7 @@ vim.opt.inccommand     = "split"
 
 
 -- fold
-vim.opt.foldlevel      = 1
+vim.opt.foldlevel      = 0
 
 
 ------------------------------------------------------------
