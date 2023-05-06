@@ -37,6 +37,7 @@ ls.add_snippets("markdown", require("snippets.markdown"))
 ls.add_snippets("python", require("snippets.python3"))
 ls.add_snippets("sh", require("snippets.sh"))
 ls.add_snippets("typescript", require("snippets.typescript"))
+ls.add_snippets("typescriptreact", require("snippets.typescriptreact"))
 ls.add_snippets("vim", require("snippets.vim"))
 
 -- vim: sw=4 sts=4 expandtab fenc=utf-8

@@ -145,28 +145,46 @@ local snippets = {
     s("obj", {
         t("{"),
         c(2, {
-          sn(nil, { t(" "), i(1, "obj_value"), t(" ") }), -- oneline
-          sn(nil, { t({ "", "\t" }), i(1, "obj_value"), t({ "", "" })}), -- multiline
+            sn(nil, { t(" "), i(1, "obj_value"), t(" ") }), -- oneline
+            sn(nil, { t({ "", "\t" }), i(1, "obj_value"), t({ "", "" }) }), -- multiline
         }),
-        t("}"), i(1, ";")
+        t("}"),
+        i(1, ";"),
     }),
     s("obj_value", {
-        i(1, "key"), t(": "), i(2, "value"), t(","),
+        i(1, "key"),
+        t(": "),
+        i(2, "value"),
+        t(","),
     }),
-
 
     -- retype
     s("type", { t("type "), i(1, "newtype"), t(" = "), i(2, "oldtype") }),
     s("interface", {
-        t("interface "), i(1, "interfacename"), t({ " {", "\t" }),
-        i(2, "obj_type"), i(0),
-        t({ "", "}" })
+        t("interface "),
+        i(1, "interfacename"),
+        t({ " {", "\t" }),
+        i(2, "obj_type"),
+        i(0),
+        t({ "", "}" }),
     }),
     s("obj_type", {
-        i(1, "key"), t(": "), i(2, "value"), t(","),
+        i(1, "key"),
+        t(": "),
+        i(2, "value"),
+        t(","),
     }),
 
-
+    -- fn
+    s("fn", {
+        i(1, "func_name"),
+        t(" ("),
+        i(2, "arg"),
+        t({ ") {", "" }),
+        t("\t"),
+        i(0),
+        t({ "", "}" }),
+    }),
 
     s("import", {
         t("import { "),
