@@ -10,6 +10,7 @@
 list=(
   "$HOME/dotfiles/config/neofetch"
   "$HOME/dotfiles/config/nvim"
+  "$HOME/dotfiles/config/i3"
 )
 
 for path in "${list[@]}"; do
