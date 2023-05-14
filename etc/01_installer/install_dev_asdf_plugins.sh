@@ -23,3 +23,4 @@ done
 
 
 
+echo "asdf plugin add deno"

@@ -29,6 +29,8 @@
 -- https://github.com/Shatur/neovim-session-manager
 --
 --
+-- ambiguous width
+-- https://qiita.com/s417-lama/items/b38089a42fe7d4a061da
 
 vim.cmd.packadd("packer.nvim")
 return require("packer").startup(function(use)
@@ -43,7 +45,8 @@ return require("packer").startup(function(use)
     use({ "rcarriga/nvim-notify" })
 
     -- @lsp
-    use({ -- lspconfig
+    use({
+        -- lspconfig
         "neovim/nvim-lspconfig",
         requires = {
             { "williamboman/mason.nvim" },
@@ -93,17 +96,17 @@ return require("packer").startup(function(use)
             mason_lspconfig.setup({
                 ensure_installed = {
                     -- lsp
-                    "bashls", -- bash
-                    "clangd", -- clang
-                    "dockerls", -- docker
-                    "dotls", -- dot
-                    "sumneko_lua", -- lua
-                    "gopls", -- go
-                    "html", -- html
-                    "jsonls", -- json
-                    "tsserver", -- javascript/typescript
+                    "bashls",        -- bash
+                    "clangd",        -- clang
+                    "dockerls",      -- docker
+                    "dotls",         -- dot
+                    "sumneko_lua",   -- lua
+                    "lua_ls",
+                    "gopls",         -- go
+                    "html",          -- html
+                    "jsonls",        -- json
+                    "tsserver",      -- javascript/typescript
                     "rust_analyzer", -- rust
-                    "sqls", -- sql
                 },
 
                 automatic_installation = true,
@@ -127,8 +130,8 @@ return require("packer").startup(function(use)
                     lsp_config[server_name].setup(opts)
                 end,
 
-                ["sumneko_lua"] = function()
-                    lsp_config.sumneko_lua.setup({
+                ["lua_ls"] = function()
+                    lsp_config.lua_ls.setup({
                         settings = {
                             Lua = {
                                 diagnostics = {
@@ -162,7 +165,8 @@ return require("packer").startup(function(use)
         end,
     })
 
-    use({ -- lsp_signature
+    use({
+        -- lsp_signature
         "ray-x/lsp_signature.nvim",
         config = function()
             require("lsp_signature").setup({
@@ -174,22 +178,21 @@ return require("packer").startup(function(use)
     use({ "folke/trouble.nvim" })
 
     -- @complete
-    use({ -- nvim-cmp
+    use({
+        -- nvim-cmp
         "hrsh7th/nvim-cmp",
         module = { "cmp" },
         requires = {
-            { "hrsh7th/cmp-buffer", event = { "InsertEnter" } },
-            { "hrsh7th/cmp-cmdline", event = { "InsertEnter" } },
-            { "hrsh7th/cmp-path", event = { "InsertEnter" } },
-
+            { "hrsh7th/cmp-buffer",                   event = { "InsertEnter" } },
+            { "hrsh7th/cmp-cmdline",                  event = { "InsertEnter" } },
+            { "hrsh7th/cmp-path",                     event = { "InsertEnter" } },
             { "hrsh7th/cmp-nvim-lsp" }, --, event = { "InsertEnter" } },
-            { "hrsh7th/cmp-nvim-lua", event = { "InsertEnter" } },
-
+            { "hrsh7th/cmp-nvim-lua",                 event = { "InsertEnter" } },
             { "hrsh7th/cmp-nvim-lsp-document-symbol", event = { "InsertEnter" } },
-            { "hrsh7th/cmp-nvim-lsp-signature-help", event = { "InsertEnter" } },
+            { "hrsh7th/cmp-nvim-lsp-signature-help",  event = { "InsertEnter" } },
             { "onsails/lspkind-nvim" },
 
-            { "saadparwaiz1/cmp_luasnip", event = { "InsertEnter" } },
+            { "saadparwaiz1/cmp_luasnip",             event = { "InsertEnter" } },
             { "L3MON4D3/LuaSnip" },
         },
         wants = {
@@ -328,7 +331,8 @@ return require("packer").startup(function(use)
     })
 
     -- @treesitter
-    use({ -- nvim-treesitter
+    use({
+        -- nvim-treesitter
         "nvim-treesitter/nvim-treesitter",
         run = [[:TSUpdate]],
         requires = {
@@ -427,8 +431,61 @@ return require("packer").startup(function(use)
         end,
     })
 
+    use({
+        "RRethy/vim-illuminate",
+        cofig = function()
+            require("illuminate").configure({
+                -- providers: provider used to get references in the buffer, ordered by priority
+                providers = {
+                    "lsp",
+                    "treesitter",
+                    "regex",
+                },
+                -- delay: delay in milliseconds
+                delay = 100,
+                -- filetype_overrides: filetype specific overrides.
+                -- The keys are strings to represent the filetype while the values are tables that
+                -- supports the same keys passed to .configure except for filetypes_denylist and filetypes_allowlist
+                filetype_overrides = {},
+                -- filetypes_denylist: filetypes to not illuminate, this overrides filetypes_allowlist
+                filetypes_denylist = {
+                    "dirvish",
+                    "fugitive",
+                },
+                -- filetypes_allowlist: filetypes to illuminate, this is overriden by filetypes_denylist
+                filetypes_allowlist = {},
+                -- modes_denylist: modes to not illuminate, this overrides modes_allowlist
+                -- See `:help mode()` for possible values
+                modes_denylist = {},
+                -- modes_allowlist: modes to illuminate, this is overriden by modes_denylist
+                -- See `:help mode()` for possible values
+                modes_allowlist = {},
+                -- providers_regex_syntax_denylist: syntax to not illuminate, this overrides providers_regex_syntax_allowlist
+                -- Only applies to the 'regex' provider
+                -- Use :echom synIDattr(synIDtrans(synID(line('.'), col('.'), 1)), 'name')
+                providers_regex_syntax_denylist = {},
+                -- providers_regex_syntax_allowlist: syntax to illuminate, this is overriden by providers_regex_syntax_denylist
+                -- Only applies to the 'regex' provider
+                -- Use :echom synIDattr(synIDtrans(synID(line('.'), col('.'), 1)), 'name')
+                providers_regex_syntax_allowlist = {},
+                -- under_cursor: whether or not to illuminate under the cursor
+                under_cursor = true,
+                -- large_file_cutoff: number of lines at which to use large_file_config
+                -- The `under_cursor` option is disabled when this cutoff is hit
+                large_file_cutoff = nil,
+                -- large_file_config: config to use for large files (based on large_file_cutoff).
+                -- Supports the same keys passed to .configure
+                -- If nil, vim-illuminate will be disabled for large files.
+                large_file_overrides = nil,
+                -- min_count_to_highlight: minimum number of matches required to perform highlighting
+                min_count_to_highlight = 1,
+            })
+        end,
+    })
+
     -- @outline
-    use({ -- aerial
+    use({
+        -- aerial
         "stevearc/aerial.nvim",
         requires = {
             { "nvim-telescope/telescope.nvim" },
@@ -444,7 +501,8 @@ return require("packer").startup(function(use)
     use({ "simrat39/symbols-outline.nvim" })
 
     -- @fuzzyfinder
-    use({ -- telescope.nvim
+    use({
+        -- telescope.nvim
         "nvim-telescope/telescope.nvim",
         requires = {
             { "nvim-lua/plenary.nvim" },
@@ -459,7 +517,8 @@ return require("packer").startup(function(use)
     })
 
     -- @git
-    use({ -- gitsigns.nvim
+    use({
+        -- gitsigns.nvim
         "lewis6991/gitsigns.nvim",
         config = function()
             require("gitsigns").setup({
@@ -468,11 +527,13 @@ return require("packer").startup(function(use)
             })
         end,
     })
-    use({ -- neogit
+    use({
+        -- neogit
         "TimUntersberger/neogit",
         cmd = "Neogit",
     })
-    use({ -- vgit.nvim
+    use({
+        -- vgit.nvim
         "tanvirtin/vgit.nvim",
         disable = true,
         config = function()
@@ -484,7 +545,8 @@ return require("packer").startup(function(use)
     use({ "sindrets/diffview.nvim" })
 
     -- @foldtext
-    use({ -- pretty-fold.nvim
+    use({
+        -- pretty-fold.nvim
         "anuvyklack/pretty-fold.nvim",
         config = function()
             require("pretty-fold").setup({
@@ -527,7 +589,7 @@ return require("packer").startup(function(use)
                 add_close_pattern = true, -- true, 'last_line' or false
 
                 matchup_patterns = {
-                    { "{", "}" },
+                    { "{",  "}" },
                     { "%(", ")" }, -- % to escape lua pattern char
                     { "%[", "]" }, -- % to escape lua pattern char
                 },
@@ -538,18 +600,21 @@ return require("packer").startup(function(use)
     })
 
     -- @quickfix
-    use({ -- vim-qfreplace
+    use({
+        -- vim-qfreplace
         "thinca/vim-qfreplace",
         cmd = "Qfreplace",
     })
-    use({ -- QFGrep
+    use({
+        -- QFGrep
         "sk1418/QFGrep",
         ft = { "qf" },
         -- keymap: <leader>g, <leader>v, <leader>r
     })
 
     -- @filer
-    use({ -- nvim-tree.lua
+    use({
+        -- nvim-tree.lua
         "nvim-tree/nvim-tree.lua",
         requires = {
             "nvim-tree/nvim-web-devicons",
@@ -612,63 +677,61 @@ return require("packer").startup(function(use)
                     mappings = {
                         custom_only = true,
                         list = {
-                            { key = "<CR>", action = "edit", action_cb = edit_or_open_and_not_close },
-                            { key = "o", action = "open" },
+                            { key = "<CR>",  action = "edit",              action_cb = edit_or_open_and_not_close },
+                            { key = "o",     action = "open" },
                             { key = "<C-e>", action = "edit_in_place" },
-                            { key = "O", action = "edit_no_picker" },
+                            { key = "O",     action = "edit_no_picker" },
                             { key = "<C-]>", action = "cd" },
-
-                            { key = "l", action = "edit", action_cb = edit_or_open },
-                            { key = "h", action = "close_node" },
-                            { key = "L", action = "vsplit_preview", action_cb = vsplit_preview },
-                            { key = "H", action = "collapse_all", action_cb = collapse_all },
-
+                            { key = "l",     action = "edit",              action_cb = edit_or_open },
+                            { key = "h",     action = "close_node" },
+                            { key = "L",     action = "vsplit_preview",    action_cb = vsplit_preview },
+                            { key = "H",     action = "collapse_all",      action_cb = collapse_all },
                             { key = "<C-v>", action = "vsplit" },
                             { key = "<C-x>", action = "split" },
                             { key = "<C-t>", action = "tabnew" },
 
-                            { key = "<", action = "prev_sibling" },
-                            { key = ">", action = "next_sibling" },
-                            { key = "P", action = "parent_node" },
-                            { key = "<BS>", action = "close_node" },
+                            { key = "<",     action = "prev_sibling" },
+                            { key = ">",     action = "next_sibling" },
+                            { key = "P",     action = "parent_node" },
+                            { key = "<BS>",  action = "close_node" },
                             { key = "<Tab>", action = "preview" },
-                            { key = "K", action = "first_sibling" },
-                            { key = "J", action = "last_sibling" },
-                            { key = "C", action = "toggle_git_clean" },
-                            { key = "I", action = "toggle_git_ignored" },
-                            { key = "H", action = "toggle_dotfiles" },
-                            { key = "B", action = "toggle_no_buffer" },
-                            { key = "U", action = "toggle_custom" },
-                            { key = "R", action = "refresh" },
-                            { key = "a", action = "create" },
-                            { key = "d", action = "remove" },
-                            { key = "D", action = "trash" },
-                            { key = "r", action = "rename" },
+                            { key = "K",     action = "first_sibling" },
+                            { key = "J",     action = "last_sibling" },
+                            { key = "C",     action = "toggle_git_clean" },
+                            { key = "I",     action = "toggle_git_ignored" },
+                            { key = "H",     action = "toggle_dotfiles" },
+                            { key = "B",     action = "toggle_no_buffer" },
+                            { key = "U",     action = "toggle_custom" },
+                            { key = "R",     action = "refresh" },
+                            { key = "a",     action = "create" },
+                            { key = "d",     action = "remove" },
+                            { key = "D",     action = "trash" },
+                            { key = "r",     action = "rename" },
                             { key = "<C-r>", action = "full_rename" },
-                            { key = "e", action = "rename_basename" },
-                            { key = "x", action = "cut" },
-                            { key = "c", action = "copy" },
-                            { key = "p", action = "paste" },
-                            { key = "y", action = "copy_name" },
-                            { key = "Y", action = "copy_path" },
-                            { key = "gy", action = "copy_absolute_path" },
-                            { key = "[e", action = "prev_diag_item" },
-                            { key = "[c", action = "prev_git_item" },
-                            { key = "]e", action = "next_diag_item" },
-                            { key = "]c", action = "next_git_item" },
-                            { key = "-", action = "dir_up" },
-                            { key = "s", action = "system_open" },
-                            { key = "f", action = "live_filter" },
-                            { key = "F", action = "clear_live_filter" },
-                            { key = "q", action = "close" },
-                            { key = "W", action = "collapse_all" },
-                            { key = "E", action = "expand_all" },
-                            { key = "S", action = "search_node" },
-                            { key = ".", action = "run_file_command" },
+                            { key = "e",     action = "rename_basename" },
+                            { key = "x",     action = "cut" },
+                            { key = "c",     action = "copy" },
+                            { key = "p",     action = "paste" },
+                            { key = "y",     action = "copy_name" },
+                            { key = "Y",     action = "copy_path" },
+                            { key = "gy",    action = "copy_absolute_path" },
+                            { key = "[e",    action = "prev_diag_item" },
+                            { key = "[c",    action = "prev_git_item" },
+                            { key = "]e",    action = "next_diag_item" },
+                            { key = "]c",    action = "next_git_item" },
+                            { key = "-",     action = "dir_up" },
+                            { key = "s",     action = "system_open" },
+                            { key = "f",     action = "live_filter" },
+                            { key = "F",     action = "clear_live_filter" },
+                            { key = "q",     action = "close" },
+                            { key = "W",     action = "collapse_all" },
+                            { key = "E",     action = "expand_all" },
+                            { key = "S",     action = "search_node" },
+                            { key = ".",     action = "run_file_command" },
                             { key = "<C-k>", action = "toggle_file_info" },
-                            { key = "g?", action = "toggle_help" },
-                            { key = "m", action = "toggle_mark" },
-                            { key = "bmv", action = "bulk_move" },
+                            { key = "g?",    action = "toggle_help" },
+                            { key = "m",     action = "toggle_mark" },
+                            { key = "bmv",   action = "bulk_move" },
                         },
                     },
                 },
@@ -683,6 +746,10 @@ return require("packer").startup(function(use)
                     indent_markers = {
                         enable = true,
                     },
+
+                    icons = {
+                        padding = " ",
+                    },
                 },
 
                 actions = {
@@ -694,8 +761,69 @@ return require("packer").startup(function(use)
         end,
     })
 
+    use({
+        "lambdalisue/fern.vim",
+        requires = {
+            "lambdalisue/nerdfont.vim",
+            "lambdalisue/fern-renderer-nerdfont.vim"
+        },
+
+        config = function()
+            -- keymap
+            function load_fern_keymaps()
+                local opt_expr   = { expr = true, silent = true, noremap = false }
+                local opt_silent = { silent = true, noremap = false, nowait = true }
+                local list       = {
+                    { key = "<CR>",  cmd = '<Plug>(fern-action-open-or-expand)',  opt = opt_silent },
+                    { key = '<C-c>', cmd = '<Plug>(fern-action-cancel)',          opt = opt_silent },
+                    { key = "<C-i>", cmd = '<Plug>(fern-action-mark:toggle)',     opt = opt_silent },
+                    { key = "os",    cmd = '<Plug>(fern-action-open:split)',      opt = opt_silent },
+                    { key = "ov",    cmd = '<Plug>(fern-action-open:vsplit)',     opt = opt_silent },
+                    { key = "ot",    cmd = '<Plug>(fern-action-open:tabedit)',    opt = opt_silent },
+                    { key = "oo",    cmd = '<Plug>(fern-action-open:select)',     opt = opt_silent },
+                    { key = "h",     cmd = '<Plug>(fern-action-collapse)',        opt = opt_silent },
+                    { key = "l",     cmd = '<Plug>(fern-action-expand)',          opt = opt_silent },
+                    { key = "q",     cmd = '<cmd>close<CR>',                      opt = opt_silent },
+                    { key = "r",     cmd = '<cmd>lua _G.load_fern_keymaps()<CR>', opt = opt_silent },
+                    { key = "y",     cmd = '<Plug>(fern-action-yank:bufname)',    opt = opt_silent },
+                    { key = "R",     cmd = '<Plug>(fern-action-reload:all)',      opt = opt_silent },
+                    { key = "?",     cmd = '<Plug>(fern-action-help)',            opt = opt_silent },
+                }
+                for _, items in ipairs(list) do
+                    vim.api.nvim_buf_set_keymap(0, "n", items.key, items.cmd, items.opt)
+                end
+            end
+
+            vim.api.nvim_exec([[
+                let g:fern#default_hidden = 1
+                let g:fern#scheme#file#show_absolute_path_on_root_label = 1
+
+                let g:fern#renderer = "nerdfont"
+                let g:fern#disable_default_mappings             = 1
+                let g:fern#mapping#fzf#disable_default_mappings = 1
+                let g:fern#drawer_width                         = 30
+                let g:fern#renderer                             = 'nerdfont'
+                let g:fern#renderer#nerdfont#padding            = ' '
+                let g:fern#hide_cursor                          = 0
+            ]], true)
+
+            local fernKeyCustom = vim.api.nvim_create_augroup("FernCustomKeys", { clear = true })
+            vim.api.nvim_create_autocmd("FileType",
+                { pattern = { "fern" }, command = [[silent! lua _G.load_fern_keymaps()]], group = fernKeyCusto })
+            vim.api.nvim_create_autocmd("FileType", {
+                pattern = { "fern" },
+                callback = function()
+                    vim.opt_local.number = false
+                    vim.opt_local.relativenumber = true
+                end,
+                group = fernKeyCusto
+            })
+        end
+    })
+
     -- @edit
-    use({ -- vim-partedit
+    use({
+        -- vim-partedit
         "thinca/vim-partedit",
         config = function()
             vim.g["partedit#opener"] = "vsplit"
@@ -704,7 +832,8 @@ return require("packer").startup(function(use)
             -- filetype
         end,
     })
-    use({ -- winresizer
+    use({
+        -- winresizer
         "simeji/winresizer",
         -- cmd :WinResizerStartResize
         config = function()
@@ -713,15 +842,16 @@ return require("packer").startup(function(use)
             vim.g.winresizer_horiz_resize = 5
         end,
     })
-    use({ -- nvim-surround
+    use({
+        -- nvim-surround
         "kylechui/nvim-surround",
         config = function()
             require("nvim-surround").setup({
                 keymaps = {
                     -- normal add
-                    normal = "sa", -- general operation
-                    normal_cur = "sas", -- line
-                    normal_line = "sA", -- general operation, insert new line.
+                    normal = "sa",           -- general operation
+                    normal_cur = "sas",      -- line
+                    normal_line = "sA",      -- general operation, insert new line.
                     normal_cur_line = "sAS", -- line, and insert new line.
 
                     delete = "sd",
@@ -736,7 +866,8 @@ return require("packer").startup(function(use)
             })
         end,
     })
-    use({ -- nvim-autopairs
+    use({
+        -- nvim-autopairs
         "windwp/nvim-autopairs",
         config = function()
             require("nvim-autopairs").setup({
@@ -761,13 +892,15 @@ return require("packer").startup(function(use)
             -- ... add rules ...
         end,
     })
-    use({ -- Comment.nvim
+    use({
+        -- Comment.nvim
         "numToStr/Comment.nvim",
         config = function()
             require("Comment").setup()
         end,
     })
-    use({ -- auto-session
+    use({
+        -- auto-session
         "rmagatti/auto-session",
         config = function()
             -- require("auto-session").setup({
@@ -778,7 +911,8 @@ return require("packer").startup(function(use)
     })
 
     -- @keyassistant
-    use({ -- which-key
+    use({
+        -- which-key
         "folke/which-key.nvim",
         config = function()
             require("which-key").setup({
@@ -791,7 +925,8 @@ return require("packer").startup(function(use)
     use({ "mrjones2014/legendary.nvim", wants = { "telescope", "dressing" } })
 
     -- @statusline
-    use({ -- lualine.nvim
+    use({
+        -- lualine.nvim
         "nvim-lualine/lualine.nvim",
         config = function()
             require("lualine").setup({
@@ -840,7 +975,8 @@ return require("packer").startup(function(use)
     })
 
     -- @startup
-    use({ -- alpha-nvim
+    use({
+        -- alpha-nvim
         "goolord/alpha-nvim",
         requires = {
             "nvim-tree/nvim-web-devicons",
@@ -855,13 +991,15 @@ return require("packer").startup(function(use)
     use({ "ahmedkhalf/project.nvim" })
 
     -- @motion
-    use({ -- neoscroll.nvim
+    use({
+        -- neoscroll.nvim
         "karb94/neoscroll.nvim",
         config = function()
             require("neoscroll").setup()
         end,
     })
-    use({ -- hop.nvim
+    use({
+        -- hop.nvim
         "phaazon/hop.nvim",
         config = function()
             local hop = require("hop")
@@ -873,7 +1011,8 @@ return require("packer").startup(function(use)
 
     -- @hex
     use({ "RaafatTurki/hex.nvim" })
-    use({ -- bufpreview
+    use({
+        -- bufpreview
         "kat0h/bufpreview.vim",
         run = "deno task prepare",
         requires = {

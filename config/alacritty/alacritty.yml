@@ -69,6 +69,7 @@ window:
     # Window class (Linux only):
     class: Alacritty
     dynamic_title: true
+    opacity: 1.0
 
 scrolling:
     # Maximum number of lines in the scrollback buffer.
@@ -120,7 +121,7 @@ font:
         family: SauceCodePro Nerd Font
         style: Italic
 
-    size: 12.0
+    size: 10.0
 
     # Offset is the extra space around each character. `offset.y` can be thought of
     # as modifying the line spacing, and `offset.x` as modifying the letter spacing.
@@ -149,7 +150,7 @@ font:
         #
         # This is a global setting and will require a log out or restart to take
         # effect.
-    use_thin_strokes: true
+        # use_thin_strokes: true
 
     # If `true`, bold text is drawn using the bright color variants.
 draw_bold_text_with_bright_colors: true
@@ -294,7 +295,7 @@ colors:
         #
         # Window opacity as a floating point number from `0.0` to `1.0`.
         # The value `0.0` is completely transparent and `1.0` is opaque.
-background_opacity: 1.00
+        # background_opacity: 1.00
 
 # Mouse bindings
 #
@@ -404,7 +405,7 @@ working_directory: None
 enable_experimental_conpty_backend: false
 
 # Send ESC (\x1b) before characters when alt is pressed.
-alt_send_esc: true
+# alt_send_esc: true
 
 debug:
     # Display the time it takes to redraw each frame.
