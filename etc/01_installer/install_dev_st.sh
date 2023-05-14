@@ -5,81 +5,79 @@
 # NOTE:
 #
 #   install st.
+#
+# ~/.Xresources
+# *font:                            xxxx
+# *color0:                          #002b36
+# *color8:                          #657b83
+# *color1:                          #dc322f
+# *color9:                          #dc322f
+# *color2:                          #859900
+# *color10:                         #859900
+# *color3:                          #b58900
+# *color11:                         #b58900
+# *color4:                          #268bd2
+# *color12:                         #268bd2
+# *color5:                          #6c71c4
+# *color13:                         #6c71c4
+# *color6:                          #2aa198
+# *color14:                         #2aa198
+# *color7:                          #93a1a1
+# *color15:                         #fdf6e3
+# *background:                      #cccccc
+# *foreground:                      #555555
+# *cursorColor:                     #e5e5e5
+# termname:
+# shell:
+# minlatency:
+# maxlatency:
+# blinktimeout",
+# bellvolume:
+# tabspaces:
+# borderpx:
+# cwscale:
+# chscale:
+#
 
-patchfiles=( https://st.suckless.org/patches/xresources/st-xresources-20200604-9ba7ecf.diff
-	)
-src_config=~/dotfiles/etc/01_installer/config.def.h
-
-download_st() {
-	git clone https://github.com/Shourai/st.git
-	cd st
-}
-
-
-install_st() {
-	echo "install st..."
-	echo "give me sudo"
-	sudo make clean install
-}
-
-
-clean_st() {
-	cd ..
-	rm -Rf st
-}
-
-
-patch_st() {
-	for file in ${patchfiles[@]}; do
-		echo "wget $file"
-		wget $file
-		
-		echo "patch -i ${file##*/}"
-		patch -i ${file##*/}
-	done
-}
-
-
-copy_st_config() {
-	echo "copy config file..."
-	cp ${src_config} .
-}
-
-
-main() {
-	download_st
-	# patch_st
-	copy_st_config
-	
-	install_st
-
-	read -n1 -p "clear st repo? (Y/n): " yn
-	if [[ $yn = [yY] ]]; then
-		clean_st
-	else
-		echo "bye!!"
-	fi
-}
+REPO="git://git.suckless.org/st"
+REPO_NAME="st"
+PATCHES=(
+  https://st.suckless.org/patches/alpha/st-alpha-20220206-0.8.5.diff
+  https://st.suckless.org/patches/clipboard/st-clipboard-20180309-c5ba9c0.diff
+  https://st.suckless.org/patches/font2/st-font2-0.8.5.diff
+  https://st.suckless.org/patches/xresources/st-xresources-20200604-9ba7ecf.diff
+  https://st.suckless.org/patches/glyph_wide_support/st-glyph-wide-support-20230701-5770f2f.diff
+)
+CONFIG="~/dotfiles/etc/02_config/st/config.h"
 
 
-
-if ! command -v git &> /dev/null; then
-	echo "git could not be found"
-	exit
-fi
-
-
-if ! command -v patch &> /dev/null; then
-	echo "patch could not be found"
-	exit
-fi
+# ... download ...
+echo "Download $REPO..."
+git clone $REPO
+cd $REPO_NAME
 
 
-if ! command -v wget &> /dev/null; then
-	echo "wget could not be found"
-	exit
-fi
+# ... patch ...
+echo "Patch..."
+for file in ${PATCHES[@]}; do
+  echo "wget $file"
+  wget $file
+  
+  echo "patch -i ${file##*/}"
+  patch -i ${file##*/}
+done
 
 
-main
+# ... copy my config file ...
+echo "Copy config..."
+cp -f $CONFIG .
 
+echo "Build and install..."
+sudo make clean install
+
+
+
+# ... Clean ...
+echo "Clean"
+cd ..
+rm -Rf $REPO_NAME
