@@ -28,7 +28,8 @@ pacman_install_items=(
   "ufw;ufw;handler_ufw"
 
   # im(input method)
-  "fcitx;fcitx:fcitx-im:fcitx-configtool:fcitx-mozc:fcitx-gtk2:fcitx-gtk3:fcitx-qt5;"
+  # "fcitx;fcitx:fcitx-im:fcitx-configtool:fcitx-mozc:fcitx-gtk2:fcitx-gtk3:fcitx-qt5;"
+  "fcitx5;fcitx5:fcitx5-configtool:fcitx5-gtk:fcitx5-qt:fcitx5-mozc-ut;"
 
   # web browser
   "firefox;firefox;"
@@ -65,6 +66,7 @@ yay_install_items=(
   # dev tools
   "android-studio;android-studio;"
   "man-pages-ja;man-pages-ja;"
+  "gucharmap;gucharmap;"
 )
 
 
