@@ -100,7 +100,6 @@ return require("packer").startup(function(use)
                     "clangd",        -- clang
                     "dockerls",      -- docker
                     "dotls",         -- dot
-                    "sumneko_lua",   -- lua
                     "lua_ls",
                     "gopls",         -- go
                     "html",          -- html
