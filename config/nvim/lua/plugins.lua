@@ -96,15 +96,15 @@ return require("packer").startup(function(use)
             mason_lspconfig.setup({
                 ensure_installed = {
                     -- lsp
-                    "bashls",        -- bash
-                    "clangd",        -- clang
-                    "dockerls",      -- docker
-                    "dotls",         -- dot
+                    "bashls", -- bash
+                    "clangd", -- clang
+                    "dockerls", -- docker
+                    "dotls", -- dot
                     "lua_ls",
-                    "gopls",         -- go
-                    "html",          -- html
-                    "jsonls",        -- json
-                    "tsserver",      -- javascript/typescript
+                    "gopls", -- go
+                    "html", -- html
+                    "jsonls", -- json
+                    "tsserver", -- javascript/typescript
                     "rust_analyzer", -- rust
                 },
 
@@ -182,16 +182,16 @@ return require("packer").startup(function(use)
         "hrsh7th/nvim-cmp",
         module = { "cmp" },
         requires = {
-            { "hrsh7th/cmp-buffer",                   event = { "InsertEnter" } },
-            { "hrsh7th/cmp-cmdline",                  event = { "InsertEnter" } },
-            { "hrsh7th/cmp-path",                     event = { "InsertEnter" } },
+            { "hrsh7th/cmp-buffer", event = { "InsertEnter" } },
+            { "hrsh7th/cmp-cmdline", event = { "InsertEnter" } },
+            { "hrsh7th/cmp-path", event = { "InsertEnter" } },
             { "hrsh7th/cmp-nvim-lsp" }, --, event = { "InsertEnter" } },
-            { "hrsh7th/cmp-nvim-lua",                 event = { "InsertEnter" } },
+            { "hrsh7th/cmp-nvim-lua", event = { "InsertEnter" } },
             { "hrsh7th/cmp-nvim-lsp-document-symbol", event = { "InsertEnter" } },
-            { "hrsh7th/cmp-nvim-lsp-signature-help",  event = { "InsertEnter" } },
+            { "hrsh7th/cmp-nvim-lsp-signature-help", event = { "InsertEnter" } },
             { "onsails/lspkind-nvim" },
 
-            { "saadparwaiz1/cmp_luasnip",             event = { "InsertEnter" } },
+            { "saadparwaiz1/cmp_luasnip", event = { "InsertEnter" } },
             { "L3MON4D3/LuaSnip" },
         },
         wants = {
@@ -242,7 +242,7 @@ return require("packer").startup(function(use)
                     fields = { "kind", "abbr", "menu" },
                     format = function(entry, vim_item)
                         local kind =
-                            require("lspkind").cmp_format({ mode = "symbol_text", maxwidth = 50 })(entry, vim_item)
+                        require("lspkind").cmp_format({ mode = "symbol_text", maxwidth = 50 })(entry, vim_item)
                         local strings = vim.split(kind.kind, "%s", { trimempty = true })
                         kind.kind = " " .. (strings[1] or "") .. " "
                         kind.menu = "    (" .. (strings[2] or "") .. ")"
@@ -588,7 +588,7 @@ return require("packer").startup(function(use)
                 add_close_pattern = true, -- true, 'last_line' or false
 
                 matchup_patterns = {
-                    { "{",  "}" },
+                    { "{", "}" },
                     { "%(", ")" }, -- % to escape lua pattern char
                     { "%[", "]" }, -- % to escape lua pattern char
                 },
@@ -676,61 +676,61 @@ return require("packer").startup(function(use)
                     mappings = {
                         custom_only = true,
                         list = {
-                            { key = "<CR>",  action = "edit",              action_cb = edit_or_open_and_not_close },
-                            { key = "o",     action = "open" },
+                            { key = "<CR>", action = "edit", action_cb = edit_or_open_and_not_close },
+                            { key = "o", action = "open" },
                             { key = "<C-e>", action = "edit_in_place" },
-                            { key = "O",     action = "edit_no_picker" },
+                            { key = "O", action = "edit_no_picker" },
                             { key = "<C-]>", action = "cd" },
-                            { key = "l",     action = "edit",              action_cb = edit_or_open },
-                            { key = "h",     action = "close_node" },
-                            { key = "L",     action = "vsplit_preview",    action_cb = vsplit_preview },
-                            { key = "H",     action = "collapse_all",      action_cb = collapse_all },
+                            { key = "l", action = "edit", action_cb = edit_or_open },
+                            { key = "h", action = "close_node" },
+                            { key = "L", action = "vsplit_preview", action_cb = vsplit_preview },
+                            { key = "H", action = "collapse_all", action_cb = collapse_all },
                             { key = "<C-v>", action = "vsplit" },
                             { key = "<C-x>", action = "split" },
                             { key = "<C-t>", action = "tabnew" },
 
-                            { key = "<",     action = "prev_sibling" },
-                            { key = ">",     action = "next_sibling" },
-                            { key = "P",     action = "parent_node" },
-                            { key = "<BS>",  action = "close_node" },
+                            { key = "<", action = "prev_sibling" },
+                            { key = ">", action = "next_sibling" },
+                            { key = "P", action = "parent_node" },
+                            { key = "<BS>", action = "close_node" },
                             { key = "<Tab>", action = "preview" },
-                            { key = "K",     action = "first_sibling" },
-                            { key = "J",     action = "last_sibling" },
-                            { key = "C",     action = "toggle_git_clean" },
-                            { key = "I",     action = "toggle_git_ignored" },
-                            { key = "H",     action = "toggle_dotfiles" },
-                            { key = "B",     action = "toggle_no_buffer" },
-                            { key = "U",     action = "toggle_custom" },
-                            { key = "R",     action = "refresh" },
-                            { key = "a",     action = "create" },
-                            { key = "d",     action = "remove" },
-                            { key = "D",     action = "trash" },
-                            { key = "r",     action = "rename" },
+                            { key = "K", action = "first_sibling" },
+                            { key = "J", action = "last_sibling" },
+                            { key = "C", action = "toggle_git_clean" },
+                            { key = "I", action = "toggle_git_ignored" },
+                            { key = "H", action = "toggle_dotfiles" },
+                            { key = "B", action = "toggle_no_buffer" },
+                            { key = "U", action = "toggle_custom" },
+                            { key = "R", action = "refresh" },
+                            { key = "a", action = "create" },
+                            { key = "d", action = "remove" },
+                            { key = "D", action = "trash" },
+                            { key = "r", action = "rename" },
                             { key = "<C-r>", action = "full_rename" },
-                            { key = "e",     action = "rename_basename" },
-                            { key = "x",     action = "cut" },
-                            { key = "c",     action = "copy" },
-                            { key = "p",     action = "paste" },
-                            { key = "y",     action = "copy_name" },
-                            { key = "Y",     action = "copy_path" },
-                            { key = "gy",    action = "copy_absolute_path" },
-                            { key = "[e",    action = "prev_diag_item" },
-                            { key = "[c",    action = "prev_git_item" },
-                            { key = "]e",    action = "next_diag_item" },
-                            { key = "]c",    action = "next_git_item" },
-                            { key = "-",     action = "dir_up" },
-                            { key = "s",     action = "system_open" },
-                            { key = "f",     action = "live_filter" },
-                            { key = "F",     action = "clear_live_filter" },
-                            { key = "q",     action = "close" },
-                            { key = "W",     action = "collapse_all" },
-                            { key = "E",     action = "expand_all" },
-                            { key = "S",     action = "search_node" },
-                            { key = ".",     action = "run_file_command" },
+                            { key = "e", action = "rename_basename" },
+                            { key = "x", action = "cut" },
+                            { key = "c", action = "copy" },
+                            { key = "p", action = "paste" },
+                            { key = "y", action = "copy_name" },
+                            { key = "Y", action = "copy_path" },
+                            { key = "gy", action = "copy_absolute_path" },
+                            { key = "[e", action = "prev_diag_item" },
+                            { key = "[c", action = "prev_git_item" },
+                            { key = "]e", action = "next_diag_item" },
+                            { key = "]c", action = "next_git_item" },
+                            { key = "-", action = "dir_up" },
+                            { key = "s", action = "system_open" },
+                            { key = "f", action = "live_filter" },
+                            { key = "F", action = "clear_live_filter" },
+                            { key = "q", action = "close" },
+                            { key = "W", action = "collapse_all" },
+                            { key = "E", action = "expand_all" },
+                            { key = "S", action = "search_node" },
+                            { key = ".", action = "run_file_command" },
                             { key = "<C-k>", action = "toggle_file_info" },
-                            { key = "g?",    action = "toggle_help" },
-                            { key = "m",     action = "toggle_mark" },
-                            { key = "bmv",   action = "bulk_move" },
+                            { key = "g?", action = "toggle_help" },
+                            { key = "m", action = "toggle_mark" },
+                            { key = "bmv", action = "bulk_move" },
                         },
                     },
                 },
@@ -764,60 +764,66 @@ return require("packer").startup(function(use)
         "lambdalisue/fern.vim",
         requires = {
             "lambdalisue/nerdfont.vim",
-            "lambdalisue/fern-renderer-nerdfont.vim"
+            "lambdalisue/fern-git-status.vim",
+
+            "lambdalisue/fern-renderer-nerdfont.vim",
+            "TheLeoP/fern-renderer-web-devicons.nvim",
         },
 
         config = function()
             -- keymap
             function load_fern_keymaps()
-                local opt_expr   = { expr = true, silent = true, noremap = false }
+                local opt_expr = { expr = true, silent = true, noremap = false }
                 local opt_silent = { silent = true, noremap = false, nowait = true }
-                local list       = {
-                    { key = "<CR>",  cmd = '<Plug>(fern-action-open-or-expand)',  opt = opt_silent },
-                    { key = '<C-c>', cmd = '<Plug>(fern-action-cancel)',          opt = opt_silent },
-                    { key = "<C-i>", cmd = '<Plug>(fern-action-mark:toggle)',     opt = opt_silent },
-                    { key = "os",    cmd = '<Plug>(fern-action-open:split)',      opt = opt_silent },
-                    { key = "ov",    cmd = '<Plug>(fern-action-open:vsplit)',     opt = opt_silent },
-                    { key = "ot",    cmd = '<Plug>(fern-action-open:tabedit)',    opt = opt_silent },
-                    { key = "oo",    cmd = '<Plug>(fern-action-open:select)',     opt = opt_silent },
-                    { key = "h",     cmd = '<Plug>(fern-action-collapse)',        opt = opt_silent },
-                    { key = "l",     cmd = '<Plug>(fern-action-expand)',          opt = opt_silent },
-                    { key = "q",     cmd = '<cmd>close<CR>',                      opt = opt_silent },
-                    { key = "r",     cmd = '<cmd>lua _G.load_fern_keymaps()<CR>', opt = opt_silent },
-                    { key = "y",     cmd = '<Plug>(fern-action-yank:bufname)',    opt = opt_silent },
-                    { key = "R",     cmd = '<Plug>(fern-action-reload:all)',      opt = opt_silent },
-                    { key = "?",     cmd = '<Plug>(fern-action-help)',            opt = opt_silent },
+                local list = {
+                    { key = "<CR>", cmd = "<Plug>(fern-action-open-or-expand)", opt = opt_silent },
+                    { key = "<C-c>", cmd = "<Plug>(fern-action-cancel)", opt = opt_silent },
+                    { key = "<C-i>", cmd = "<Plug>(fern-action-mark:toggle)", opt = opt_silent },
+                    { key = "os", cmd = "<Plug>(fern-action-open:split)", opt = opt_silent },
+                    { key = "ov", cmd = "<Plug>(fern-action-open:vsplit)", opt = opt_silent },
+                    { key = "ot", cmd = "<Plug>(fern-action-open:tabedit)", opt = opt_silent },
+                    { key = "oo", cmd = "<Plug>(fern-action-open:select)", opt = opt_silent },
+                    { key = "h", cmd = "<Plug>(fern-action-collapse)", opt = opt_silent },
+                    { key = "l", cmd = "<Plug>(fern-action-expand)", opt = opt_silent },
+                    { key = "q", cmd = "<cmd>close<CR>", opt = opt_silent },
+                    { key = "r", cmd = "<cmd>lua _G.load_fern_keymaps()<CR>", opt = opt_silent },
+                    { key = "y", cmd = "<Plug>(fern-action-yank:bufname)", opt = opt_silent },
+                    { key = "R", cmd = "<Plug>(fern-action-reload:all)", opt = opt_silent },
+                    { key = "?", cmd = "<Plug>(fern-action-help)", opt = opt_silent },
                 }
                 for _, items in ipairs(list) do
                     vim.api.nvim_buf_set_keymap(0, "n", items.key, items.cmd, items.opt)
                 end
             end
 
-            vim.api.nvim_exec([[
-                let g:fern#default_hidden = 1
-                let g:fern#scheme#file#show_absolute_path_on_root_label = 1
+            vim.g["fern_git_status#disable_ignore"] = 1
+            vim.g["fern_git_status#disable_untracked"] = 1
+            vim.g["fern_git_status#disable_submodules"] = 1
+            vim.g["fern_git_status#disable_directories"] = 1
 
-                let g:fern#renderer = "nerdfont"
-                let g:fern#disable_default_mappings             = 1
-                let g:fern#mapping#fzf#disable_default_mappings = 1
-                let g:fern#drawer_width                         = 30
-                let g:fern#renderer                             = 'nerdfont'
-                let g:fern#renderer#nerdfont#padding            = ' '
-                let g:fern#hide_cursor                          = 0
-            ]], true)
+            vim.g["fern#renderer"] = "nerdfont"
+            vim.g["fern#default_hidden"] = 1
+
+            vim.g["fern#disable_default_mappings"] = 1
+            vim.g["fern#mapping#fzf#disable_default_mappings"] = 1
+            vim.g["fern#drawer_width"] = 30
+            vim.g["fern#hide_cursor"] = 0
+            vim.g["fern#scheme#file#show_absolute_path_on_root_label"] = 1
 
             local fernKeyCustom = vim.api.nvim_create_augroup("FernCustomKeys", { clear = true })
-            vim.api.nvim_create_autocmd("FileType",
-                { pattern = { "fern" }, command = [[silent! lua _G.load_fern_keymaps()]], group = fernKeyCusto })
+            vim.api.nvim_create_autocmd(
+                "FileType",
+                { pattern = { "fern" }, command = [[silent! lua _G.load_fern_keymaps()]], group = fernKeyCusto }
+            )
             vim.api.nvim_create_autocmd("FileType", {
                 pattern = { "fern" },
                 callback = function()
                     vim.opt_local.number = false
                     vim.opt_local.relativenumber = true
                 end,
-                group = fernKeyCusto
+                group = fernKeyCusto,
             })
-        end
+        end,
     })
 
     -- @edit
@@ -848,9 +854,9 @@ return require("packer").startup(function(use)
             require("nvim-surround").setup({
                 keymaps = {
                     -- normal add
-                    normal = "sa",           -- general operation
-                    normal_cur = "sas",      -- line
-                    normal_line = "sA",      -- general operation, insert new line.
+                    normal = "sa", -- general operation
+                    normal_cur = "sas", -- line
+                    normal_line = "sA", -- general operation, insert new line.
                     normal_cur_line = "sAS", -- line, and insert new line.
 
                     delete = "sd",
