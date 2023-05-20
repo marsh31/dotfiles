@@ -774,6 +774,7 @@ return require("packer").startup(function(use)
         requires = {
             "lambdalisue/nerdfont.vim",
             "lambdalisue/fern-git-status.vim",
+            "lambdalisue/fern-hijack.vim",
 
             "lambdalisue/fern-renderer-nerdfont.vim",
             "TheLeoP/fern-renderer-web-devicons.nvim",
