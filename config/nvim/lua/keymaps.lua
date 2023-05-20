@@ -56,7 +56,8 @@ wk.register({
         ["dc"] = { "<cmd>nohlsearch<CR>", "Disable Highlight" },
         ["de"] = { "<cmd>NvimTreeClose<CR>", "Close Nvimtree" },
 
-        ["e"] = { "<cmd>NvimTreeOpen<CR>", "Open NvimTree" },
+        ["e"] = { "<Cmd>Fern . -drawer<CR><C-w>=", "Open filer" },
+        ["E"] = { "<Cmd>Fern . -drawer -reveal=%<CR><C-w>=", "Open filer" },
 
         ["g"] = { -- go
             name = "go",
