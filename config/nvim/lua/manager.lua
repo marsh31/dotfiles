@@ -25,7 +25,7 @@ M.setup = function()
 end
 
 M.load_plugins = function()
-    require('lazy').setup("pluginlist")
+    require('lazy').setup("plugins")
 end
 
 return M

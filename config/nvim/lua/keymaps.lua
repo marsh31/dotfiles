@@ -19,14 +19,10 @@ keymap("n", "<Leader>f", vim.lsp.buf.format)
 keymap("t", "<A-j><A-j>", "<C-\\><C-n>", { silent = true, nowait = true, remap = true })
 
 wk.register({
-    ["<C-c"] = { "<ESC>", "escape" },
+    ["<C-c>"] = { "<ESC>", "escape" },
+    ["<C-p>"] = { "<cmd>Telescope command_palette<CR>", "command palette" },
 
     ["s"] = {
-        -- ["a"] = {},
-        -- ["as"] = {},
-        -- ["A"] = {}.
-        -- ["AS"] = {},
-
         ["s"] = {
             ["b"] = { "<cmd>HopWord<CR>", "hop words in buffer" },
             ["c"] = { "<cmd>HopChar1<CR>", "hop character in buffer" },
@@ -47,6 +43,7 @@ wk.register({
     },
 
     ["<Leader>"] = {
+        ["<Leader>"] = { "<cmd>Telescope buffers<CR>", "Search buffer" },
         ["a"] = { -- toggle
             name = "toggle",
             ["a"] = { "<cmd>AerialToggle!<CR>", "Toggle Aerial" },

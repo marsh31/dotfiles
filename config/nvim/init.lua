@@ -17,6 +17,8 @@ require("manager").load_plugins()
 
 require("keymaps")
 
+-- ./lua/autocmd.lua
+require("autocmd")
 
 
 
