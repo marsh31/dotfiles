@@ -19,14 +19,10 @@ keymap("n", "<Leader>f", vim.lsp.buf.format)
 keymap("t", "<A-j><A-j>", "<C-\\><C-n>", { silent = true, nowait = true, remap = true })
 
 wk.register({
-    ["<C-c"] = { "<ESC>", "escape" },
+    ["<C-c>"] = { "<ESC>", "escape" },
+    ["<C-p>"] = { "<cmd>Telescope command_palette<CR>", "command palette" },
 
     ["s"] = {
-        -- ["a"] = {},
-        -- ["as"] = {},
-        -- ["A"] = {}.
-        -- ["AS"] = {},
-
         ["s"] = {
             ["b"] = { "<cmd>HopWord<CR>", "hop words in buffer" },
             ["c"] = { "<cmd>HopChar1<CR>", "hop character in buffer" },
@@ -47,6 +43,7 @@ wk.register({
     },
 
     ["<Leader>"] = {
+        ["<Leader>"] = { "<cmd>Telescope buffers<CR>", "Search buffer" },
         ["a"] = { -- toggle
             name = "toggle",
             ["a"] = { "<cmd>AerialToggle!<CR>", "Toggle Aerial" },
@@ -56,7 +53,8 @@ wk.register({
         ["dc"] = { "<cmd>nohlsearch<CR>", "Disable Highlight" },
         ["de"] = { "<cmd>NvimTreeClose<CR>", "Close Nvimtree" },
 
-        ["e"] = { "<cmd>NvimTreeOpen<CR>", "Open NvimTree" },
+        ["e"] = { "<Cmd>Fern . -drawer<CR><C-w>=", "Open filer" },
+        ["E"] = { "<Cmd>Fern . -drawer -reveal=%<CR><C-w>=", "Open filer" },
 
         ["g"] = { -- go
             name = "go",
@@ -123,6 +121,12 @@ vim.api.nvim_create_autocmd("FileType", {
             wk.register({
                 ["<Leader>q"] = { "<cmd>quit<CR>", "exit quickfix window" },
                 ["q"] = { "<cmd>quit<CR>", "exit quickfix window" },
+                ["o"] = { "<cmd>lua require('nvim_qf_helper').edit()<CR>", "edit" },
+
+                ["<C-o>"] = { "<cmd>lua require('nvim_qf_helper').edit()<CR>", "edit" },
+                ["<C-v>"] = { "<cmd>lua require('nvim_qf_helper').vsplit()<CR>", "vsplit" },
+                ["<C-x>"] = { "<cmd>lua require('nvim_qf_helper').vsplit()<CR>", "split" },
+
             }, nopts)
         elseif filetype == "vim" then
             if filename == "[Command Line]" then

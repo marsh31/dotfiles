@@ -30,7 +30,6 @@ local postfix = require("luasnip.extras.postfix").postfix
 local types = require("luasnip.util.types")
 local parse = require("luasnip.util.parser").parse_snippet
 
-
 local snippets = {
     s("#!", {
         t("#!/"),
@@ -58,6 +57,15 @@ local snippets = {
         i(0),
         t({ "", "}" }),
     }),
+
+    s("check_command", {
+        t("if ! command -v "),
+        i(1, "command"),
+        t({ " &> /dev/null", "then", "\t" }),
+        i(2, "echo \"Error. command not found\""),
+        i(3, "exit 1"),
+        t({ "", "fi" })
+    })
 }
 
 return snippets
