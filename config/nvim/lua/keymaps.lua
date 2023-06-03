@@ -121,6 +121,12 @@ vim.api.nvim_create_autocmd("FileType", {
             wk.register({
                 ["<Leader>q"] = { "<cmd>quit<CR>", "exit quickfix window" },
                 ["q"] = { "<cmd>quit<CR>", "exit quickfix window" },
+                ["o"] = { "<cmd>lua require('nvim_qf_helper').edit()<CR>", "edit" },
+
+                ["<C-o>"] = { "<cmd>lua require('nvim_qf_helper').edit()<CR>", "edit" },
+                ["<C-v>"] = { "<cmd>lua require('nvim_qf_helper').vsplit()<CR>", "vsplit" },
+                ["<C-x>"] = { "<cmd>lua require('nvim_qf_helper').vsplit()<CR>", "split" },
+
             }, nopts)
         elseif filetype == "vim" then
             if filename == "[Command Line]" then

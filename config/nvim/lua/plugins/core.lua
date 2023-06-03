@@ -43,6 +43,19 @@ return {
       })
     end,
   },
+  {
+    "rest-nvim/rest.nvim" ,
+    dependencies = { 'nvim-lua/plenary.nvim' },
+    event = { "VeryLazy" },
+    config = function ()
+      require("rest-nvim").setup({
+        result_split_horizontal = true,
+        result_split_in_place = false,
+        skip_ssl_verification = false,
+        encode_url = true,
+      })
+    end
+  },
 
   { 'MunifTanjim/nui.nvim' },
   { 'nvim-lua/plenary.nvim' },

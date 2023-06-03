@@ -59,11 +59,11 @@ return {
         extensions = {
           command_palette = {
             { "File",
-              { "File explorer", "<cmd>Fern ." },
-              { "File selector", "<cmd>Telescope find_files", },
+              { "File explorer", ":Fern ." },
+              { "File selector", ":Telescope find_files", },
             },
             { "Help",
-              { "File selector", "<cmd>Telescope notify", },
+              { "Notify list", ":Telescope notify", },
             },
           }
         }

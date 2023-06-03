@@ -7,9 +7,10 @@ return {
   {
     "neovim/nvim-lspconfig",
     dependencies = {
-      { 'williamboman/mason.nvim' },
-      { 'jose-elias-alvarez/null-ls.nvim' },
-      { 'hrsh7th/cmp-nvim-lsp' },
+      { "williamboman/mason.nvim" },
+      { "jose-elias-alvarez/null-ls.nvim" },
+      { "hrsh7th/cmp-nvim-lsp" },
+      { "folke/neodev.nvim" },
     },
     config = function()
       local lsp_config = require("lspconfig")
@@ -21,7 +22,6 @@ return {
         },
       })
 
-
       mason_lspconfig.setup_handlers({
         function(server_name)
           local opts = {
@@ -30,10 +30,10 @@ return {
 
             handlers = {
               ["textDocument/publishDiagnostics"] = vim.lsp.with(
-              vim.lsp.diagnostic.on_publish_diagnostics,
-              {
-                virtual_text = false,
-              }
+                vim.lsp.diagnostic.on_publish_diagnostics,
+                {
+                  virtual_text = false,
+                }
               ),
             },
           }
@@ -52,6 +52,10 @@ return {
                 runtime = {
                   version = "Lua 5.1",
                 },
+
+                completion = {
+                  callSnippet = "Replace"
+                }
               },
             },
           })
@@ -60,7 +64,7 @@ return {
     end,
   },
   {
-    "williamboman/mason.nvim" ,
+    "williamboman/mason.nvim",
     dependencies = {
       { "williamboman/mason-lspconfig.nvim" },
       { "jayp0521/mason-null-ls.nvim" },
@@ -108,7 +112,6 @@ return {
           null_ls.builtins.formatting.stylua,
         },
       })
-
     end,
   },
   {
@@ -118,7 +121,7 @@ return {
     end,
   },
   {
-    "tami5/lspsaga.nvim" ,
+    "tami5/lspsaga.nvim",
     config = function()
       require("lspsaga").setup({
         code_action_prompt = {
@@ -135,5 +138,5 @@ return {
       })
     end,
   },
-  { "folke/trouble.nvim" }
+  { "folke/trouble.nvim" },
 }

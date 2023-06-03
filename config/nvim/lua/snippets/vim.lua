@@ -39,6 +39,12 @@ local snippets = {
         t("/j "),
         i(2, "%"),
     }),
+
+    s("help_full", {
+        t("help "),
+        i(1, "command"),
+        t(" | only"),
+    }),
 }
 
 return snippets
