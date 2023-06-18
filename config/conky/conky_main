@@ -1,0 +1,27 @@
+conky.config = {
+	alignment = 'top_right',
+	background = true,
+	color2 = '5D7B86',
+	cpu_avg_samples = 2,
+	default_color = 'F9FAF9',
+	double_buffer = true,
+	font = 'SauceCodePro Nerd Font:size=15',
+	draw_shades = false,
+	gap_x = 30,
+	gap_y = 20,
+	minimum_width = 200,
+	no_buffers = true,
+	own_window = true,
+	own_window_type = 'override',
+	own_window_transparent = true,
+	update_interval = 1.0,
+	use_xft = true,
+}
+
+conky.text = [[
+${voffset 30}
+${font SauceCodePro Nerd Font:size=30}${time %y}.${time %m}.${time %d}
+${font SauceCodePro Nerd Font:size=30}${time %T}
+${font SauceCodePro Nerd Font:size=15} I'm marsh. test. OK?
+Current directory : ${desktop_name}
+]]
