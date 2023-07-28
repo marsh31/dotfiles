@@ -16,8 +16,7 @@ return {
                     component_separators = { left = "", right = "" },
                     section_separators = { left = "", right = "" },
                     disabled_filetypes = {
-                        statusline = {},
-                        winbar = {},
+                        statusline = { "dashboard", "alpha" },
                     },
                     ignore_focus = {},
                     always_divide_middle = true,
@@ -35,14 +34,14 @@ return {
                     lualine_y = { "progress" },
                     lualine_z = { "location" },
                 },
-                tabline = {
-                    lualine_a = {},
-                    lualine_b = { { "tabs", mode = 2 } },
-                    lualine_c = {},
-                    lualine_x = {},
-                    lualine_y = { { "windows", mode = 2 } },
-                    lualine_z = {},
-                },
+                -- tabline = {
+                --     lualine_a = {},
+                --     lualine_b = { { "tabs", mode = 2 } },
+                --     lualine_c = {},
+                --     lualine_x = {},
+                --     lualine_y = { { "windows", mode = 2 } },
+                --     lualine_z = {},
+                -- },
                 winbar = {},
                 inactive_winbar = {},
                 extensions = {
@@ -52,20 +51,20 @@ return {
             })
         end,
     },
-    {
-        "romgrk/barbar.nvim",
-        enabled = false,
-        dependencies = {
-            "lewis6991/gitsigns.nvim", -- OPTIONAL: for git status
-            "nvim-tree/nvim-web-devicons", -- OPTIONAL: for file icons
-        },
-        init = function ()
-          vim.g.barbar_auto_setup = false
-        end,
-        config = function ()
-          require("bufferline").setup({
-
-          })
-        end
-    },
+    -- {
+    --     "romgrk/barbar.nvim",
+    --     enabled = false,
+    --     dependencies = {
+    --         "lewis6991/gitsigns.nvim", -- OPTIONAL: for git status
+    --         "nvim-tree/nvim-web-devicons", -- OPTIONAL: for file icons
+    --     },
+    --     init = function ()
+    --       vim.g.barbar_auto_setup = false
+    --     end,
+    --     config = function ()
+    --       require("bufferline").setup({
+    --
+    --       })
+    --     end
+    -- },
 }

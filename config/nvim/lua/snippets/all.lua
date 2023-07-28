@@ -54,7 +54,7 @@ local snippets = {
         utils.date_input(),
     }),
 
-    s("pnode", {
+    s("p", {
         c(1, {
             sn(nil, { t("("), r(1, "user_text"), t(")") }),
             sn(nil, { t("["), r(1, "user_text"), t("]") }),

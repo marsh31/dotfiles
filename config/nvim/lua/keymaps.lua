@@ -18,6 +18,10 @@ keymap("i", "jj", "<ESC>", { silent = true, nowait = true, remap = true })
 keymap("n", "<Leader>f", vim.lsp.buf.format)
 keymap("t", "<A-j><A-j>", "<C-\\><C-n>", { silent = true, nowait = true, remap = true })
 
+keymap("n", "ga", "<Plug>(EasyAlign)", { silent = true, nowait = true, remap = true })
+keymap("x", "ga", "<Plug>(EasyAlign)", { silent = true, nowait = true, remap = true })
+
+
 wk.register({
     ["<C-c>"] = { "<ESC>", "escape" },
     ["<C-p>"] = { "<cmd>Telescope command_palette<CR>", "command palette" },
@@ -27,18 +31,24 @@ wk.register({
             ["b"] = { "<cmd>HopWord<CR>", "hop words in buffer" },
             ["c"] = { "<cmd>HopChar1<CR>", "hop character in buffer" },
             ["l"] = { "<cmd>HopLineStart<CR>", "hop line in buffer" },
-            ["s"] = { function()
-                require("hop").hint_words({
-                    direction = require("hop.hint").HintDirection.AFTER_CURSOR,
-                    current_line_only = true
-                })
-            end, "hop line char in buffer" },
-            ["*"] = { function()
-                vim.api.nvim_exec([[normal! "ayiw]], true)
+            ["s"] = {
+                function()
+                    require("hop").hint_words({
+                        direction = require("hop.hint").HintDirection.AFTER_CURSOR,
+                        current_line_only = true,
+                    })
+                end,
+                "hop line char in buffer",
+            },
+            ["*"] = {
+                function()
+                    vim.api.nvim_exec([[normal! "ayiw]], true)
 
-                local sword = vim.api.nvim_exec('echo @a', true)
-                require("hop").hint_patterns({}, sword)
-            end, "hop pattern use * in buffer" }
+                    local sword = vim.api.nvim_exec("echo @a", true)
+                    require("hop").hint_patterns({}, sword)
+                end,
+                "hop pattern use * in buffer",
+            },
         },
     },
 
@@ -53,8 +63,37 @@ wk.register({
         ["dc"] = { "<cmd>nohlsearch<CR>", "Disable Highlight" },
         ["de"] = { "<cmd>NvimTreeClose<CR>", "Close Nvimtree" },
 
-        ["e"] = { "<Cmd>Fern . -drawer<CR><C-w>=", "Open filer" },
-        ["E"] = { "<Cmd>Fern . -drawer -reveal=%<CR><C-w>=", "Open filer" },
+        ["e"] = { -- explorer
+            ["d"] = { "<Cmd>Fern . -drawer<CR><C-w>=", "Open filer" },
+            ["D"] = { "<Cmd>Fern . -drawer -reveal=%<CR><C-w>=", "Open filer" },
+
+            ["w"] = { "<Cmd>Fern . -reveal=%<CR><C-w>=", "Open filer in current window" },
+            ["W"] = { "<Cmd>Fern .<CR>", "Open filer in current window" },
+
+            ["l"] = { "<Cmd>vertical rightbelow split | Fern . -reveal=%<CR><C-w>=", "Open filer in left window" },
+            ["L"] = { "<Cmd>vertical rightbelow split | Fern .<CR>", "Open filer in right window" },
+
+            ["h"] = { "<Cmd>vertical leftabove split | Fern . -reveal=%<CR><C-w>=", "Open filer in left window" },
+            ["H"] = { "<Cmd>vertical leftabove split | Fern .<CR>", "Open filer in right window" },
+
+            ["j"] = { "<Cmd>rightbelow split | Fern . -reveal=%<CR><C-w>=", "Open filer in below window" },
+            ["J"] = { "<Cmd>rightbelow split | Fern .<CR>", "Open filer in below window" },
+
+            ["k"] = { "<Cmd>leftabove split | Fern . -reveal=%<CR><C-w>=", "Open filer in above window" },
+            ["K"] = { "<Cmd>leftabove split | Fern .<CR>", "Open filer in above window" },
+
+            ["o"] = { "<Cmd>vertical botright split | Fern . -reveal=%<CR><C-w>=", "Open filer in left window" },
+            ["O"] = { "<Cmd>vertical botright split | Fern .<CR>", "Open filer in right window" },
+
+            ["y"] = { "<Cmd>vertical topleft split | Fern . -reveal=%<CR><C-w>=", "Open filer in left window" },
+            ["Y"] = { "<Cmd>vertical topleft split | Fern .<CR>", "Open filer in right window" },
+
+            ["u"] = { "<Cmd>botright split | Fern . -reveal=%<CR><C-w>=", "Open filer in below window" },
+            ["U"] = { "<Cmd>botright split | Fern .<CR>", "Open filer in below window" },
+
+            ["i"] = { "<Cmd>topleft split | Fern . -reveal=%<CR><C-w>=", "Open filer in above window" },
+            ["I"] = { "<Cmd>topleft split | Fern .<CR>", "Open filer in above window" },
+        },
 
         ["g"] = { -- go
             name = "go",
@@ -86,7 +125,7 @@ wk.register({
             },
             ["k"] = { "<cmd>lua vim.lsp.buf.hover()<CR>", "hover" },
             ["f"] = { "<cmd>lua vim.lsp.buf.formatting()<CR>", "formatting" },
-            ["r"] = { "<cmd>lua vim.diagnostic.open_float()<CR>", "rename" },
+            ["r"] = { "<cmd>lua vim.lsp.buf.rename()<CR>", "rename" },
         },
     },
 
@@ -100,9 +139,6 @@ wk.register({
 }, {
     mode = "n",
 })
-
-
-
 
 ------------------------------------------------------------
 -- @buffer
@@ -126,7 +162,6 @@ vim.api.nvim_create_autocmd("FileType", {
                 ["<C-o>"] = { "<cmd>lua require('nvim_qf_helper').edit()<CR>", "edit" },
                 ["<C-v>"] = { "<cmd>lua require('nvim_qf_helper').vsplit()<CR>", "vsplit" },
                 ["<C-x>"] = { "<cmd>lua require('nvim_qf_helper').vsplit()<CR>", "split" },
-
             }, nopts)
         elseif filetype == "vim" then
             if filename == "[Command Line]" then

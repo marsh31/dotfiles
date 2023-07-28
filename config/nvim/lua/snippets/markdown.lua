@@ -30,42 +30,104 @@ local postfix = require("luasnip.extras.postfix").postfix
 local types = require("luasnip.util.types")
 local parse = require("luasnip.util.parser").parse_snippet
 
+---@param  num integer 1 to 6
+---@return SnippetNode
+local function header(num)
+  local label = ""
+  for index = 1, num, 1 do
+    label = label .. "#"
+  end
 
+  return s("h" .. num, {
+    t(label .. " "),
+    i(0),
+  })
+end
+
+local attrs = {
+  { head = "*", tail = "*" },
+  { head = "_", tail = "_" },
+  { head = "**", tail = "**" },
+  { head = "`", tail = "`" },
+  { head = "~~", tail = "~~" },
+}
+
+---@param  order integer
+---@return ChoiceNode
+local function choice_attrs(order)
+  local nodes = {}
+  for index, value in ipairs(attrs) do
+    nodes[index] = sn(nil, {
+      t(value["head"]),
+      i(1),
+      t(value["tail"]),
+    })
+  end
+
+  return c(order, nodes)
+end
+
+------------------------------------------------------------
+--- Snippets
+------------------------------------------------------------
 local snippets = {
-    s({ trig = "h(%d)", regTrig = true }, {
-        f(function(args, snip)
-            local ret = ""
-            for i = 1, snip.captures[1], 1 do
-                ret = ret .. "#"
-            end
-            ret = ret .. " "
-            return ret
-        end, {}),
-    }),
+  s({ trig = "h(%d)", regTrig = true }, {
+    f(function(args, snip)
+      local ret = ""
+      for i = 1, snip.captures[1], 1 do
+        ret = ret .. "#"
+      end
+      ret = ret .. " "
+      return ret
+    end, {}),
+  }),
 
-    s("codeblock", {
-        t("```"), i(1, "lang"), t(":"), i(2, "filename"),
-        t({"", ""}), i(0),
-        t({"", "```"})
-    }),
+  header(1),
+  header(2),
+  header(3),
+  header(4),
+  header(5),
+  header(6),
 
-    s("mermaid_seq", {
-        t("```mermaid"),
-        t({"", "sequenceDiagram", ""}), i(0),
-        t({"", "```"})
-    }),
+  s("attr", {
+    choice_attrs(1),
+  }),
 
-    s("box", {
-        t("- [ ] "), i(0)
-    }),
+  s("codeb", {
+    t("```"),
+    i(1, "lang"),
+    t(":"),
+    i(2, "filename"),
+    t({ "", "" }),
+    i(0),
+    t({ "", "```" }),
+  }),
 
-    s("->>", {
-        i(1, "send"),
-        t(" ->> "),
-        i(2, "recv"),
-        t(" : "),
-        i(0, "msg"),
-    }),
+  s("code", {
+    t("`"),
+    i(1, "code"),
+    t("`"),
+  }),
+
+  s("mermaid_seq", {
+    t("```mermaid"),
+    t({ "", "sequenceDiagram", "" }),
+    i(0),
+    t({ "", "```" }),
+  }),
+
+  s("task", {
+    t("- [ ] "),
+    i(0),
+  }),
+
+  s("->>", {
+    i(1, "send"),
+    t(" ->> "),
+    i(2, "recv"),
+    t(" : "),
+    i(0, "msg"),
+  }),
 }
 
 return snippets

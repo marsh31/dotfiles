@@ -16,7 +16,7 @@ vim.api.nvim_create_autocmd("QuickFixCmdPost", {
     pattern = { "vimgrep,grep,grepadd" },
     callback = function()
         if vim.fn.len(vim.fn.getqflist()) ~= 0 then
-            vim.api.nvim_command("copen")
+            vim.api.nvim_command("botright copen")
         end
     end,
 })
@@ -96,4 +96,16 @@ return {
         "itchyny/vim-qfedit",
         ft = { "qf" },
     },
+
+    -- {
+    --     "thinca/vim-qfhl",
+    --     event = { "VeryLazy" },
+    -- },
+
+    -- {
+    --     "ten3roberts/qf.nvim",
+    --     event = { "VeryLazy" },
+    -- },
 }
+
+-- vim: ft=lua sts=4 expandtab fenc=utf-8

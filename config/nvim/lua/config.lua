@@ -20,8 +20,6 @@ vim.opt.number         = true
 vim.opt.relativenumber = true
 vim.opt.signcolumn     = "yes:1"
 
--- completion menu
-vim.opt.pumheight      = 5
 
 -- status line
 vim.opt.cmdheight      = 0                          -- command line height. 0: no line.
@@ -52,6 +50,7 @@ vim.opt.fillchars      = {
   eob = " ",
 }
 vim.opt.inccommand     = "split"
+vim.opt.conceallevel   = 3
 
 
 -- fold
@@ -74,12 +73,14 @@ vim.opt.splitright     = true                      -- split right
 vim.opt.swapfile       = false                     -- noswapfile
 vim.opt.undofile       = true                      -- undofile
 vim.opt.undodir        = vim.fn.expand("~/.local/state/nvim")
-vim.opt.undolevels     = 1000
+vim.opt.undolevels     = 10000
 vim.opt.updatetime     = 200                       -- cursor hold time
 vim.opt.virtualedit    = "block"                   -- virtualedit. move on blank on visual mode.
 vim.opt.writebackup    = false                     -- nowritebackup
 vim.opt.timeout        = true
-vim.opt.timeoutlen     = 300
+vim.opt.timeoutlen     = 5000
+vim.opt.ttimeout       = true
+vim.opt.ttimeoutlen    = 300
 
 vim.opt.autoindent     = true
 vim.opt.cindent        = true
@@ -114,6 +115,8 @@ vim.opt.completeopt:append {
     "menuone",
     "noselect",
 }
+vim.opt.pumblend       = 10
+vim.opt.pumheight      = 10
 
 ------------------------------------------------------------
 -- Diff
@@ -139,6 +142,6 @@ vim.opt.ignorecase  = true
 vim.opt.smartcase   = true
 vim.opt.suffixesadd = ".php,.tpl,.ts,.tsx,.css,.scss,.rb,.java,.json,.md,.as,.js,.jpg,.jpeg,.gif,.png,.vim"
 vim.opt.matchpairs  = "(:),[:],{:}"
-
+vim.opt.history     = 5000
 
 -- vim: sw=4 sts=4 expandtab fenc=utf-8
