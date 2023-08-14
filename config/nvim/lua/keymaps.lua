@@ -9,6 +9,12 @@
 local wk = require("which-key")
 local keymap = vim.keymap.set
 
+local function map(mode, lhs, rhs, option, desc)
+    local opts = option
+    opts.desc = desc
+    vim.keymap.set(mode, lhs, rhs, opts)
+end
+
 ------------------------------------------------------------
 -- @global
 ------------------------------------------------------------
@@ -18,9 +24,41 @@ keymap("i", "jj", "<ESC>", { silent = true, nowait = true, remap = true })
 keymap("n", "<Leader>f", vim.lsp.buf.format)
 keymap("t", "<A-j><A-j>", "<C-\\><C-n>", { silent = true, nowait = true, remap = true })
 
+keymap("n", "*", "*N", { desc = "highlight cursor word", silent = true, nowait = true, remap = true })
+
 keymap("n", "ga", "<Plug>(EasyAlign)", { silent = true, nowait = true, remap = true })
 keymap("x", "ga", "<Plug>(EasyAlign)", { silent = true, nowait = true, remap = true })
 
+keymap("n", "]b", "<Cmd>bnext<CR>", { desc = "jump to next buffer", silent = true, nowait = true, remap = true })
+keymap("n", "[b", "<Cmd>bprevious<CR>", { desc = "jump to previous buffer", silent = true, nowait = true, remap = true })
+
+keymap("n", "]q", "<Cmd>cnext<CR>", { desc = "jump next quickfix" })
+keymap("n", "[q", "<Cmd>cprevious<CR>", { desc = "jump previous quickfix" })
+
+keymap("n", "]d", vim.diagnostic.goto_next, { desc = "jump next diagnostic" })
+keymap("n", "[d", vim.diagnostic.goto_prev, { desc = "jump prev diagnostic" })
+
+local gs = package.loaded.gitsigns
+keymap("n", "]g", gs.next_hunk, { desc = "Next Hunk" })
+keymap("n", "[g", gs.prev_hunk, { desc = "Prev Hunk" })
+
+keymap({ "n", "v" }, "<Leader>ghs", ":Gitsigns stage_hunk<CR>", { desc = "State Hunk" })
+keymap({ "n", "v" }, "<Leader>ghr", ":Gitsigns reset_hunk<CR>", { desc = "Reset Hunk" })
+
+keymap("n", "<Leader>ghS", gs.stage_buffer, { desc = "Stage Buffer" })
+keymap("n", "<Leader>ghR", gs.reset_buffer, { desc = "Reset Buffer" })
+
+keymap("n", "<Leader>ghu", gs.undo_stage_hunk, { desc = "Undo Stage Hunk" })
+keymap("n", "<Leader>ghp", gs.preview_hunk, { desc = "Preview Hunk" })
+
+keymap("n", "<Leader>ghb", function()
+    gs.blame_line({ full = true })
+end, { desc = "Blame Line" })
+
+keymap("n", "<Leader>ghd", gs.diffthis, { desc = "Diff This" })
+keymap("n", "<Leader>ghD", function()
+    gs.diffthis("~")
+end, { desc = "Diff This ~" })
 
 wk.register({
     ["<C-c>"] = { "<ESC>", "escape" },
@@ -93,6 +131,8 @@ wk.register({
 
             ["i"] = { "<Cmd>topleft split | Fern . -reveal=%<CR><C-w>=", "Open filer in above window" },
             ["I"] = { "<Cmd>topleft split | Fern .<CR>", "Open filer in above window" },
+
+            ["n"] = { "<Cmd>enew<CR>", "New File" },
         },
 
         ["g"] = { -- go
@@ -128,17 +168,28 @@ wk.register({
             ["r"] = { "<cmd>lua vim.lsp.buf.rename()<CR>", "rename" },
         },
     },
-
-    ["["] = {
-        ["g"] = { "<cmd>lua vim.diagnostic.goto_prev()<CR>", "go to previous diagnostic error" },
-    },
-
-    ["]"] = {
-        ["g"] = { "<cmd>lua vim.diagnostic.goto_next()<CR>", "go to next diagnostic error" },
-    },
 }, {
     mode = "n",
 })
+
+
+------------------------------------------------------------
+-- @insert mode
+------------------------------------------------------------
+keymap("i", ",", ",<C-g>u")
+keymap("i", ".", ".<C-g>u")
+keymap("i", ";", ";<C-g>u")
+
+
+------------------------------------------------------------
+-- @cmdline
+------------------------------------------------------------
+keymap("c", "<C-a>", "<C-b>", { desc = "Move to top" })
+keymap("c", "<C-e>", "<C-e>", { desc = "Move to tail" })
+keymap("c", "<C-b>", "<Left>", { desc = "Move to left" })
+keymap("c", "<C-f>", "<Right>", { desc = "Move to right" })
+
+keymap("c", "<C-k>", "<C-f><Esc>", { desc = "Move to cmdline window" })
 
 ------------------------------------------------------------
 -- @buffer

@@ -1,3 +1,12 @@
+-- NAME:   lua/plugins/git.lua
+-- AUTHOR: marsh
+-- NOTE:
+--
+--
+--
+--
+
+
 return {
     {
         "dinhhuy258/git.nvim",
