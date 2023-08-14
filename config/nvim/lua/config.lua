@@ -144,4 +144,9 @@ vim.opt.suffixesadd = ".php,.tpl,.ts,.tsx,.css,.scss,.rb,.java,.json,.md,.as,.js
 vim.opt.matchpairs  = "(:),[:],{:}"
 vim.opt.history     = 5000
 
+if vim.fn.executable("rg") then
+    vim.opt.grepprg = "rg --vimgrep --hidden"
+    vim.opt.grepformat = "%f:%l:%c:%m"
+end
+
 -- vim: sw=4 sts=4 expandtab fenc=utf-8

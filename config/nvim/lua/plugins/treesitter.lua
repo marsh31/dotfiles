@@ -29,7 +29,6 @@ return {
                     "awk",
                     "bash",
                     "c",
-                    "cairo",
                     "cmake",
                     "comment",
                     "cpp",

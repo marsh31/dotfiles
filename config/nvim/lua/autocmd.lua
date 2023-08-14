@@ -48,3 +48,14 @@ vim.api.nvim_create_autocmd("TextYankPost", {
     vim.highlight.on_yank()
   end,
 })
+
+vim.api.nvim_create_augroup("GrepCmd", {})
+vim.api.nvim_create_autocmd("QuickFixCmdPost", {
+    group = "GrepCmd",
+    pattern = { "vimgrep,grep,grepadd" },
+    callback = function()
+        if vim.fn.len(vim.fn.getqflist()) ~= 0 then
+            vim.api.nvim_command("botright copen")
+        end
+    end,
+})

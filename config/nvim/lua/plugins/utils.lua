@@ -58,11 +58,13 @@ return {
     },
 
     {
-        "rmagatti/session-lens"
+        "rmagatti/session-lens",
     },
 
     {
         "folke/which-key.nvim",
+        lazy = true,
+        cmd = "WhichKey",
         config = function()
             require("which-key").setup({
                 plugins = {
@@ -121,7 +123,7 @@ return {
         "arnarg/todotxt.nvim",
         config = function()
             require("todotxt-nvim").setup({
-                todo_file = vim.fn.expand("~/.todo/todo.txt")
+                todo_file = vim.fn.expand("~/.todo/todo.txt"),
             })
         end,
     },
