@@ -1,10 +1,37 @@
+-- NAME:   dev/init.lua
+-- AUTHOR: marsh
+-- 
+-- NOTE:
+-- # develop env.
 --
+-- ## nvim lua dev guide
+-- https://github.com/nanotee/nvim-lua-guide
+-- https://zenn.dev/slin/articles/2020-10-19-neovim-lua1
+-- https://jacobsimpson.github.io/nvim-lua-manual/
 --
+-- ## lua language
+-- https://ja.wikibooks.org/wiki/Lua
+-- https://github.com/anthony-khong/nvim-education
+-- https://light11.hatenadiary.com/archive/category/Lua
+-- https://itsakura.com/other-pg
+-- http://gurakura.sakura.ne.jp/lua/
+-- http://www.rtpro.yamaha.co.jp/RT/docs/lua/tutorial/index.html
 --
+-- ## How to write plugin?
+-- https://learnxinyminutes.com/docs/lua/
+-- https://github.com/medwatt/Notes
+-- https://speakerdeck.com/delphinus/neovim-dejin-feng-nopuraguinwoshu-kufang-fa?slide=11
 --
+-- ## Standard
+-- https://github.com/norcalli/neovim-plugin
 --
+-- ## test
+-- https://zenn.dev/notomo/articles/neovim-lua-plugin-testing
+-- https://github.com/lunarmodules/busted
 --
---
+
+
+
 local group_name = "select_window"
 local opts = {
   relative = "win",

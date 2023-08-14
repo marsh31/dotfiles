@@ -1,0 +1,45 @@
+
+
+
+
+
+
+
+
+
+
+
+n  gt            <Plug>(submode-before-entering:changetab:with:gt)<Plug>(submode-before-entering:changetab)<Plug>(submode-enter:changetab)
+n  <Plug>(submode-rhs:changetab:for:t) * gt
+n  <Plug>(submode-prefix:changetab)t   <Plug>(submode-rhs:changetab:for:t)<Plug>(submode-enter:changetab)
+n  <Plug>(submode-leave:changetab) * @=<SNR>105_on_leaving_submode('changetab')<CR>
+n  <Plug>(submode-prefix:changetab)   <Plug>(submode-leave:changetab)
+n  <Plug>(submode-before-action:changetab) * <SNR>105_on_executing_action('changetab')
+n  <Plug>(submode-enter:changetab)   <Plug>(submode-before-action:changetab)<Plug>(submode-prefix:changetab)
+n  <Plug>(submode-before-entering:changetab) * <SNR>105_on_entering_submode('changetab')
+n  <Plug>(submode-before-entering:changetab:with:gt) * gt
+n  <Plug>(submode-rhs:changetab:for:<Esc>) * <Nop>
+n  <Plug>(submode-prefix:changetab)<Esc>   <Plug>(submode-rhs:changetab:for:<Esc>)<Plug>(submode-leave:changetab)
+
+
+n  <C-W>>                                <Plug>(submode-before-entering:winsize:with:<C-W>>)<Plug>(submode-before-entering:winsize)<Plug>(submode-enter:winsize) -> OK
+n  <Plug>(submode-before-action:winsize) * <SNR>105_on_executing_action('winsize') -> NG
+n  <Plug>(submode-before-entering:winsize) * <SNR>105_on_entering_submode('winsize') -> NG
+n  <Plug>(submode-leave:winsize) * @=<SNR>105_on_leaving_submode('winsize')<CR> -> NG
+n  <Plug>(submode-before-entering:winsize:with:<C-W>>) * <C-W>> -> NG
+n  <Plug>(submode-rhs:winsize:for:>) * <C-W>>
+n  <Plug>(submode-enter:winsize)   <Plug>(submode-before-action:winsize)<Plug>(submode-prefix:winsize)
+n  <Plug>(submode-rhs:winsize:for:<Esc>) * <Nop>
+n  <Plug>(submode-prefix:winsize)<Esc>   <Plug>(submode-rhs:winsize:for:<Esc>)<Plug>(submode-leave:winsize)
+n  <Plug>(submode-prefix:winsize)>   <Plug>(submode-rhs:winsize:for:>)<Plug>(submode-enter:winsize)
+n  <Plug>(submode-prefix:winsize)   <Plug>(submode-leave:winsize)
+
+
+
+  ---------------
+
+n  <Plug>(submode-leave:winsize) * @=<SNR>105_on_leaving_submode('winsize')<CR> -> NG
+n  <Plug>(submode-rhs:winsize:for:<Esc>) * <Nop>
+n  <Plug>(submode-prefix:winsize)<Esc>   <Plug>(submode-rhs:winsize:for:<Esc>)<Plug>(submode-leave:winsize)
+
+n  <Plug>(submode-l:test) * @=<Cmd>lua on_leaving_submode('test')<CR>

@@ -19,7 +19,6 @@ return {
             { "yioneko/nvim-yati" },
             { "nvim-treesitter/nvim-treesitter-refactor" },
             { "theHamsta/nvim-treesitter-pairs" },
-            { "p00f/nvim-ts-rainbow" },
             { "Dkendal/nvim-treeclimber" },
         },
         cmd = { "TSUpdateSync" },
@@ -124,11 +123,6 @@ return {
                             ["ic"] = "@class.inner",
                         },
                     },
-                },
-
-                rainbow = {
-                    enable = true,
-                    extended_mode = true,
                 },
 
                 pairs = {

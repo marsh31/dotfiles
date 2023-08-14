@@ -78,7 +78,7 @@ vim.opt.updatetime     = 200                       -- cursor hold time
 vim.opt.virtualedit    = "block"                   -- virtualedit. move on blank on visual mode.
 vim.opt.writebackup    = false                     -- nowritebackup
 vim.opt.timeout        = true
-vim.opt.timeoutlen     = 5000
+vim.opt.timeoutlen     = 2000
 vim.opt.ttimeout       = true
 vim.opt.ttimeoutlen    = 300
 

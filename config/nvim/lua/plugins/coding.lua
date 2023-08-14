@@ -17,6 +17,7 @@ return {
 
     {
         "hrsh7th/nvim-cmp",
+        event = "InsertEnter",
         dependencies = {
             { "hrsh7th/cmp-buffer", event = { "InsertEnter" } },
             { "hrsh7th/cmp-cmdline", event = { "InsertEnter" } },
@@ -48,8 +49,8 @@ return {
                     },
                 },
             })
-
             local cmp = require("cmp")
+            local defaults = require("cmp.config.default")()
             local cmp_autopairs = require("nvim-autopairs.completion.cmp")
             cmp.event:on("confirm_done", cmp_autopairs.on_confirm_done())
 
@@ -85,29 +86,59 @@ return {
                         return kind
                     end,
                 },
+                sources = {
+                    { name = "nvim_lsp" },
+                    { name = "luasnip" },
+                    { name = "buffer" },
+                    { name = "path" },
+                    { name = "nvim_lua" },
+                },
+                sorting = defaults.sorting,
+                -- experimental = {
+                --     ghost_text = {
+                --         hl_group = "CmpGhostText",
+                --     },
+                -- },
                 mapping = {
-                    ["<C-x><C-o>"] = cmp.mapping(cmp.mapping.complete(), { "i", "s" }),
                     ["<C-n>"] = cmp.mapping(function(fallback)
                         if cmp.visible() then
-                            cmp.select_next_item()
+                            cmp.select_next_item({ behavior = cmp.SelectBehavior.Insert })
                         else
                             cmp.complete()
-                        end
-                    end, { "i", "s" }),
-
-                    ["<C-e>"] = cmp.mapping(function(fallback)
-                        if luasnip.choice_active() then
-                            luasnip.change_choice(1)
-                        else
-                            fallback()
                         end
                     end, { "i", "s" }),
 
                     ["<C-p>"] = cmp.mapping(function(fallback)
                         if cmp.visible() then
-                            cmp.select_prev_item()
+                            cmp.select_prev_item({ behavior = cmp.SelectBehavior.Insert })
                         else
                             cmp.complete()
+                        end
+                    end, { "i", "s" }),
+
+                    ["<C-b>"] = cmp.mapping(function (fallback)
+                        if cmp.visible() then
+                            cmp.scroll_docs(-4)
+                        else
+                            fallback()
+                        end
+                    end, { "i" }),
+
+                    ["<C-f>"] = cmp.mapping(function (fallback)
+                        if cmp.visible() then
+                            cmp.scroll_docs(4)
+                        else
+                            fallback()
+                        end
+                    end, { "i" }),
+
+                    ["<C-e>"] = cmp.mapping(function(fallback)
+                        if cmp.visible() then
+                            cmp.abort()
+                        elseif luasnip.choice_active() then
+                            luasnip.change_choice(1)
+                        else
+                            fallback()
                         end
                     end, { "i", "s" }),
 
@@ -131,21 +162,7 @@ return {
 
                     ["<CR>"] = cmp.mapping({
                         i = cmp.mapping.confirm({ behavior = cmp.ConfirmBehavior.Replace, select = false }),
-                        c = function(fallback)
-                            if cmp.visible() then
-                                cmp.confirm({ behavior = cmp.ConfirmBehavior.Replace, select = false })
-                            else
-                                fallback()
-                            end
-                        end,
                     }),
-                },
-                sources = {
-                    { name = "nvim_lsp" },
-                    { name = "luasnip" },
-                    { name = "buffer" },
-                    { name = "path" },
-                    { name = "nvim_lua" },
                 },
             })
 
