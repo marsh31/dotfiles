@@ -18,11 +18,22 @@ end
 ------------------------------------------------------------
 -- @global
 ------------------------------------------------------------
-keymap("", "<MiddleMouse>", "<Nop>", { silent = true, nowait = true, remap = true })
-keymap("i", "<middleMouse>", "<Nop>", { silent = true, nowait = true, remap = true })
-keymap("i", "jj", "<ESC>", { silent = true, nowait = true, remap = true })
+keymap("n", "<MiddleMouse>", "<Nop>", { silent = true, nowait = true, remap = true })
 keymap("n", "<Leader>f", vim.lsp.buf.format)
 keymap("t", "<A-j><A-j>", "<C-\\><C-n>", { silent = true, nowait = true, remap = true })
+
+keymap("n", "w", "<Plug>CamelCaseMotion_w", { silent = true, nowait = true })
+keymap("n", "b", "<Plug>CamelCaseMotion_b", { silent = true, nowait = true })
+keymap("n", "e", "<Plug>CamelCaseMotion_e", { silent = true, nowait = true })
+keymap("n", "ge", "<Plug>CamelCaseMotion_ge", { silent = true, nowait = true })
+
+keymap("o", "iw", "<Plug>CamelCaseMotion_iw", { silent = true, nowait = true })
+keymap("x", "iw", "<Plug>CamelCaseMotion_iw", { silent = true, nowait = true })
+keymap("o", "ib", "<Plug>CamelCaseMotion_ib", { silent = true, nowait = true })
+keymap("x", "ib", "<Plug>CamelCaseMotion_ib", { silent = true, nowait = true })
+keymap("o", "ie", "<Plug>CamelCaseMotion_ie", { silent = true, nowait = true })
+keymap("x", "ie", "<Plug>CamelCaseMotion_ie", { silent = true, nowait = true })
+
 
 keymap("n", "*", "*N", { desc = "highlight cursor word", silent = true, nowait = true, remap = true })
 
@@ -176,6 +187,15 @@ wk.register({
 ------------------------------------------------------------
 -- @insert mode
 ------------------------------------------------------------
+keymap("i", "jj", "<ESC>", { silent = true, nowait = true, remap = true })
+keymap("i", "<A-j><A-j>", "<ESC>", { silent = true, nowait = true, remap = true })
+
+keymap("i", "<middleMouse>", "<Nop>", { silent = true, nowait = true, remap = true })
+
+keymap("i", "<C-a>", "<Home>")
+keymap("i", "<C-e>", "<End>")
+keymap("i", "<C-l>", "<C-g>u<C-o>:update<CR>")
+
 keymap("i", ",", ",<C-g>u")
 keymap("i", ".", ".<C-g>u")
 keymap("i", ";", ";<C-g>u")

@@ -19,17 +19,17 @@ return {
         "hrsh7th/nvim-cmp",
         event = "InsertEnter",
         dependencies = {
-            { "hrsh7th/cmp-buffer", event = { "InsertEnter" } },
-            { "hrsh7th/cmp-cmdline", event = { "InsertEnter" } },
-            { "hrsh7th/cmp-path", event = { "InsertEnter" } },
+            { "hrsh7th/cmp-buffer",                   event = { "InsertEnter" } },
+            { "hrsh7th/cmp-cmdline",                  event = { "InsertEnter" } },
+            { "hrsh7th/cmp-path",                     event = { "InsertEnter" } },
             { "hrsh7th/cmp-nvim-lsp" }, --, event = { "InsertEnter" } },
-            { "hrsh7th/cmp-nvim-lua", event = { "InsertEnter" } },
+            { "hrsh7th/cmp-nvim-lua",                 event = { "InsertEnter" } },
             { "hrsh7th/cmp-nvim-lsp-document-symbol", event = { "InsertEnter" } },
-            { "hrsh7th/cmp-nvim-lsp-signature-help", event = { "InsertEnter" } },
+            { "hrsh7th/cmp-nvim-lsp-signature-help",  event = { "InsertEnter" } },
             { "onsails/lspkind-nvim" },
             { "windwp/nvim-autopairs" },
 
-            { "saadparwaiz1/cmp_luasnip", event = { "InsertEnter" } },
+            { "saadparwaiz1/cmp_luasnip",             event = { "InsertEnter" } },
             { "L3MON4D3/LuaSnip" },
         },
         config = function()
@@ -79,7 +79,7 @@ return {
                     fields = { "kind", "abbr", "menu" },
                     format = function(entry, vim_item)
                         local kind =
-                        require("lspkind").cmp_format({ mode = "symbol_text", maxwidth = 50 })(entry, vim_item)
+                            require("lspkind").cmp_format({ mode = "symbol_text", maxwidth = 50 })(entry, vim_item)
                         local strings = vim.split(kind.kind, "%s", { trimempty = true })
                         kind.kind = " " .. (strings[1] or "") .. " "
                         kind.menu = "    (" .. (strings[2] or "") .. ")"
@@ -116,7 +116,7 @@ return {
                         end
                     end, { "i", "s" }),
 
-                    ["<C-b>"] = cmp.mapping(function (fallback)
+                    ["<C-b>"] = cmp.mapping(function(fallback)
                         if cmp.visible() then
                             cmp.scroll_docs(-4)
                         else
@@ -124,7 +124,7 @@ return {
                         end
                     end, { "i" }),
 
-                    ["<C-f>"] = cmp.mapping(function (fallback)
+                    ["<C-f>"] = cmp.mapping(function(fallback)
                         if cmp.visible() then
                             cmp.scroll_docs(4)
                         else
@@ -148,7 +148,14 @@ return {
                         elseif luasnip.locally_jumpable(1) then
                             luasnip.jump(1)
                         else
-                            fallback()
+                            cmp.complete({
+                                config = {
+                                    sources = {
+                                        { name = "luasnip" },
+                                    },
+                                },
+                            })
+                            -- fallback()
                         end
                     end, { "i", "s" }),
 
@@ -189,23 +196,28 @@ return {
                 },
             })
 
-            local rule = require("nvim-autopairs.rule")
             local npairs = require("nvim-autopairs")
+            local rule = require("nvim-autopairs.rule")
+            local cond = require("nvim-autopairs.conds")
+
+            -- npairs.add_rules({
+            --     rule("\\begin{%w*} $", "tex")
+            --         :replace_endpair(function(opts)
+            --             local beforeText = string.sub(opts.line, 0, opts.col)
+            --             local _, _, match = beforeText:find("\\begin(%w*)")
+            --
+            --             if match and #match > 0 then
+            --                 return "\\end" .. match
+            --             end
+            --
+            --             return ""
+            --         end)
+            --         :with_move(cond.none())
+            --         :use_key("<space>")
+            --         :use_regex(true),
+            -- })
 
             -- ... add rules ...
         end,
     },
-    {
-        "RaafatTurki/hex.nvim",
-        cmd = "HexToggle",
-        config = function()
-            require("hex").setup()
-        end,
-    },
-
-    {
-        "junegunn/vim-easy-align",
-    },
-}
-
--- vim: sw=4 sts=4 expandtab fenc=utf-8
+} -- vim: sw=4 sts=4 expandtab fenc=utf-8

@@ -32,6 +32,18 @@
 -- -count=N    カウント(無指定時はN)を行番号位置か、初期化引数に指定できます (例 |:Next|)。
 -- -count      -count=0 と同じです
 
+vim.api.nvim_create_user_command("DisableIME", function(opts)
+    vim.fn.system("fcitx5-remote -c")
+end, {
+    nargs = 0,
+})
+
+vim.api.nvim_create_user_command("EnableIME", function(opts)
+    vim.fn.system("fcitx5-remote -o")
+end, {
+    nargs = 0,
+})
+
 vim.api.nvim_create_user_command("T", function(opts)
     local cmd = string.format("split | wincmd j | resize 10 | terminal %s", opts["args"])
     vim.cmd(cmd)
@@ -54,7 +66,6 @@ end, {
         return { "foo", "bar", "baz" }
     end,
 })
-
 
 ------------------------------------------------------------
 -- Toggle

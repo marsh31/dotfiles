@@ -33,6 +33,7 @@ local util = require("luasnip.util.util")
 local node_util = require("luasnip.nodes.util")
 
 ls.add_snippets("all", require("snippets.all"))
+ls.add_snippets("csv", require("snippets.csv"))
 ls.add_snippets("json", require("snippets.json"))
 ls.add_snippets("lua", require("snippets.lua"))
 ls.add_snippets("markdown", require("snippets.markdown"))

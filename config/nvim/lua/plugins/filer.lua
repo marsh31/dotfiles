@@ -141,11 +141,11 @@ return {
                             cmd = "<Plug>(fern-action-open-or-expand)",
                             opt = opt_silent,
                         },
-                        {
-                            key = "<C-i>",
-                            cmd = "<Plug>(fern-action-mark:toggle)j",
-                            opt = opt_silent,
-                        },
+                        -- {
+                        --     key = "<C-i>",
+                        --     cmd = "<Plug>(fern-action-mark:toggle)j",
+                        --     opt = opt_silent,
+                        -- },
                         {
                             key = "x",
                             cmd = "<Plug>(fern-action-mark:toggle)j",
@@ -309,17 +309,8 @@ return {
                         },
                     }
 
-                    local xkeys = {
-                        { key = "<C-i>", cmd = "<Plug>(fern-action-mark:toggle)", opt = opt_silent },
-                        { key = "x", cmd = "<Plug>(fern-action-mark:toggle)j", opt = opt_silent },
-                    }
-
                     for _, items in ipairs(list) do
                         vim.api.nvim_buf_set_keymap(0, "n", items.key, items.cmd, items.opt)
-                    end
-
-                    for _, items in ipairs(xkeys) do
-                        vim.api.nvim_buf_set_keymap(0, "x", items.key, items.cmd, items.opt)
                     end
 
                     vim.opt_local.number = false

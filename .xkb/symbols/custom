@@ -1,0 +1,24 @@
+
+partial modifier_keys
+xkb_symbols "nocaps" {
+  replace key <CAPS> { [ Control_L ] };
+  replace key <MUHE> { [ Super_L ]};
+  replace key <HENK> { [ Super_R ]};
+  modifier_map Control { <CAPS> };
+};
+
+partial modifier_keys
+xkb_symbols "super" {
+  replace key <MUHE> { [ Super_L ]};
+  replace key <HENK> { [ Super_R ]};
+};
+
+
+partial modifier_keys
+xkb_symbols "add_escape" {
+  replace key <TLDE> {
+    type="PC_SUPER_LEVEL2",
+    symbols[Group1]= [ Zenkaku_Hankaku, Escape]
+  };
+};
+

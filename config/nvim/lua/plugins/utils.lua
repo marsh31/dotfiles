@@ -1,5 +1,15 @@
 return {
     {
+        "RaafatTurki/hex.nvim",
+        cmd = "HexToggle",
+        config = function()
+            require("hex").setup()
+        end,
+    },
+    {
+        "junegunn/vim-easy-align",
+    },
+    {
         "thinca/vim-partedit",
         config = function()
             vim.g["partedit#opener"] = "vsplit"
@@ -23,9 +33,9 @@ return {
             require("nvim-surround").setup({
                 keymaps = {
                     -- normal add
-                    normal = "sa", -- general operation
-                    normal_cur = "sas", -- line
-                    normal_line = "sA", -- general operation, insert new line.
+                    normal = "sa",           -- general operation
+                    normal_cur = "sas",      -- line
+                    normal_line = "sA",      -- general operation, insert new line.
                     normal_cur_line = "sAS", -- line, and insert new line.
 
                     delete = "ds",
@@ -89,15 +99,6 @@ return {
         end,
     },
     { "ahmedkhalf/project.nvim" },
-    {
-        "phaazon/hop.nvim",
-        config = function()
-            local hop = require("hop")
-            hop.setup({
-                keys = "asdfqwerzxcv",
-            })
-        end,
-    },
     {
         "andymass/vim-matchup",
     },
