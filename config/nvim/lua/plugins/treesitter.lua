@@ -20,10 +20,18 @@ return {
             { "nvim-treesitter/nvim-treesitter-refactor" },
             { "theHamsta/nvim-treesitter-pairs" },
             { "Dkendal/nvim-treeclimber" },
+
+            { "windwp/nvim-ts-autotag" },
         },
         cmd = { "TSUpdateSync" },
         config = function()
             require("nvim-treesitter.configs").setup({
+                autotag = {
+                    enable = true,
+                    enable_rename = true,
+                    enable_close = true,
+                    enable_close_on_slash = true,
+                },
                 ensure_installed = {
                     "awk",
                     "bash",
