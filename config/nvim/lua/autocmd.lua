@@ -8,11 +8,11 @@ local function augroup(name)
 end
 
 -- disable ime japanese to english when leave insert mode.
-vim.api.nvim_create_autocmd("InsertLeave", {
-    group = augroup("leave_insert_with_disable_ime"),
-    pattern = { "*" },
-    command = "DisableIME",
-})
+-- vim.api.nvim_create_autocmd("InsertLeave", {
+--     group = augroup("leave_insert_with_disable_ime"),
+--     pattern = { "*" },
+--     command = "DisableIME",
+-- })
 
 -- validate file name on save.
 vim.api.nvim_create_autocmd("BufWritePre", {
