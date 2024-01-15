@@ -84,9 +84,19 @@ let g:GTD_CONTEXT_FILE      = expand('~/til/tm/context.txt')
 
 command! -nargs=0  GtdOpen            :call s:open("split", "gtd.inbox.txt")
 
-command! -nargs=0  TodoPrependDate    :call s:todo_prepend_date()
-command! -nargs=0  TodoRemovePriority :call s:todo_remove_priority()
-command! -nargs=0  TodoDone           :call s:todo_mark_as_done()
+command! -nargs=0  GtdInbox           :execute "split" g:GTD_INBOX_TODO_FILE
+command! -nargs=0  GtdDoc             :execute "split" g:GTD_DOC_FILE
+command! -nargs=0  GtdSomeday         :execute "split" g:GTD_SOMEDAY_FILE
+command! -nargs=0  GtdWaiting         :execute "split" g:GTD_WAITING_FILE
+command! -nargs=0  GtdCalendar        :execute "split" g:GTD_CALENDAR_FILE
+command! -nargs=0  GtdAction          :execute "split" g:GTD_ACTION_TODO_FILE
+
+command! -nargs=0  GtdProject         :execute "split" g:GTD_PROJECT_FILE
+command! -nargs=0  GtdContext         :execute "split" g:GTD_CONTEXT_FILE
+
+command! -nargs=0 -range TodoPrependDate    :<line1>, <line2>call s:todo_prepend_date()
+command! -nargs=0 -range TodoRemovePriority :<line1>, <line2>call s:todo_remove_priority()
+command! -nargs=0 -range TodoDone           :<line1>, <line2>call s:todo_mark_as_done()
 
 
 
