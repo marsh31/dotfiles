@@ -11,9 +11,13 @@ function! s:todo_remove_priority()
     :s/^([A-Z])\s\+//ge
 endfunction
 
+(A) xxxxxxxxxxxxxx +debug @test
+(B) xxxxxxxxxxxxxx +debug @test
+(a) xxxxxxxxxxxxxx +debug @test
+(b) xxxxxxxxxxxxxx +debug @test
 
 function! s:todo_prepend_date()
-    execute 'normal! I' . s:get_current_date() . ' '
+    execute 's/^\C\(([A-Z])\s\+\)\?/' . '\1' . s:get_current_date() . ' /'
 endfunction
 
 
@@ -63,25 +67,41 @@ function! s:get_when_tags(line) abort
   return matchstr(a:line, '\swhen:\zs\(\w\+\)\ze\s\?', 0)
 endfunction
 
+let s:day_of_week = [[ "sun", "sunday" ],
+                    \[ "mon", "monday" ],
+                    \[ "tue", "tuesday" ],
+                    \[ "wed", "wednesday" ],
+                    \[ "thu", "thursday" ],
+                    \[ "fri", "friday" ],
+                    \[ "sat", "saturday" ],]
 function! s:judge_insert(when_tag) abort
-  return v:true
+  if a:when_tag =~? "everyday" || a:when_tag =~? "every"
+    return v:true
+  endif
+
+  let wday = strftime('%w')
+  let wday_keys = s:day_of_week[wday]
+  let result = v:false
+  for key in wday_keys
+    if key =~? a:when_tag
+      let result = v:true
+    endif
+  endfor
+  return result
 endfunction
 
-function! s:make_insert_txt(line) abort
-  return "this is test"
-endfunction
 
 function! s:autoload_file() abort
   let lines = readfile(g:GTD_AUTOLOAD_FILE)
   for line in lines
     let when_tag = s:get_when_tags(line)
     if s:judge_insert(when_tag)
-      " https://qiita.com/wariichi/items/f935f726ddfeb743e70d
-      let insert_str = substitute(line, "^\(([A-Z])\s\+\)?\(.\+\)$", "\1xxx \=strftime('%Y-%m-%d') \2", "")
+      let insert_str = substitute(line, '^\C\(([A-Z])\s\+\)\?', '\1' . s:get_current_date() . ' ', '')
       call writefile([insert_str], g:GTD_ACTION_TODO_FILE, "a")
     endif
   endfor
 endfunction
+
 
 function! s:open(opener, buffername) abort
   noautocmd hide execute a:opener a:buffername
