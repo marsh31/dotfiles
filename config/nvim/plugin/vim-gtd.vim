@@ -11,10 +11,6 @@ function! s:todo_remove_priority()
     :s/^([A-Z])\s\+//ge
 endfunction
 
-(A) xxxxxxxxxxxxxx +debug @test
-(B) xxxxxxxxxxxxxx +debug @test
-(a) xxxxxxxxxxxxxx +debug @test
-(b) xxxxxxxxxxxxxx +debug @test
 
 function! s:todo_prepend_date()
     execute 's/^\C\(([A-Z])\s\+\)\?/' . '\1' . s:get_current_date() . ' /'
