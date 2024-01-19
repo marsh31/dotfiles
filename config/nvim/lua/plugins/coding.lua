@@ -21,8 +21,6 @@ return {
             "vim-denops/denops.vim",
         },
         config = function()
-            -- imap <C-j> <Plug>(skkeleton-toggle)
-            -- cmap <C-j> <Plug>(skkeleton-toggle)
             vim.api.nvim_set_keymap("i", "<C-j>", "<Plug>(skkeleton-toggle)", { noremap = true })
             vim.api.nvim_set_keymap("c", "<C-j>", "<Plug>(skkeleton-toggle)", { noremap = true })
             vim.api.nvim_exec(
@@ -32,12 +30,6 @@ return {
                     \  'eggLikeNewline': v:true,
                     \ })
             ]],
-                --     [[
-                --     call skkeleton#config({
-                --         \  'globalJisyo': expand('~/.skk/SKK-JISYO.L'),
-                --         \  'eggLikeNewline': v:true,
-                --         \ })
-                -- ]],
                 false
             )
         end,
