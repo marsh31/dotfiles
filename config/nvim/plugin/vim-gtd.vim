@@ -7,13 +7,44 @@ function! s:get_current_date()
 endfunction
 
 
+function! s:todo_add_priority(...)
+    let pri = g:TODO_DEFAULT_PRIORITY
+    if a:0 >= 1
+      let pri = a:1
+    endif
+
+    execute 's/^\(([a-zA-Z]) \)\?/(' . pri . ') /'
+endfunction
+
 function! s:todo_remove_priority()
     :s/^([A-Z])\s\+//ge
 endfunction
 
 
 function! s:todo_prepend_date()
-    execute 's/^\C\(([A-Z])\s\+\)\?/' . '\1' . s:get_current_date() . ' /'
+    execute 's/^\C\(([A-Z])\s\+\)\?' . '/\1' . s:get_current_date() . ' /'
+endfunction
+
+
+function! s:todo_update_date()
+    execute 's/^\C\(([A-Z])\s\+\)\?\(\d\{4\}-\d\{2\}-\d\{2\}\s\+\)\?' . '/\1' . s:get_current_date() . ' /'
+endfunction
+
+
+function! s:todo_increase_priority()
+    normal! 0f)h
+endfunction
+
+
+function! s:todo_decrease_priority()
+    normal! 0f)h
+endfunction
+
+
+function! s:todo_remove_complete()
+    let completed = []
+    :g/^x /call add(l:completed, getline(line(".")))|delete
+    call writefile(completed, g:GTD_ACTION_DONE_FILE, "a")
 endfunction
 
 
@@ -25,7 +56,6 @@ endfunction
 
 
 function! Omni(findstart, base) abort
-  " let matches = getline(0, line('$'))
   let matches = readfile(g:GTD_CONTEXT_FILE)
 
   if a:findstart
@@ -129,6 +159,7 @@ let g:GTD_CONTEXT_FILE      = expand('~/til/tm/context.txt')
 let g:GTD_AUTOLOAD_FILE     = expand('~/til/tm/autoload.txt')
 
 
+command! -nargs=0  GtdCd              :execute "cd" g:GTD_PATH
 command! -nargs=0  GtdOpen            :call s:open("split", "gtd.inbox.txt")
 
 command! -nargs=0  GtdInbox           :execute "split" g:GTD_INBOX_TODO_FILE
@@ -142,10 +173,19 @@ command! -nargs=0  GtdAutoload        :call s:autoload_file()
 command! -nargs=0  GtdProject         :execute "split" g:GTD_PROJECT_FILE
 command! -nargs=0  GtdContext         :execute "split" g:GTD_CONTEXT_FILE
 
+let g:TODO_DEFAULT_PRIORITY = "A"
+
 command! -nargs=0 -range TodoPrependDate    :<line1>, <line2>call s:todo_prepend_date()
+command! -nargs=0 -range TodoUpdateDate     :<line1>, <line2>call s:todo_update_date()
+
+command! -nargs=? -range TodoAddPriority    :<line1>, <line2>call s:todo_add_priority(<f-args>)
 command! -nargs=0 -range TodoRemovePriority :<line1>, <line2>call s:todo_remove_priority()
+
+command! -nargs=0 -range TodoIncreasePri    :<line1>, <line2>call s:todo_increase_priority()
+command! -nargs=0 -range TodoDecreasePri    :<line1>, <line2>call s:todo_decrease_priority()
+
 command! -nargs=0 -range TodoDone           :<line1>, <line2>call s:todo_mark_as_done()
 
-
+command! -nargs=0 -range TodoMoveDone       :call s:todo_remove_complete()
 
 " vim: set ft=vim
