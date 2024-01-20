@@ -32,18 +32,24 @@ endfunction
 
 
 function! s:todo_increase_priority()
-    normal! 0f)h
+    let nf = &l:nrformats
+    call setbufvar(bufnr('%'), '&nrformats', 'bin,octal,hex,alpha')
+    normal! 0f)h
+    call setbufvar(bufnr('%'), '&nrformats', nf)
 endfunction
 
 
 function! s:todo_decrease_priority()
-    normal! 0f)h
+    let nf = &l:nrformats
+    call setbufvar(bufnr('%'), '&nrformats', 'bin,octal,hex,alpha')
+    normal! 0f)h
+    call setbufvar(bufnr('%'), '&nrformats', nf)
 endfunction
 
 
 function! s:todo_remove_complete()
     let completed = []
-    :g/^x /call add(l:completed, getline(line(".")))|delete
+    :g/^x /call add(l:completed, getline(line("."))) | delete _
     call writefile(completed, g:GTD_ACTION_DONE_FILE, "a")
 endfunction
 
