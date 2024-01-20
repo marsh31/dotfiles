@@ -10,15 +10,18 @@
 ! Add suepr key.
 ! kana and henkan to super key
 !
-keycode 102 = Super_L
-keycode 100 = Super_R
-
-
+! keycode 102: muhenkan
+! keycode 100: henkan
+! keycode 101: katakana hiragana romazi
+!keycode 102 = Super_L
+!keycode 100 = Super_R
+!keycode 101 = Super_R
 !
-! Caps_Lock to Control_L
+!!
+!! Caps_Lock to Control_L
+!!
+!clear lock
+!clear control
 !
-clear lock
-clear control
-
-keycode 66 = Control_L
-add control = Control_L Control_R
+!keycode 66 = Control_L
+!add control = Control_L Control_R

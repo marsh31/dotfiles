@@ -188,4 +188,29 @@ command! -nargs=0 -range TodoDone           :<line1>, <line2>call s:todo_mark_as
 
 command! -nargs=0 -range TodoMoveDone       :call s:todo_remove_complete()
 
+command! -range          TodoGetContext     :<line1>, <line2>call s:todo_get_context()
+function! s:todo_get_context() range 
+    let l:lines = getline(a:firstline, a:lastline)
+    let l:contexts = []
+    for line in l:lines
+        let item = matchstrpos(line, '\(^\|\s\+\)@\w\+\(\s\+\)\?')
+
+        while item[1] != -1
+          call add(contexts, trim(item[0]))
+          let item = matchstrpos(line, '\(^\|\s\+\)@\w\+\(\s\+\)\?', item[2] - 1)
+        endwhile
+    endfor
+    return l:contexts
+endfunction
+
+function! Foo()
+  let x = 0
+  function! Bar() closure
+    let x += 1
+    return x
+  endfunction
+  return funcref('Bar')
+endfunction
+
+
 " vim: set ft=vim
