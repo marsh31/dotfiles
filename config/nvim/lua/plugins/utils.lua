@@ -120,14 +120,6 @@ return {
             require("stickybuf").setup()
         end,
     },
-    {
-        "arnarg/todotxt.nvim",
-        config = function()
-            require("todotxt-nvim").setup({
-                todo_file = vim.fn.expand("~/.todo/todo.txt"),
-            })
-        end,
-    },
 }
 
 -- vim: sw=4 sts=4 expandtab fenc=utf-8

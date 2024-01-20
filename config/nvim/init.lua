@@ -2,8 +2,7 @@
 -- NAME:   init.vim
 -- AUTHOR: marsh
 -- NOTE:
---
---
+-- 
 
 vim.g.mapleader = [[ ]]
 vim.g.maplocalleader = [[\]]
@@ -32,15 +31,6 @@ require("keymaps")
 -- vim.api.nvim_set_hl(0, "Normal", {
 --     bg = "NONE"
 -- })
-
-
-vim.filetype.add({
-    filename = {
-        ["~/.todo/todo.txt"] = "todotxt",
-        ["~/.todo/done.txt"] = "todotxt",
-        ["~/.todo/report.txt"] = "todotxt",
-    }
-})
 
 
 -- local log = require("nvim_lua_logger")

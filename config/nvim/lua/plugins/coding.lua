@@ -16,12 +16,33 @@ return {
     },
 
     {
+        "vim-skk/skkeleton",
+        dependencies = {
+            "vim-denops/denops.vim",
+        },
+        config = function()
+            vim.api.nvim_set_keymap("i", "<C-j>", "<Plug>(skkeleton-toggle)", { noremap = true })
+            vim.api.nvim_set_keymap("c", "<C-j>", "<Plug>(skkeleton-toggle)", { noremap = true })
+            vim.api.nvim_exec(
+                [[
+                call skkeleton#config({
+                    \  'globalJisyo': expand('/usr/share/skk/SKK-JISYO.L'),
+                    \  'eggLikeNewline': v:true,
+                    \ })
+            ]],
+                false
+            )
+        end,
+    },
+
+    {
         "hrsh7th/nvim-cmp",
         event = "InsertEnter",
         dependencies = {
             { "hrsh7th/cmp-buffer",                   event = { "InsertEnter" } },
             { "hrsh7th/cmp-cmdline",                  event = { "InsertEnter" } },
             { "hrsh7th/cmp-path",                     event = { "InsertEnter" } },
+            { "hrsh7th/cmp-omni",                     event = { "InsertEnter" } },
             { "hrsh7th/cmp-nvim-lsp" }, --, event = { "InsertEnter" } },
             { "hrsh7th/cmp-nvim-lua",                 event = { "InsertEnter" } },
             { "hrsh7th/cmp-nvim-lsp-document-symbol", event = { "InsertEnter" } },
@@ -31,6 +52,8 @@ return {
 
             { "saadparwaiz1/cmp_luasnip",             event = { "InsertEnter" } },
             { "L3MON4D3/LuaSnip" },
+
+            { "rinx/cmp-skkeleton" },
         },
         config = function()
             local luasnip = require("luasnip")
@@ -89,8 +112,10 @@ return {
                 sources = {
                     { name = "nvim_lsp" },
                     { name = "luasnip" },
+                    { name = "skkeleton" },
                     { name = "buffer" },
                     { name = "path" },
+                    { name = "omni" },
                     { name = "nvim_lua" },
                 },
                 sorting = defaults.sorting,
