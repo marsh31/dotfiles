@@ -21,7 +21,7 @@ vim.api.nvim_create_autocmd("BufWritePre", {
     callback = function()
         local filename = vim.fn.expand("<afile>:p")
 
-        local invalid_chars = "!&()[]{}<>^*=+:;'\",`~?|"
+        local invalid_chars = "!&()[]{}<>^:;'\",`~?|"
         for i = 1, #invalid_chars do
             local char = string.sub(invalid_chars, i, i)
             local res = string.find(filename, char, 1, true)

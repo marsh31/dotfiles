@@ -13,6 +13,7 @@ return {
         end,
     },
     { "marsh31/nvim-lua-logger" },
+    { dir = "~/src/vimscript/vim-todotxt/" },
     --  {
     --    dir = "~/src/project/nvim-qf-helper",
     --    config = function()
