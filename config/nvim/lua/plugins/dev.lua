@@ -1,3 +1,14 @@
+
+
+local devpath = "~/src/vimscript/vim-todotxt/"
+local todotxt = {}
+if vim.fn.isdirectory(vim.fn.expand(devpath)) ~= 0 then
+    todotxt = { dir = "~/src/vimscript/vim-todotxt/" }
+else
+    todotxt = { "marsh31/vim-todotxt" }
+end
+
+
 return {
     -- {
     --     "folke/neodev.nvim",
@@ -13,7 +24,8 @@ return {
         end,
     },
     { "marsh31/nvim-lua-logger" },
-    { dir = "~/src/vimscript/vim-todotxt/" },
+    todotxt
+
     --  {
     --    dir = "~/src/project/nvim-qf-helper",
     --    config = function()
