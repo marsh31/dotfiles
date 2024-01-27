@@ -17,6 +17,8 @@ return {
   { "christianchiarulli/nvcode-color-schemes.vim" },
   { "EdenEast/nightfox.nvim" },
   { "projekt0n/github-nvim-theme" },
+  { "rebelot/kanagawa.nvim" },
+  { "nyoom-engineering/oxocarbon.nvim" },
 
   -- hilight
   { "MTDL9/vim-log-highlighting" },

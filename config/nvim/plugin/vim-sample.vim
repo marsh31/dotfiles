@@ -81,3 +81,54 @@ function! s:calendar(year, month) abort
     execute "normal! o"
   endwhile
 endfunction
+
+" command! -nargs=0  ColorSchemeOpen :call s:buffer_output_get_colorscheme()
+" command! -nargs=0  ColorChange     :call s:buffer_change_colorscheme()
+" function! s:get_color_schemes()
+"   return uniq(sort(map(
+"         \ globpath(&runtimepath, "colors/*.vim", 0, 1),
+"         \ 'fnamemodify(v:val, ":t:r")'
+"         \ )))
+" endfunction
+"
+" function! s:buffer_output_get_colorscheme()
+"   let opener = "vsplit"
+"   let buffername = "colorthemes"
+"
+"   let bufferlines = map(s:get_color_schemes(), '"colorscheme " .. v:val')
+"   let buffercolsizes = map(copy(bufferlines), 'strlen(v:val)')
+"   let buffercolmaxsize = max(buffercolsizes) + 10
+"
+"   noautocmd hide execute buffercolmaxsize .. opener buffername
+"   setlocal ft=colorselector buftype=acwrite bufhidden=wipe noswapfile
+"   setlocal nonumber norelativenumber
+"   call append('$', bufferlines)
+"
+"   augroup plugin_colorlist_file
+"     autocmd! * <buffer>
+"     autocmd FileType    colorselector   call s:init()
+"     autocmd BufWriteCmd <buffer> nested call s:apply()
+"     autocmd BufWipeout  <buffer> nested call s:wipeout()
+"   augroup END
+" endfunction
+"
+" function! s:init() abort
+"   nmap <buffer> <CR> :ColorChange<CR>
+"   nmap <buffer> q    :q!<CR>
+" endfunction
+"
+" function! s:apply() abort
+"   " TODO: if needed, add it.
+"   setlocal nomodified
+" endfunction
+"
+" function! s:wipeout() abort
+"   " TODO: if needed, add it.
+" endfunction
+"
+" function s:buffer_change_colorscheme()
+"   let linestr = getline('.')
+"   if linestr =~# "^colorscheme "
+"     execute linestr
+"   endif
+" endfunction
