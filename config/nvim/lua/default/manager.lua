@@ -27,4 +27,10 @@ M.load_plugins = function(plugins)
     require('lazy').setup(plugins)
 end
 
+
+M.update_plugins = function ()
+    vim.fn.execute("Lazy update")
+    vim.fn.execute("TSUpdate")
+end
+
 return M
