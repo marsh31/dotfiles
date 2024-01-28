@@ -2,7 +2,6 @@
 -- AUTHOR: marsh
 -- NOTE:
 --
--- manager is plugin manager.
 
 local M = {}
 
@@ -24,8 +23,8 @@ M.setup = function()
     init_lazy_nvim(path)
 end
 
-M.load_plugins = function()
-    require('lazy').setup("plugins")
+M.load_plugins = function(plugins)
+    require('lazy').setup(plugins)
 end
 
 return M

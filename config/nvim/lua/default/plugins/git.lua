@@ -12,15 +12,15 @@ return {
         "dinhhuy258/git.nvim",
     },
 
-    {
-        "lewis6991/gitsigns.nvim",
-        config = function()
-            require("gitsigns").setup({
-                signcolumn = false,
-                numhl = true,
-            })
-        end,
-    },
+    -- {
+    --     "lewis6991/gitsigns.nvim",
+    --     config = function()
+    --         require("gitsigns").setup({
+    --             signcolumn = false,
+    --             numhl = true,
+    --         })
+    --     end,
+    -- },
 
     {
         "TimUntersberger/neogit",
