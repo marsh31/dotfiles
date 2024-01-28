@@ -49,27 +49,27 @@ keymap("n", "[q", "<Cmd>cprevious<CR>", { desc = "jump previous quickfix" })
 keymap("n", "]d", vim.diagnostic.goto_next, { desc = "jump next diagnostic" })
 keymap("n", "[d", vim.diagnostic.goto_prev, { desc = "jump prev diagnostic" })
 
-local gs = package.loaded.gitsigns
-keymap("n", "]g", gs.next_hunk, { desc = "Next Hunk" })
-keymap("n", "[g", gs.prev_hunk, { desc = "Prev Hunk" })
-
-keymap({ "n", "v" }, "<Leader>ghs", ":Gitsigns stage_hunk<CR>", { desc = "State Hunk" })
-keymap({ "n", "v" }, "<Leader>ghr", ":Gitsigns reset_hunk<CR>", { desc = "Reset Hunk" })
-
-keymap("n", "<Leader>ghS", gs.stage_buffer, { desc = "Stage Buffer" })
-keymap("n", "<Leader>ghR", gs.reset_buffer, { desc = "Reset Buffer" })
-
-keymap("n", "<Leader>ghu", gs.undo_stage_hunk, { desc = "Undo Stage Hunk" })
-keymap("n", "<Leader>ghp", gs.preview_hunk, { desc = "Preview Hunk" })
-
-keymap("n", "<Leader>ghb", function()
-    gs.blame_line({ full = true })
-end, { desc = "Blame Line" })
-
-keymap("n", "<Leader>ghd", gs.diffthis, { desc = "Diff This" })
-keymap("n", "<Leader>ghD", function()
-    gs.diffthis("~")
-end, { desc = "Diff This ~" })
+-- local gs = package.loaded.gitsigns
+-- keymap("n", "]g", gs.next_hunk, { desc = "Next Hunk" })
+-- keymap("n", "[g", gs.prev_hunk, { desc = "Prev Hunk" })
+--
+-- keymap({ "n", "v" }, "<Leader>ghs", ":Gitsigns stage_hunk<CR>", { desc = "State Hunk" })
+-- keymap({ "n", "v" }, "<Leader>ghr", ":Gitsigns reset_hunk<CR>", { desc = "Reset Hunk" })
+--
+-- keymap("n", "<Leader>ghS", gs.stage_buffer, { desc = "Stage Buffer" })
+-- keymap("n", "<Leader>ghR", gs.reset_buffer, { desc = "Reset Buffer" })
+--
+-- keymap("n", "<Leader>ghu", gs.undo_stage_hunk, { desc = "Undo Stage Hunk" })
+-- keymap("n", "<Leader>ghp", gs.preview_hunk, { desc = "Preview Hunk" })
+--
+-- keymap("n", "<Leader>ghb", function()
+--     gs.blame_line({ full = true })
+-- end, { desc = "Blame Line" })
+--
+-- keymap("n", "<Leader>ghd", gs.diffthis, { desc = "Diff This" })
+-- keymap("n", "<Leader>ghD", function()
+--     gs.diffthis("~")
+-- end, { desc = "Diff This ~" })
 
 wk.register({
     ["<C-c>"] = { "<ESC>", "escape" },

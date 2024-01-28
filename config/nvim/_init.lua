@@ -1,30 +1,31 @@
+--
 -- NAME:   init.vim
 -- AUTHOR: marsh
 -- NOTE:
 -- 
 
 vim.g.mapleader = [[ ]]
-vim.g.maplocalleader = [[,]]
+vim.g.maplocalleader = [[\]]
+-- vim.g.maplocalleader = [[,]]
 
 -- ./lua/config.lua
-require("default/config")
-
+require("config")
 
 -- ./lua/manager.lua
-local pm = require("default/manager")
+local pm = require("manager")
 pm.setup()
-pm.load_plugins("default/plugins")
+pm.load_plugins()
 
 -- ./lua/command.lua
-require("default/command")
+require("command")
 
 
 -- ./lua/autocmd.lua
-require("default/autocmd")
+require("autocmd")
 
 
 -- ./lua/keymaps.lua
-require("default/keymaps")
+require("keymaps")
 
 -- -- highlight Normal ctermbg=NONE guibg=NONE
 -- vim.api.nvim_set_hl(0, "Normal", {
