@@ -81,3 +81,4 @@ function! s:calendar(year, month) abort
     execute "normal! o"
   endwhile
 endfunction
+

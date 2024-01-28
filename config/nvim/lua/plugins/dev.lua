@@ -1,5 +1,3 @@
-
-
 local devpath = "~/src/vimscript/vim-todotxt/"
 local todotxt = {}
 if vim.fn.isdirectory(vim.fn.expand(devpath)) ~= 0 then
@@ -8,6 +6,13 @@ else
     todotxt = { "marsh31/vim-todotxt" }
 end
 
+local colorselector_devpath = "~/src/vimscript/vim-colorselector/"
+local colorselector = {}
+if vim.fn.isdirectory(vim.fn.expand(colorselector_devpath)) ~= 0 then
+    colorselector = { dir = "~/src/vimscript/vim-colorselector/" }
+else
+    colorselector = { "marsh31/vim-colorselector" }
+end
 
 return {
     -- {
@@ -24,7 +29,8 @@ return {
         end,
     },
     { "marsh31/nvim-lua-logger" },
-    todotxt
+    todotxt,
+    colorselector,
 
     --  {
     --    dir = "~/src/project/nvim-qf-helper",

@@ -143,7 +143,8 @@ return {
             vim.opt.foldexpr = "nvim_treesitter#foldexpr()"
 
             -- vim.cmd.colorscheme([[kanagawa-dragon]])
-            vim.cmd.colorscheme([[carbonfox]])
+            -- vim.cmd.colorscheme([[carbonfox]])
+            vim.cmd.colorscheme([[github_dark_colorblind]])
         end,
     },
 }
