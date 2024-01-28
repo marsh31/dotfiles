@@ -1,0 +1,22 @@
+#!/usr/bin/env bash
+
+
+DIALY_SH=$(basename "$0")
+DIALY_FULL_SH="$0"
+
+CFG_FILE="$HOME/.dialy.cfg"
+
+
+# LOAD CFG FILE
+. "$CFG_FILE"
+
+
+# create
+EDIT_FILE="$DIALY_DIR/$(date +"%Y/%m/%d.md")"
+if [[ ! -f $EDIT_FILE ]]; then
+  cp "$DIALY_TEMPLATE_FILE" "$DIALY_DIR/$(date +"%Y/%m/%d.md")"
+else
+  echo "error: file is exist" 1>&2
+fi
+
+# vim: set ft=shell
