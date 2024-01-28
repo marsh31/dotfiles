@@ -2,13 +2,16 @@
 " Version: 1.1
 " Author : marsh
 
-let s:buffer_name   = "colorselector"
+let s:buffer_name   = "bufferlist"
 
-let s:buffer_opener = "vsplit"
-" let s:buffer_opener = "split"
+" let s:buffer_opener = "vsplit"
+let s:buffer_opener = "split"
 
-let s:buffer_side   = "leftabove"
-" let s:buffer_side   = "rightbelow"
+" let s:buffer_side   = "leftabove"
+let s:buffer_side   = "rightbelow"
+
+
+command! BufferListOpen call s:buffer_open()
 
 "
 " IF
@@ -19,10 +22,11 @@ function! s:buffer_open()
     execute "autocmd FileType " .. s:buffer_name .. " call s:init()"
   augroup END
 
-  let bufferlines = s:get_color_schemes()
-  let buffercolmaxsize = max(map(copy(bufferlines), 'strlen(v:val)')) + 10
+  let bufferlines = s:get_bufferlist()
+  let bufferrowmaxsize = len(bufferlines) + 5
+  let buffercolmaxsize = max(map(copy(bufferlines), 'strlen(v:val)')) + 5
 
-  noautocmd hide execute s:buffer_side .. " " .. buffercolmaxsize .. s:buffer_opener .. " " .. s:buffer_name
+  noautocmd hide execute s:buffer_side .. " " .. bufferrowmaxsize .. s:buffer_opener .. " " .. s:buffer_name
 
   execute  "setlocal ft=" .. s:buffer_name
   setlocal buftype=acwrite bufhidden=wipe noswapfile
@@ -35,13 +39,13 @@ function! s:buffer_open()
 
   augroup plugin_colorlist_file
     autocmd! * <buffer>
-    autocmd CursorMoved <buffer> nested call s:buffer_change_colorscheme()
+    " autocmd CursorMoved <buffer> nested call s:buffer_change_colorscheme()
 
     autocmd BufWriteCmd <buffer> nested call s:apply()
     autocmd BufWipeout  <buffer> nested call s:wipeout()
   augroup END
 
-  setlocal nomodified nomodifiable readonly
+  call s:protect_buffer()
 endfunction
 
 
@@ -59,31 +63,39 @@ endfunction
 "
 " SCRIPT LOCAL
 "
-function! s:get_color_schemes()
-  return uniq(sort(map(
-        \ globpath(&runtimepath, "colors/*.vim", 0, 1),
-        \ 'fnamemodify(v:val, ":t:r")'
-        \ )))
+function! s:get_bufferlist()
+  " TODO: ignore bufferlist.
+  let buffers = map(filter(copy(getbufinfo()), 'v:val.listed'), 'printf("%3d: %s", v:val.bufnr, v:val.name)')
+  return buffers
 endfunction
 
 
-function! s:get_cmd_color_scheme()
-  return "colorscheme " .. getline('.')
+function! s:parse(line)
+  return split(a:line, ": ")
+endfunction
+
+
+function! s:protect_buffer()
+  setlocal nomodified nomodifiable readonly
+endfunction
+
+function! s:unprotect_buffer()
+  setlocal nomodified modifiable noreadonly
 endfunction
 
 
 function! s:init() abort
-  command! -buffer -nargs=0  ColorChange     :call s:buffer_change_colorscheme()
-  command! -buffer -nargs=0  ColorYank       :call s:buffer_yank_colorscheme()
-  command! -buffer -nargs=0  ColorMoveK      :call s:buffer_move_top()
-  command! -buffer -nargs=0  ColorMoveJ      :call s:buffer_move_down()
+  command! -buffer -nargs=0  MoveK           :call s:buffer_move_top()
+  command! -buffer -nargs=0  MoveJ           :call s:buffer_move_down()
+  command! -buffer -nargs=0  DeleteLine      :call s:buffer_delete_line()
+  command! -buffer -nargs=0  BufferDelete    :call s:buffer_delete()
+  command! -buffer -nargs=0  BufferUpdate    :call s:buffer_update()
 
-  nmap <buffer><silent> <CR> :ColorChange<CR>
   nmap <buffer><silent> q    :q!<CR>
-  nmap <buffer><silent> yy   :ColorYank<CR>
-
-  nmap <buffer><silent> j    :ColorMoveJ<CR>
-  nmap <buffer><silent> k    :ColorMoveK<CR>
+ 
+  nmap <buffer><silent> dd   :DeleteLine<CR>
+  nmap <buffer><silent> j    :MoveJ<CR>
+  nmap <buffer><silent> k    :MoveK<CR>
 endfunction
 
 
@@ -102,16 +114,6 @@ endfunction
 "
 " ACTION LIST
 "
-function s:buffer_change_colorscheme()
-  execute s:get_cmd_color_scheme()
-endfunction
-
-
-function s:buffer_yank_colorscheme()
-  let @+ = s:get_cmd_color_scheme()
-endfunction
-
-
 function! s:buffer_move_top()
   let lnum = line('.')
   let buffer_min = 1
@@ -135,3 +137,39 @@ function! s:buffer_move_down()
   endif
 endfunction
 
+
+function! s:buffer_delete_line()
+  call s:unprotect_buffer()
+
+  " TODO: if need range option, add it.
+  delete _
+
+  call s:protect_buffer()
+endfunction
+
+
+function! s:buffer_update()
+  call s:unprotect_buffer()
+
+  " TODO: if need range option, add it.
+  %delete _
+
+  let bufferlines = s:get_bufferlist()
+
+  call append('$', bufferlines)
+  :g/^$/delete_
+
+
+  call s:protect_buffer()
+endfunction
+
+
+function! s:buffer_delete()
+  let lines = getline(1, '$')
+  let bdlist = map(lines, 'str2nr(s:parse(v:val)[0])')
+
+  for bditem in bdlist
+    execute "bd " .. bditem
+  endfor
+  call s:buffer_update()
+endfunction
