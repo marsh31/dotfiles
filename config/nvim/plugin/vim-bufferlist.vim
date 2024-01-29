@@ -64,8 +64,8 @@ endfunction
 " SCRIPT LOCAL
 "
 function! s:get_bufferlist()
-  " TODO: ignore bufferlist.
-  let buffers = map(filter(copy(getbufinfo()), 'v:val.listed'), 'printf("%3d: %s", v:val.bufnr, v:val.name)')
+  let buffers = map(filter(copy(getbufinfo()), 'v:val.listed && bufname(v:val.bufnr) != s:buffer_name'),
+        \ 'printf("%3d: %s", v:val.bufnr, v:val.name == "" ? "[No Name]" : v:val.name)')
   return buffers
 endfunction
 
@@ -151,14 +151,10 @@ endfunction
 function! s:buffer_update()
   call s:unprotect_buffer()
 
-  " TODO: if need range option, add it.
   %delete _
-
   let bufferlines = s:get_bufferlist()
-
   call append('$', bufferlines)
   :g/^$/delete_
-
 
   call s:protect_buffer()
 endfunction
