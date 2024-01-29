@@ -82,3 +82,13 @@ function! s:calendar(year, month) abort
   endwhile
 endfunction
 
+
+command! -bar TimerStart let start_time = reltime()
+command! -bar TimerNow   echo reltimestr(reltime(start_time))
+command! -bar TimerEnd   echo reltimestr(reltime(start_time)) | unlet start_time
+
+
+function! s:disp(timer)
+  echo "callback"
+endfunction
+command! -nargs=1 IntervalTimerStart call timer_start(1000 * 60 * str2nr(<f-args>), function("s:disp"))

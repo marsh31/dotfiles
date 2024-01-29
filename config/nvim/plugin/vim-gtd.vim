@@ -22,6 +22,10 @@ let g:GTD_CONTEXT_FILE      = expand('~/til/tm/context.txt')
 let g:GTD_AUTOLOAD_FILE     = expand('~/til/tm/autoload.txt')
 
 
+function! s:get_current_date()
+    return strftime('%Y-%m-%d')
+endfunction
+
 
 function! Omni(findstart, base) abort
   let matches = readfile(g:GTD_CONTEXT_FILE)
