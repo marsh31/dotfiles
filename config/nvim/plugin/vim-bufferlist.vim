@@ -86,12 +86,12 @@ endfunction
 
 
 function! s:init() abort
-  command! -buffer -nargs=0  MoveK           :call s:buffer_move_top()
-  command! -buffer -nargs=0  MoveJ           :call s:buffer_move_down()
-  command! -buffer -nargs=0  DeleteLine      :call s:buffer_delete_line()
-  command! -buffer -nargs=0  BufferDelete    :call s:buffer_delete()
-  command! -buffer -nargs=0  BufferUpdate    :call s:buffer_update()
-  command! -buffer -nargs=0  BufferSelect    :call s:buffer_buffer_open()
+  command! -buffer -nargs=0         MoveK           :call s:buffer_move_top()
+  command! -buffer -nargs=0         MoveJ           :call s:buffer_move_down()
+  command! -buffer -nargs=0 -range  DeleteLine      :<line1>,<line2>call s:buffer_delete_line()
+  command! -buffer -nargs=0         BufferDelete    :call s:buffer_delete()
+  command! -buffer -nargs=0         BufferUpdate    :call s:buffer_update()
+  command! -buffer -nargs=0         BufferSelect    :call s:buffer_buffer_open()
 
   nmap <buffer><silent> q    :q!<CR>
  
@@ -101,6 +101,8 @@ function! s:init() abort
   nmap <buffer><silent> R    :BufferUpdate<CR>
   nmap <buffer><silent> j    :MoveJ<CR>
   nmap <buffer><silent> k    :MoveK<CR>
+
+  xmap <buffer><silent> d    :DeleteLine<CR>
 endfunction
 
 
@@ -152,12 +154,9 @@ function! s:buffer_buffer_open()
 endfunction
 
 
-function! s:buffer_delete_line()
+function! s:buffer_delete_line() range
   call s:unprotect_buffer()
-
-  " TODO: if need range option, add it.
-  delete _
-
+  execute a:firstline .. "," .. a:lastline .. "delete_"
   call s:protect_buffer()
 endfunction
 
