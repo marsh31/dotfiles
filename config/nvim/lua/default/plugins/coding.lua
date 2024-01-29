@@ -15,25 +15,25 @@ return {
         },
     },
 
-    {
-        "vim-skk/skkeleton",
-        dependencies = {
-            "vim-denops/denops.vim",
-        },
-        config = function()
-            vim.api.nvim_set_keymap("i", "<C-j>", "<Plug>(skkeleton-toggle)", { noremap = true })
-            vim.api.nvim_set_keymap("c", "<C-j>", "<Plug>(skkeleton-toggle)", { noremap = true })
-            vim.api.nvim_exec(
-                [[
-                call skkeleton#config({
-                    \  'globalJisyo': expand('/usr/share/skk/SKK-JISYO.L'),
-                    \  'eggLikeNewline': v:true,
-                    \ })
-            ]],
-                false
-            )
-        end,
-    },
+    -- {
+    --     "vim-skk/skkeleton",
+    --     dependencies = {
+    --         "vim-denops/denops.vim",
+    --     },
+    --     config = function()
+    --         vim.api.nvim_set_keymap("i", "<C-j>", "<Plug>(skkeleton-toggle)", { noremap = true })
+    --         vim.api.nvim_set_keymap("c", "<C-j>", "<Plug>(skkeleton-toggle)", { noremap = true })
+    --         vim.api.nvim_exec(
+    --             [[
+    --             call skkeleton#config({
+    --                 \  'globalJisyo': expand('/usr/share/skk/SKK-JISYO.L'),
+    --                 \  'eggLikeNewline': v:true,
+    --                 \ })
+    --         ]],
+    --             false
+    --         )
+    --     end,
+    -- },
 
     {
         "hrsh7th/nvim-cmp",
@@ -53,7 +53,7 @@ return {
             { "saadparwaiz1/cmp_luasnip",             event = { "InsertEnter" } },
             { "L3MON4D3/LuaSnip" },
 
-            { "rinx/cmp-skkeleton" },
+            -- { "rinx/cmp-skkeleton" },
         },
         config = function()
             local luasnip = require("luasnip")
@@ -112,7 +112,7 @@ return {
                 sources = {
                     { name = "nvim_lsp" },
                     { name = "luasnip" },
-                    { name = "skkeleton" },
+                    -- { name = "skkeleton" },
                     { name = "buffer" },
                     { name = "path" },
                     { name = "omni" },
