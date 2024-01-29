@@ -23,7 +23,8 @@ function! s:buffer_open()
   augroup END
 
   let bufferlines = s:get_bufferlist()
-  let bufferrowmaxsize = len(bufferlines) + 5
+  " let bufferrowmaxsize = len(bufferlines) + 5
+  let bufferrowmaxsize = 10
   let buffercolmaxsize = max(map(copy(bufferlines), 'strlen(v:val)')) + 5
 
   noautocmd hide execute s:buffer_side .. " " .. bufferrowmaxsize .. s:buffer_opener .. " " .. s:buffer_name
@@ -64,8 +65,8 @@ endfunction
 " SCRIPT LOCAL
 "
 function! s:get_bufferlist()
-  " TODO: ignore bufferlist.
-  let buffers = map(filter(copy(getbufinfo()), 'v:val.listed'), 'printf("%3d: %s", v:val.bufnr, v:val.name)')
+  let buffers = map(filter(copy(getbufinfo()), 'v:val.listed && bufname(v:val.bufnr) != s:buffer_name'),
+        \ 'printf("%3d: %s", v:val.bufnr, v:val.name == "" ? "[No Name]" : v:val.name)')
   return buffers
 endfunction
 
@@ -90,10 +91,14 @@ function! s:init() abort
   command! -buffer -nargs=0  DeleteLine      :call s:buffer_delete_line()
   command! -buffer -nargs=0  BufferDelete    :call s:buffer_delete()
   command! -buffer -nargs=0  BufferUpdate    :call s:buffer_update()
+  command! -buffer -nargs=0  BufferSelect    :call s:buffer_buffer_open()
 
   nmap <buffer><silent> q    :q!<CR>
  
   nmap <buffer><silent> dd   :DeleteLine<CR>
+  nmap <buffer><silent> <CR> :BufferSelect<CR>
+  nmap <buffer><silent> D    :BufferDelete<CR>
+  nmap <buffer><silent> R    :BufferUpdate<CR>
   nmap <buffer><silent> j    :MoveJ<CR>
   nmap <buffer><silent> k    :MoveK<CR>
 endfunction
@@ -138,6 +143,15 @@ function! s:buffer_move_down()
 endfunction
 
 
+function! s:buffer_buffer_open()
+  let bufnum = str2nr(s:parse(getline('.'))[0])
+  echomsg bufnum
+
+  execute winnr('#') .. 'wincmd w'
+  execute 'b' .. bufnum
+endfunction
+
+
 function! s:buffer_delete_line()
   call s:unprotect_buffer()
 
@@ -151,14 +165,10 @@ endfunction
 function! s:buffer_update()
   call s:unprotect_buffer()
 
-  " TODO: if need range option, add it.
   %delete _
-
   let bufferlines = s:get_bufferlist()
-
   call append('$', bufferlines)
   :g/^$/delete_
-
 
   call s:protect_buffer()
 endfunction
