@@ -23,7 +23,8 @@ function! s:buffer_open()
   augroup END
 
   let bufferlines = s:get_bufferlist()
-  let bufferrowmaxsize = len(bufferlines) + 5
+  " let bufferrowmaxsize = len(bufferlines) + 5
+  let bufferrowmaxsize = 10
   let buffercolmaxsize = max(map(copy(bufferlines), 'strlen(v:val)')) + 5
 
   noautocmd hide execute s:buffer_side .. " " .. bufferrowmaxsize .. s:buffer_opener .. " " .. s:buffer_name
@@ -90,10 +91,14 @@ function! s:init() abort
   command! -buffer -nargs=0  DeleteLine      :call s:buffer_delete_line()
   command! -buffer -nargs=0  BufferDelete    :call s:buffer_delete()
   command! -buffer -nargs=0  BufferUpdate    :call s:buffer_update()
+  command! -buffer -nargs=0  BufferSelect    :call s:buffer_buffer_open()
 
   nmap <buffer><silent> q    :q!<CR>
  
   nmap <buffer><silent> dd   :DeleteLine<CR>
+  nmap <buffer><silent> <CR> :BufferSelect<CR>
+  nmap <buffer><silent> D    :BufferDelete<CR>
+  nmap <buffer><silent> R    :BufferUpdate<CR>
   nmap <buffer><silent> j    :MoveJ<CR>
   nmap <buffer><silent> k    :MoveK<CR>
 endfunction
@@ -135,6 +140,15 @@ function! s:buffer_move_down()
   else
     normal! j
   endif
+endfunction
+
+
+function! s:buffer_buffer_open()
+  let bufnum = str2nr(s:parse(getline('.'))[0])
+  echomsg bufnum
+
+  execute winnr('#') .. 'wincmd w'
+  execute 'b' .. bufnum
 endfunction
 
 
