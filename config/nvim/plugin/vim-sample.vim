@@ -92,3 +92,8 @@ function! s:disp(timer)
   echo "callback"
 endfunction
 command! -nargs=1 IntervalTimerStart call timer_start(1000 * 60 * str2nr(<f-args>), function("s:disp"))
+
+
+
+
+

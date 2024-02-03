@@ -15,45 +15,80 @@ return {
         },
     },
 
-    -- {
-    --     "vim-skk/skkeleton",
-    --     dependencies = {
-    --         "vim-denops/denops.vim",
-    --     },
-    --     config = function()
-    --         vim.api.nvim_set_keymap("i", "<C-j>", "<Plug>(skkeleton-toggle)", { noremap = true })
-    --         vim.api.nvim_set_keymap("c", "<C-j>", "<Plug>(skkeleton-toggle)", { noremap = true })
-    --         vim.api.nvim_exec(
-    --             [[
-    --             call skkeleton#config({
-    --                 \  'globalJisyo': expand('/usr/share/skk/SKK-JISYO.L'),
-    --                 \  'eggLikeNewline': v:true,
-    --                 \ })
-    --         ]],
-    --             false
-    --         )
-    --     end,
-    -- },
+    {
+        "vim-skk/skkeleton",
+        dependencies = {
+            "vim-denops/denops.vim",
+        },
+        config = function()
+            vim.api.nvim_set_keymap("i", "<C-j>", "<Plug>(skkeleton-toggle)", { noremap = true })
+            vim.api.nvim_set_keymap("c", "<C-j>", "<Plug>(skkeleton-toggle)", { noremap = true })
+
+            local function init()
+                -- table.insert(vim.g["skkeleton#mapped_keys"], '<C-v>')
+                return vim.fn["skkeleton#config"]({
+                    globalDictionaries = { "~/.SKK-JISYO.L" },
+                    immediatelyDictionaryRW = true,
+                    keepState = true,
+                    selectCandidateKeys = "asdfjkl",
+                    setUndoPoint = true,
+                    showCandidatesCount = 4,
+                    usePopup = true,
+                    userDictionary = "~/.skk-jisyo",
+                    eggLikeNewline = true,
+                    registerConvertResult = false,
+                })
+            end
+
+            local function enable_pre()
+                local cmp = require("cmp")
+                return cmp.setup.buffer({ view = { entries = "native" } })
+            end
+
+            local function disable_pre()
+                local cmp = require("cmp")
+                return cmp.setup.buffer({ view = { entries = "custom" } })
+            end
+            local group_5_auto = vim.api.nvim_create_augroup("init-skkeleton", { clear = true })
+            vim.api.nvim_create_autocmd(
+                { "User" },
+                { callback = init, group = group_5_auto, pattern = "skkeleton-initialize-pre" }
+            )
+            vim.api.nvim_create_autocmd(
+                { "User" },
+                { callback = enable_pre, group = group_5_auto, pattern = "skkeleton-enable-pre" }
+            )
+            vim.api.nvim_create_autocmd(
+                { "User" },
+                { callback = disable_pre, group = group_5_auto, pattern = "skkeleton-disable-pre" }
+            )
+
+            vim.api.nvim_create_autocmd(
+                { "User" },
+                { command = "redrawstatus", group = group_5_auto, pattern = "skkeleton-mode-changed" }
+            ) -- 
+        end,
+    },
 
     {
         "hrsh7th/nvim-cmp",
         event = "InsertEnter",
         dependencies = {
-            { "hrsh7th/cmp-buffer",                   event = { "InsertEnter" } },
-            { "hrsh7th/cmp-cmdline",                  event = { "InsertEnter" } },
-            { "hrsh7th/cmp-path",                     event = { "InsertEnter" } },
-            { "hrsh7th/cmp-omni",                     event = { "InsertEnter" } },
+            { "hrsh7th/cmp-buffer", event = { "InsertEnter" } },
+            { "hrsh7th/cmp-cmdline", event = { "InsertEnter" } },
+            { "hrsh7th/cmp-path", event = { "InsertEnter" } },
+            { "hrsh7th/cmp-omni", event = { "InsertEnter" } },
             { "hrsh7th/cmp-nvim-lsp" }, --, event = { "InsertEnter" } },
-            { "hrsh7th/cmp-nvim-lua",                 event = { "InsertEnter" } },
+            { "hrsh7th/cmp-nvim-lua", event = { "InsertEnter" } },
             { "hrsh7th/cmp-nvim-lsp-document-symbol", event = { "InsertEnter" } },
-            { "hrsh7th/cmp-nvim-lsp-signature-help",  event = { "InsertEnter" } },
+            { "hrsh7th/cmp-nvim-lsp-signature-help", event = { "InsertEnter" } },
             { "onsails/lspkind-nvim" },
             { "windwp/nvim-autopairs" },
 
-            { "saadparwaiz1/cmp_luasnip",             event = { "InsertEnter" } },
+            { "saadparwaiz1/cmp_luasnip", event = { "InsertEnter" } },
             { "L3MON4D3/LuaSnip" },
 
-            -- { "rinx/cmp-skkeleton" },
+            { "rinx/cmp-skkeleton", event = { "InsertEnter" } },
         },
         config = function()
             local luasnip = require("luasnip")

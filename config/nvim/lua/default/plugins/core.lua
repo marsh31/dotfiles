@@ -38,6 +38,7 @@ return {
     { "tani/vim-artemis", event = { "VeryLazy" } },
     { "kana/vim-operator-user", event = { "VeryLazy" } },
     { "kana/vim-textobj-user", event = { "VeryLazy" } },
+    { 'vim-denops/denops.vim', lazy = false },
 
     -- nvim
     { "nvim-lua/plenary.nvim", lazy = true },
