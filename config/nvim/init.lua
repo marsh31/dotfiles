@@ -14,6 +14,7 @@ require("default/config")
 local pm = require("default/manager")
 pm.setup()
 pm.load_plugins("default/plugins")
+-- pm.load_plugins("sample/ddc/plugins")
 
 -- ./lua/command.lua
 require("default/command")
@@ -30,6 +31,8 @@ require("default/keymaps")
 -- vim.api.nvim_set_hl(0, "Normal", {
 --     bg = "NONE"
 -- })
+
+
 
 
 -- vim: sw=4 sts=4 expandtab fenc=utf-8

@@ -5,6 +5,15 @@
 -- https://uhoho.hatenablog.jp/entry/2023/04/25/202246
 -- https://zenn.dev/shougo/articles/ddc-vim-pum-vim
 return {
-  { "vim-denops/denops.vim" },
+    { "vim-denops/denops.vim" },
 
+    { "prabirshrestha/vim-lsp" },
+    { "mattn/vim-lsp-settings" },
+
+    { "Shougo/ddc.vim" },
+    { "Shougo/ddc-ui-native" },
+    { "Shougo/ddc-around" },
+    { "matsui54/ddc-buffer" },
+    { "shun/ddc-source-vim-lsp" },
+    { "tani/ddc-fuzzy" },
 }
