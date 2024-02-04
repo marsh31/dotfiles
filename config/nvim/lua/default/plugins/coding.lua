@@ -27,16 +27,16 @@ return {
             local function init()
                 -- table.insert(vim.g["skkeleton#mapped_keys"], '<C-v>')
                 return vim.fn["skkeleton#config"]({
-                    globalDictionaries = { "~/.SKK-JISYO.L" },
+                    globalDictionaries = { '~/.SKK-JISYO.L' },
                     immediatelyDictionaryRW = true,
                     keepState = true,
-                    selectCandidateKeys = "asdfjkl",
+                    selectCandidateKeys = 'asdfjkl',
                     setUndoPoint = true,
                     showCandidatesCount = 4,
                     usePopup = true,
-                    userDictionary = "~/.skk-jisyo",
                     eggLikeNewline = true,
                     registerConvertResult = false,
+                    userDictionary = '~/.skk-jisyo',
                 })
             end
 

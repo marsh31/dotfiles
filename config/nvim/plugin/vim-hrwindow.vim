@@ -1,3 +1,29 @@
+" >   11: buffer = 0
+" open -> jump other
+" BufAdd
+" BufCreate
+" BufNewFile
+" BufEnter
+" BufLeave
+" WinLeave
+"
+" open -> close
+" BufAdd
+" BufCreate
+" BufNewFile
+" BufEnter
+" BufLeave
+" WinLeave
+" BufHidden 
+"
+" enter -> leave
+" WinEnter
+" BufEnter
+" BufLeave
+" WinLeave
+"
+"
+
 
 
 
@@ -6,26 +32,27 @@ command! TestStop            :call s:test_stop()
 
 
 let s:timer_time_ms = 100
+" let s:timer_id = 0
+
+let s:bufname   = '[hrwindow]'
+let s:bufnr     = 0
+
+
 let s:timer_count   = 0
 
-let s:timer_id = 0
-let s:start_wid = 0
-let s:buffer_wid  = 0
-let s:bufname = '[hrwindow]'
+augroup plugin_hrwindow
+  autocmd! *
+
+  autocmd FileType     \[hrwindow]   setlocal ft=hrwindow
+
+  autocmd BufEnter     \[hrwindow]   call s:enter_buffer()
+  autocmd BufHidden    \[hrwindow]   call s:hide_buffer()
+
+augroup END
 
 function! s:open_buffer()
-  augroup plugin_hrwindow
-    autocmd! * <buffer>
-
-    exec "autocmd FileType " .. s:bufname .. " echomsg 'FileType'"
-    exec printf("autocmd BufNewFile %s echomsg 'BufNewFile'", s:bufname)
-
-  augroup END
   exec '5new ' .. s:bufname
 
-
-  let s:buffer_wid = win_getid(winnr())
-  let s:timer_id = timer_start(s:timer_time_ms, 'UpdateBuffer', { 'repeat': -1 })
 endfunction
 
 
@@ -34,28 +61,60 @@ function! s:test_stop()
 endfunction
 
 
-" deletebufline({buf}, {first} [, {last}])
-"   {first} ~ {last}を含む行をバッファから削除する。
-"   バッファが省略されていた場合は、{first}行だけを削除する。
-"   これは、ロード されたバッファにたいしてのみ機能する。
-"   必要であれば、最初に bufload を呼び出すこと。
-"
-"   {buf} 
-" getbufline
-" setbufline
-function! UpdateBuffer(timer)
-  let s:start_wid = win_getid(winnr())
-  call win_gotoid(s:buffer_wid)
 
+
+
+
+
+
+
+
+
+
+
+
+" backend function
+
+
+"
+" call BufEnter Event
+"
+function! s:enter_buffer()
+  echomsg "Enter Buffer"
+
+  if ! exists("s:timer_id")
+    call s:init_buffer()
+  endif
+endfunction
+
+
+"
+" call BufEnter Event AND unhidden buffer
+"
+function! s:init_buffer()
+  echomsg "Init Buffer. call updater"
+  let s:timer_id = timer_start(s:timer_time_ms, 'UpdateBuffer', { 'repeat': -1 })
+  let s:bufnr    = bufnr()
+endfunction
+
+
+"
+" call BufHidden Event
+"
+function! s:hide_buffer()
+  echomsg "Hide Buffer. stop updater"
+  call timer_stop(s:timer_id) | unlet s:timer_id
+endfunction
+
+
+function! UpdateBuffer(timer)
+  echomsg "update"
   let s:timer_count = s:timer_count + 1
   if s:timer_count > 1000
     let s:timer_count = 0
   endif
 
-  %delete _
-  exec "normal! A> " .. s:timer_count
-
-  call win_gotoid(s:start_wid)
+  call setbufline(s:bufnr, 1, printf("> %4d: buffer = %d", s:timer_count, s:bufnr))
 endfunction
 
 
