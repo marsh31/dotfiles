@@ -6,16 +6,71 @@
 ------------------------------------------------------------
 -- @config
 ------------------------------------------------------------
-local wk = require("which-key")
+local wk = require('which-key')
 local keymap = vim.keymap.set
 
-local function map(mode, lhs, rhs, option, desc)
-    local opts = option
-    opts.desc = desc
-    vim.keymap.set(mode, lhs, rhs, opts)
+local function nop(mode, lhs)
+    vim.keymap.set(mode, lhs, '<Nop>', { silent = true, nowait = true, remap = true })
 end
 
-------------------------------------------------------------
+local function noplist(mode, list)
+    for _, item in ipairs(list) do
+        nop(mode, item)
+    end
+end
+
+local insert_index = {
+    '<C-@>',
+    '<C-a>',
+    '<C-b>',
+    '<C-c>',
+    '<C-d>',
+    '<C-e>',
+    '<C-f>',
+    '<C-k>',
+    '<C-l>',
+    '<C-q>',
+    '<C-s>',
+    '<C-t>',
+    '<C-y>',
+    '<C-z>',
+}
+
+local normal_index = {
+    '<BS>',
+    '<C-b>',
+    '<C-f>',
+    '<C-g>',
+    '<C-h>',
+    '<C-k>',
+    '<C-n>',
+    '<C-p>',
+    '<C-q>',
+    '<C-s>',
+    '<C-t>',
+    '<C-y>',
+    '<C-z>',
+    '<Space>',
+    '!',
+    '!!',
+}
+
+local visual_index = {
+
+}
+
+local command_index = {
+
+}
+
+
+
+
+
+noplist("i", insert_index)
+noplist("n", normal_index)
+
+
 -- @global
 ------------------------------------------------------------
 keymap("n", "<MiddleMouse>", "<Nop>", { silent = true, nowait = true, remap = true })

@@ -6,6 +6,8 @@
 vim.g.mapleader = [[ ]]
 vim.g.maplocalleader = [[,]]
 
+vim.g.my_plugin_list = "custom"
+
 -- ./lua/config.lua
 require("default/config")
 
@@ -24,7 +26,7 @@ require("default/command")
 require("default/autocmd")
 
 
--- ./lua/keymaps.lua
+-- ./lua/default/keymaps.lua
 require("default/keymaps")
 
 -- -- highlight Normal ctermbg=NONE guibg=NONE
@@ -33,6 +35,9 @@ require("default/keymaps")
 -- })
 
 
+-- vim.cmd.colorscheme([[kanagawa-dragon]])
+-- vim.cmd.colorscheme([[carbonfox]])
+vim.cmd.colorscheme([[github_dark_colorblind]])
 
 
 -- vim: sw=4 sts=4 expandtab fenc=utf-8

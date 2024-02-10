@@ -72,18 +72,6 @@ return {
     },
 
     {
-        "folke/which-key.nvim",
-        lazy = true,
-        cmd = "WhichKey",
-        config = function()
-            require("which-key").setup({
-                plugins = {
-                    registers = false,
-                },
-            })
-        end,
-    },
-    {
         "mrjones2014/legendary.nvim",
     },
     {
