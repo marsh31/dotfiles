@@ -25,6 +25,8 @@ command! ZJumpNext call s:zettelkasten_jump_next()
 command! ZCopyLink  call s:zettelkasten_copy_link()
 command! ZPasteLink call s:zettelkasten_paste_link()
 
+command! Ztest      call s:auto_inputlink()
+
 
 " IF =======================================================
 function! s:zettelkasten_open(mods, str, config) abort
@@ -33,8 +35,14 @@ function! s:zettelkasten_open(mods, str, config) abort
   let l:tags= trim(input('tags> '), " ")
   let l:date = strftime(g:zettelkasten_date_format)
   let l:filename = l:date . '.' . g:zettelkasten_ext
-  exec l:cmd . trim(a:config.path, '/', 2) . '/' . l:filename
 
+  let l:isOk = s:yninput("Do you want to input link?(Yy/other): ")
+  let l:linktext = printf("[%s](%s)", title, l:filename)
+  if l:isOk
+    call append(line('.'), l:linktext)
+  endif
+
+  exec l:cmd . trim(a:config.path, '/', 2) . '/' . l:filename
   if g:zettelkasten_template != ''
     call s:zettelkasten_template_do(l:title, l:tags, a:config.type)
   endif
@@ -62,7 +70,7 @@ function! s:zettelkasten_jump_next() abort
   endif
 
   let l:open_cmd = "edit " . l:splitted[l:index]
-  echo l:open_cmd
+  exec l:open_cmd
 endfunction
 
 function! s:zettelkasten_copy_link() abort
@@ -81,6 +89,24 @@ function! s:zettelkasten_paste_link() abort
   let @+ = l:pastetext
   let @* = l:pastetext
 endfunction
+
+
+function! s:auto_inputlink() abort
+  let l:linktext = "test"
+  let l:cbufnr = bufnr()
+  let l:cline = line('.') - 1
+
+  let l:cdir = expand('%:p:h')
+  if l:cdir == g:zettelkasten_dir
+
+  endif
+
+  let l:isOk = s:yninput("Do you want to input link?(Yy/other): ")
+  if l:isOk
+    call appendbufline(l:cbufnr, l:cline, l:linktext)
+  endif
+endfunction
+
 " API ======================================================
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -152,4 +178,31 @@ function! s:get_current_dir_filelist() abort
   let l:filelist = glob(l:dir . '/*')
   let l:splitted = split(filelist, '\n')
   return l:splitted
+endfunction
+
+
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" 
+" 
+" 
+" 
+" 
+" 
+" 
+" 
+" 
+" 
+" 
+" 
+" 
+function! s:yninput(title) abort
+  echon a:title
+  
+  let l:result = v:false
+  let l:inputchar = nr2char(getchar())
+  if l:inputchar =~ '[yY]'
+    let l:result = v:true
+  endif
+
+  return l:result
 endfunction
