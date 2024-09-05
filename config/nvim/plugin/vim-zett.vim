@@ -1,31 +1,49 @@
+" Global config ============================================
+let g:zettelkasten_shellslashchar = '/'
 
-let g:zettelkasten_date_format   = "%Y%m%d%H%M%S"
-let g:zettelkasten_dir           = expand('~/til/learn/memo')
-let g:zettelkasten_ext           = 'md'
-let g:zettelkasten_template      = 'Template zett'
+let g:zettelkasten_date_format    = "%Y%m%d%H%M%S"
+let g:zettelkasten_dir            = expand('~/til/learn/memo')
+let g:zettelkasten_ext            = 'md'
+let g:zettelkasten_template       = 'Template zett'
+let g:zettelkasten_store_dir      = g:zettelkasten_dir . '/appendix'
 
-let g:zettelkasten_link          = ''
+let g:zettelkasten_link           = ''
 
-let s:zettelkasten_fleeting      = { "type": "Fleeting",   "path": g:zettelkasten_dir . "/fleeting"   }
-let s:zettelkasten_literature    = { "type": "Literature", "path": g:zettelkasten_dir . "/literature" }
-let s:zettelkasten_permanent     = { "type": "Permanent",  "path": g:zettelkasten_dir                 }
-let s:zettelkasten_index         = { "type": "Index",      "path": g:zettelkasten_dir                 }
-let s:zettelkasten_structure     = { "type": "Structure",  "path": g:zettelkasten_dir                 }
 
-command! -nargs=* Zett        call s:zettelkasten_open(<q-mods>, <q-args>, s:zettelkasten_fleeting)
-command! -nargs=* Zfleeting   call s:zettelkasten_open(<q-mods>, <q-args>, s:zettelkasten_fleeting)
-command! -nargs=* Zliterature call s:zettelkasten_open(<q-mods>, <q-args>, s:zettelkasten_literature)
-command! -nargs=* Zpermanent  call s:zettelkasten_open(<q-mods>, <q-args>, s:zettelkasten_permanent)
-command! -nargs=* Zindex      call s:zettelkasten_open(<q-mods>, <q-args>, s:zettelkasten_index)
-command! -nargs=* Zstructure  call s:zettelkasten_open(<q-mods>, <q-args>, s:zettelkasten_structure)
+" Local config =============================================
+let s:zettelkasten_fleeting       = { "type": "Fleeting",   "path": g:zettelkasten_dir }
+let s:zettelkasten_literature     = { "type": "Literature", "path": g:zettelkasten_dir }
+let s:zettelkasten_permanent      = { "type": "Permanent",  "path": g:zettelkasten_dir }
+let s:zettelkasten_index          = { "type": "Index",      "path": g:zettelkasten_dir }
+let s:zettelkasten_structure      = { "type": "Structure",  "path": g:zettelkasten_dir }
 
-command! ZJumpPrev call s:zettelkasten_jump_prev()
-command! ZJumpNext call s:zettelkasten_jump_next()
+let s:zettelkasten_header_s       = 1
+let s:zettelkasten_header_e       = 9
 
-command! ZCopyLink  call s:zettelkasten_copy_link()
-command! ZPasteLink call s:zettelkasten_paste_link()
 
-command! Ztest      call s:auto_inputlink()
+" Command ==================================================
+command! -nargs=* Zett            call s:zettelkasten_open(<q-mods>, <q-args>, s:zettelkasten_fleeting)
+command! -nargs=* Zfleeting       call s:zettelkasten_open(<q-mods>, <q-args>, s:zettelkasten_fleeting)
+command! -nargs=* Zliterature     call s:zettelkasten_open(<q-mods>, <q-args>, s:zettelkasten_literature)
+command! -nargs=* Zpermanent      call s:zettelkasten_open(<q-mods>, <q-args>, s:zettelkasten_permanent)
+command! -nargs=* Zindex          call s:zettelkasten_open(<q-mods>, <q-args>, s:zettelkasten_index)
+command! -nargs=* Zstructure      call s:zettelkasten_open(<q-mods>, <q-args>, s:zettelkasten_structure)
+
+command! ZJumpPrev                call s:zettelkasten_jump_prev()
+command! ZJumpNext                call s:zettelkasten_jump_next()
+
+command! ZCopyLink                call s:zettelkasten_copy_link()
+command! ZPasteLink               call s:zettelkasten_paste_link()
+
+command! ZMetaStatics             call s:zettelkasten_meta_statics()
+
+command! ZMakeStoreDir            call s:zettelkasten_store_dir()
+command! ZRegStoreDir             call s:zettelkasten_store_dir_to_register()
+
+command! ZSearchLink              /\[.\+\](\zs.\+\ze)
+
+
+command! Ztest                    call s:auto_inputlink()
 
 
 " IF =======================================================
@@ -39,10 +57,10 @@ function! s:zettelkasten_open(mods, str, config) abort
   let l:isOk = s:yninput("Do you want to input link?(Yy/other): ")
   let l:linktext = printf("[%s](%s)", title, l:filename)
   if l:isOk
-    call append(line('.'), l:linktext)
+    exec printf("normal! O%s", l:linktext)
   endif
 
-  exec l:cmd . trim(a:config.path, '/', 2) . '/' . l:filename
+  exec l:cmd . trim_path(a:config.path) . g:shellslash . l:filename
   if g:zettelkasten_template != ''
     call s:zettelkasten_template_do(l:title, l:tags, a:config.type)
   endif
@@ -91,21 +109,41 @@ function! s:zettelkasten_paste_link() abort
 endfunction
 
 
-function! s:auto_inputlink() abort
-  let l:linktext = "test"
-  let l:cbufnr = bufnr()
-  let l:cline = line('.') - 1
+function! s:zettelkasten_meta_statics() abort
+  let l:splitted = s:get_current_dir_filelist()
+  let l:metainfo = []
 
-  let l:cdir = expand('%:p:h')
-  if l:cdir == g:zettelkasten_dir
+  for l:file in l:splitted
+    call add(l:metainfo, s:getmdheader(l:file))
+  endfor
 
-  endif
-
-  let l:isOk = s:yninput("Do you want to input link?(Yy/other): ")
-  if l:isOk
-    call appendbufline(l:cbufnr, l:cline, l:linktext)
-  endif
+  let l:sum_of_fleeting = filter(deepcopy(l:metainfo), 'v:val["type"] == "Fleeting"')
+  echo len(l:sum_of_fleeting)
+  "
+  let l:sum_of_literature = filter(deepcopy(l:metainfo), 'v:val["type"] == "Literature"')
+  echo len(l:sum_of_literature)
+  echo l:metainfo
 endfunction
+
+
+function! s:zettelkasten_store_dir() abort
+  let l:fullpath = s:get_store_dir_fullpath()
+  mkdir(l:fullpath)
+endfunction
+
+
+function! s:zettelkasten_store_dir_to_register() abort
+  let l:fullpath = s:get_store_dir_fullpath()
+  let @" = l:fullpath
+  let @+ = l:fullpath
+  let @* = l:fullpath
+endfunction
+
+
+function! s:auto_inputlink() abort
+  call s:getmdheader("/home/marsh/til/learn/memo/fleeting/20240820211328.md")
+endfunction
+
 
 " API ======================================================
 
@@ -160,18 +198,15 @@ endfunction
 
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" get_current_dir_filelist
 " 
+" args
+"   none
 " 
+" return
+"   splitted [string] カレントファイルの存在するディレクトリに存在するファイルの一覧
 " 
-" 
-" 
-" 
-" 
-" 
-" 
-" 
-" 
-" 
+"   現在のバッファの親ディレクトリに存在するファイルの一覧を配列形式で返す。
 " 
 function! s:get_current_dir_filelist() abort
   let l:dir = expand('%:p:h')
@@ -182,18 +217,17 @@ endfunction
 
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" yninput
 " 
+" args
+"   title string コンソールログのヘッダ
 " 
+" return
+"   result boolean Y = true, other = false
 " 
-" 
-" 
-" 
-" 
-" 
-" 
-" 
-" 
-" 
+"   yY or other の入力を要求する。
+" yY のときはTrue。
+" other のときはFlase。
 " 
 function! s:yninput(title) abort
   echon a:title
@@ -205,4 +239,80 @@ function! s:yninput(title) abort
   endif
 
   return l:result
+endfunction
+
+
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" getmdheader
+" 
+" args
+"   file string file path
+" 
+" return
+"   result dict メタデータの辞書型データを返す。
+" 
+"   ファイル名を受け取ると、ファイルのヘッダーを読み取り、
+" メタデータがあればメタデータを返す。メタデータがなければ、
+" 空辞書を返す。ヘッダーの有無は先頭行に---があればヘッダーあり。
+" なければ、ヘッダーなしと判定する。
+function! s:getmdheader(file) abort
+  let l:lines = readfile(a:file, '', 10)
+  let l:result = {}
+
+  if l:lines[0] !~ '^-\+$'
+    return l:result
+  endif
+
+  for l:line in l:lines[1:]
+    if l:line =~ '^-\+$'
+      break
+    endif
+
+    let l:mlist = matchlist(l:line, '\(.\+\):\s\+\(.\+\)')
+    if !empty(l:mlist)
+      let l:key = l:mlist[1]
+      let l:val = l:mlist[2]
+
+      let l:result[l:key] = s:get_list(l:val)
+    endif
+  endfor
+
+  return l:result
+endfunction
+
+
+function! s:get_list(valstr) abort
+  let l:mlist = matchlist(a:valstr, '\[\(.\+\)\]')
+  let l:start = 0
+  if !empty(l:mlist)
+    let l:result = []
+
+    let l:mres = matchstrpos(l:mlist[1], '\s*\zs\([^,]\+\)\ze,\?', l:start)
+    while l:mres[2] != -1
+      call add(l:result, l:mres[0])
+      let l:mres = matchstrpos(l:mlist[1], '\s*\zs\([^,]\+\)\ze,\?', l:mres[2])
+    endwhile
+
+    return l:result
+  elseif !empty(matchlist(a:valstr, '\[\s\+\]'))
+
+    return []
+  else
+
+    return a:valstr
+  endif
+endfunction
+
+
+function! s:get_store_dir_fullpath() abort
+  let l:dir_name = expand("%:t:r")
+  return g:zettelkasten_store_dir . g:zettelkasten_shellslashchar . l:dir_name
+endfunction
+
+
+function! s:trim_path(path) abort
+  if a:path[-1:-1] == g:zettelkasten_shellslashchar
+    return a:path[0:-2]
+  endif
+  return a:path
 endfunction
