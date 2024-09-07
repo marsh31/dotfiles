@@ -5,14 +5,12 @@
 --
 
 local list = require('default/pluginlist').get_list()
-if list.treesitter == nil then list.treesitter = false end
-
 return {
     {
         "nvim-treesitter/nvim-treesitter",
         build = ":TSUpdate",
         tag   = "v0.9.2",
-        cond = (list.all or list.treesitter),
+        cond = list.treesitter,
         event = { "BufReadPost", "BufNewFile" },
         dependencies = {
             { "nvim-treesitter/nvim-treesitter-textobjects" },
@@ -143,9 +141,6 @@ return {
                     disable = {},
                 },
             })
-
-            vim.opt.foldmethod = "expr"
-            vim.opt.foldexpr = "nvim_treesitter#foldexpr()"
 
         end,
     },

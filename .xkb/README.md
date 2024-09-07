@@ -1,9 +1,18 @@
 # README
 
 ## Backup
+
 ```sh
 xkbcomp $DISPLAY default.xkb
 ```
+
+
+## Set xkb file
+
+```sh
+xkbcomp custom.xkb $DISPLAY
+```
+
 
 ## initial
 

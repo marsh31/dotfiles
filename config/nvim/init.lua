@@ -6,7 +6,7 @@
 vim.g.mapleader = [[ ]]
 vim.g.maplocalleader = [[,]]
 
-vim.g.my_plugin_list = "custom"
+vim.g.my_plugin_list = "default"
 
 -- ./lua/config.lua
 require("default/config")

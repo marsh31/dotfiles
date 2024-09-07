@@ -1171,7 +1171,7 @@ xkb_compatibility "complete+japan" {
     };
     indicator "Group 2" {
         !allowExplicit;
-        groups= 0xfe;
+        groups= 0xff;
     };
     indicator "Mouse Keys" {
         indicatorDrivesKeyboard;
@@ -1234,7 +1234,11 @@ xkb_symbols "pc+jp+inet(evdev)+custom(nocaps)+custom(super)+custom(add_escape)" 
     };
     key <AE11> {         [           minus,           equal ] };
     key <AE12> {         [     asciicircum,      asciitilde ] };
-    key <BKSP> {         [       BackSpace,       BackSpace ] };
+    key <BKSP> {
+      type= "TWO_LEVEL",
+      symbols[Group1]= [       BackSpace,          Delete ],
+      actions[Group1]= [       NoAction(),         RedirectKey(keycode=<DELE>, clearmods=Shift) ]
+    };
     key  <TAB> {         [             Tab,    ISO_Left_Tab ] };
     key <AD01> {
         type= "ALPHABETIC",

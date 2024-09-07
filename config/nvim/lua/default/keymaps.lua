@@ -53,10 +53,15 @@ local normal_index = {
     '<Space>',
     '!',
     '!!',
+    '-',
+    'K',
+    'Q',
+    'R',
+    'S',
+    'U',
 }
 
 local visual_index = {
-
 }
 
 local command_index = {
@@ -64,17 +69,16 @@ local command_index = {
 }
 
 
-
-
-
-noplist("i", insert_index)
-noplist("n", normal_index)
+-- noplist("i", insert_index)
+-- noplist("n", normal_index)
+-- noplist("v", visual_index)
+-- noplist("c", command_index)
 
 
 -- @global
 ------------------------------------------------------------
 keymap("n", "<MiddleMouse>", "<Nop>", { silent = true, nowait = true, remap = true })
-keymap("n", "<Leader>f", vim.lsp.buf.format)
+keymap("n", "<Leader>lf", vim.lsp.buf.format)
 keymap("t", "<A-j><A-j>", "<C-\\><C-n>", { silent = true, nowait = true, remap = true })
 
 keymap("n", "w", "<Plug>CamelCaseMotion_w", { silent = true, nowait = true })
@@ -104,31 +108,9 @@ keymap("n", "[q", "<Cmd>cprevious<CR>", { desc = "jump previous quickfix" })
 keymap("n", "]d", vim.diagnostic.goto_next, { desc = "jump next diagnostic" })
 keymap("n", "[d", vim.diagnostic.goto_prev, { desc = "jump prev diagnostic" })
 
--- local gs = package.loaded.gitsigns
--- keymap("n", "]g", gs.next_hunk, { desc = "Next Hunk" })
--- keymap("n", "[g", gs.prev_hunk, { desc = "Prev Hunk" })
---
--- keymap({ "n", "v" }, "<Leader>ghs", ":Gitsigns stage_hunk<CR>", { desc = "State Hunk" })
--- keymap({ "n", "v" }, "<Leader>ghr", ":Gitsigns reset_hunk<CR>", { desc = "Reset Hunk" })
---
--- keymap("n", "<Leader>ghS", gs.stage_buffer, { desc = "Stage Buffer" })
--- keymap("n", "<Leader>ghR", gs.reset_buffer, { desc = "Reset Buffer" })
---
--- keymap("n", "<Leader>ghu", gs.undo_stage_hunk, { desc = "Undo Stage Hunk" })
--- keymap("n", "<Leader>ghp", gs.preview_hunk, { desc = "Preview Hunk" })
---
--- keymap("n", "<Leader>ghb", function()
---     gs.blame_line({ full = true })
--- end, { desc = "Blame Line" })
---
--- keymap("n", "<Leader>ghd", gs.diffthis, { desc = "Diff This" })
--- keymap("n", "<Leader>ghD", function()
---     gs.diffthis("~")
--- end, { desc = "Diff This ~" })
 
 wk.register({
     ["<C-c>"] = { "<ESC>", "escape" },
-    ["<C-p>"] = { "<cmd>Telescope command_palette<CR>", "command palette" },
 
     ["s"] = {
         ["s"] = {
@@ -157,7 +139,6 @@ wk.register({
     },
 
     ["<Leader>"] = {
-        ["<Leader>"] = { "<cmd>Telescope buffers<CR>", "Search buffer" },
         ["a"] = { -- toggle
             name = "toggle",
             ["a"] = { "<cmd>AerialToggle!<CR>", "Toggle Aerial" },
@@ -168,37 +149,42 @@ wk.register({
         ["de"] = { "<cmd>NvimTreeClose<CR>", "Close Nvimtree" },
 
         ["e"] = { -- explorer
-            ["d"] = { "<Cmd>Fern . -drawer<CR><C-w>=", "Open filer" },
-            ["D"] = { "<Cmd>Fern . -drawer -reveal=%<CR><C-w>=", "Open filer" },
-
-            ["w"] = { "<Cmd>Fern . -reveal=%<CR><C-w>=", "Open filer in current window" },
-            ["W"] = { "<Cmd>Fern .<CR>", "Open filer in current window" },
-
-            ["l"] = { "<Cmd>vertical rightbelow split | Fern . -reveal=%<CR><C-w>=", "Open filer in left window" },
-            ["L"] = { "<Cmd>vertical rightbelow split | Fern .<CR>", "Open filer in right window" },
-
-            ["h"] = { "<Cmd>vertical leftabove split | Fern . -reveal=%<CR><C-w>=", "Open filer in left window" },
-            ["H"] = { "<Cmd>vertical leftabove split | Fern .<CR>", "Open filer in right window" },
-
-            ["j"] = { "<Cmd>rightbelow split | Fern . -reveal=%<CR><C-w>=", "Open filer in below window" },
-            ["J"] = { "<Cmd>rightbelow split | Fern .<CR>", "Open filer in below window" },
-
-            ["k"] = { "<Cmd>leftabove split | Fern . -reveal=%<CR><C-w>=", "Open filer in above window" },
-            ["K"] = { "<Cmd>leftabove split | Fern .<CR>", "Open filer in above window" },
-
-            ["o"] = { "<Cmd>vertical botright split | Fern . -reveal=%<CR><C-w>=", "Open filer in left window" },
-            ["O"] = { "<Cmd>vertical botright split | Fern .<CR>", "Open filer in right window" },
-
-            ["y"] = { "<Cmd>vertical topleft split | Fern . -reveal=%<CR><C-w>=", "Open filer in left window" },
-            ["Y"] = { "<Cmd>vertical topleft split | Fern .<CR>", "Open filer in right window" },
-
-            ["u"] = { "<Cmd>botright split | Fern . -reveal=%<CR><C-w>=", "Open filer in below window" },
-            ["U"] = { "<Cmd>botright split | Fern .<CR>", "Open filer in below window" },
-
-            ["i"] = { "<Cmd>topleft split | Fern . -reveal=%<CR><C-w>=", "Open filer in above window" },
-            ["I"] = { "<Cmd>topleft split | Fern .<CR>", "Open filer in above window" },
-
-            ["n"] = { "<Cmd>enew<CR>", "New File" },
+            -- ["d"] = { "<Cmd>Fern . -drawer<CR><C-w>=", "Open filer" },
+            -- ["D"] = { "<Cmd>Fern . -drawer -reveal=%<CR><C-w>=", "Open filer" },
+            --
+            -- ["w"] = { "<Cmd>Fern . -reveal=%<CR><C-w>=", "Open filer in current window" },
+            -- ["W"] = { "<Cmd>Fern .<CR>", "Open filer in current window" },
+            --
+            -- ["l"] = { "<Cmd>vertical rightbelow split | Fern . -reveal=%<CR><C-w>=", "Open filer in left window" },
+            -- ["L"] = { "<Cmd>vertical rightbelow split | Fern .<CR>", "Open filer in right window" },
+            --
+            -- ["h"] = { "<Cmd>vertical leftabove split | Fern . -reveal=%<CR><C-w>=", "Open filer in left window" },
+            -- ["H"] = { "<Cmd>vertical leftabove split | Fern .<CR>", "Open filer in right window" },
+            --
+            -- ["j"] = { "<Cmd>rightbelow split | Fern . -reveal=%<CR><C-w>=", "Open filer in below window" },
+            -- ["J"] = { "<Cmd>rightbelow split | Fern .<CR>", "Open filer in below window" },
+            --
+            -- ["k"] = { "<Cmd>leftabove split | Fern . -reveal=%<CR><C-w>=", "Open filer in above window" },
+            -- ["K"] = { "<Cmd>leftabove split | Fern .<CR>", "Open filer in above window" },
+            --
+            -- ["o"] = { "<Cmd>vertical botright split | Fern . -reveal=%<CR><C-w>=", "Open filer in left window" },
+            -- ["O"] = { "<Cmd>vertical botright split | Fern .<CR>", "Open filer in right window" },
+            --
+            -- ["y"] = { "<Cmd>vertical topleft split | Fern . -reveal=%<CR><C-w>=", "Open filer in left window" },
+            -- ["Y"] = { "<Cmd>vertical topleft split | Fern .<CR>", "Open filer in right window" },
+            --
+            -- ["u"] = { "<Cmd>botright split | Fern . -reveal=%<CR><C-w>=", "Open filer in below window" },
+            -- ["U"] = { "<Cmd>botright split | Fern .<CR>", "Open filer in below window" },
+            --
+            -- ["i"] = { "<Cmd>topleft split | Fern . -reveal=%<CR><C-w>=", "Open filer in above window" },
+            -- ["I"] = { "<Cmd>topleft split | Fern .<CR>", "Open filer in above window" },
+            --
+            -- ["n"] = { "<Cmd>enew<CR>", "New File" },
+            ["w"] = { "<Cmd>Oil<CR>", "Open current buffer parent" },
+            ["l"] = { "<Cmd>vertical rightbelow split | Oil<CR>", "Open oil buffer right current buffer." },
+            ["h"] = { "<Cmd>vertical leftabove  split | Oil<CR>", "Open oil buffer left current buffer." },
+            ["j"] = { "<Cmd>rightbelow split | Oil<CR>", "Open oil buffer below current buffer." },
+            ["k"] = { "<Cmd>leftabove  split | Oil<CR>", "Open oil buffer above current buffer." },
         },
 
         ["g"] = { -- go
@@ -208,15 +194,6 @@ wk.register({
         },
 
         ["r"] = { "<cmd>source %<CR>", "load the buffer file" },
-        ["s"] = { -- search
-            name = "search",
-            ["b"] = { "<cmd>Telescope buffers<CR>", "Search buffers" },
-            ["f"] = { "<cmd>Telescope find_files hidden=true<CR>", "Search file" },
-            ["g"] = { "<cmd>Telescope grep_string<CR>", "Grep" },
-            ["p"] = { "<cmd>Telescope ghq list<CR>", "Search git repo" },
-            ["o"] = { "<cmd>Telescope aerial<CR>", "Search Outline" },
-            ["r"] = { "<cmd>Telescope oldfiles<CR>", "Search Recent File" },
-        },
 
         ["l"] = { -- lsp
             name = "lsp",
@@ -230,7 +207,7 @@ wk.register({
                 ["t"] = { "<cmd>lua vim.lsp.buf.type_definition()<CR>", "lsp show type definition" },
             },
             ["k"] = { "<cmd>lua vim.lsp.buf.hover()<CR>", "hover" },
-            ["f"] = { "<cmd>lua vim.lsp.buf.formatting()<CR>", "formatting" },
+            -- ["f"] = { "<cmd>lua vim.lsp.buf.formatting()<CR>", "formatting" },
             ["r"] = { "<cmd>lua vim.lsp.buf.rename()<CR>", "rename" },
         },
     },
@@ -254,6 +231,39 @@ keymap("i", "<C-l>", "<C-g>u<C-o>:update<CR>")
 keymap("i", ",", ",<C-g>u")
 keymap("i", ".", ".<C-g>u")
 keymap("i", ";", ";<C-g>u")
+
+------------------------------------------------------------
+-- @operator
+------------------------------------------------------------
+keymap("o", "i8", "i(", { silent = true, nowait = true, remap = false })
+keymap("o", "i9", "i)", { silent = true, nowait = true, remap = false })
+keymap("o", "i2", 'i"', { silent = true, nowait = true, remap = false })
+keymap("o", "i7", "i'", { silent = true, nowait = true, remap = false })
+keymap("o", "i@", "i`", { silent = true, nowait = true, remap = false })
+
+
+keymap("o", "a8", "a(", { silent = true, nowait = true, remap = false })
+keymap("o", "a9", "a)", { silent = true, nowait = true, remap = false })
+keymap("o", "a2", 'a"', { silent = true, nowait = true, remap = false })
+keymap("o", "a7", "a'", { silent = true, nowait = true, remap = false })
+keymap("o", "a@", "a`", { silent = true, nowait = true, remap = false })
+
+
+
+keymap("n", "vi8", "vi(", { silent = true, nowait = true, remap = false })
+keymap("n", "vi9", "vi)", { silent = true, nowait = true, remap = false })
+keymap("n", "vi2", 'vi"', { silent = true, nowait = true, remap = false })
+keymap("n", "vi7", "vi'", { silent = true, nowait = true, remap = false })
+keymap("n", "vi@", "vi`", { silent = true, nowait = true, remap = false })
+
+keymap("n", "va8", "va(", { silent = true, nowait = true, remap = false })
+keymap("n", "va9", "va)", { silent = true, nowait = true, remap = false })
+keymap("n", "va2", 'va"', { silent = true, nowait = true, remap = false })
+keymap("n", "va7", "va'", { silent = true, nowait = true, remap = false })
+keymap("n", "va@", "va`", { silent = true, nowait = true, remap = false })
+
+keymap("n", "*", "*N", { silent = true, nowait = true, remap = false })
+
 
 
 ------------------------------------------------------------

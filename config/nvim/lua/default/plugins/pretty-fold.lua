@@ -1,9 +1,8 @@
-
-
+local list = require("default/pluginlist").get_list()
 return {
   {
     "anuvyklack/pretty-fold.nvim",
-    enabled = true,
+    cond = list.pretty_fold,
     config = function()
       require("pretty-fold").setup({
         sections = {
@@ -21,9 +20,9 @@ return {
             end,
           },
         },
-        fill_char = "•",
+        fill_char = " ",
 
-        remove_fold_markers = false,
+        remove_fold_markers = true,
 
         -- Keep the indentation of the content of the fold string.
         keep_indentation = true,
@@ -45,6 +44,10 @@ return {
         add_close_pattern = true, -- true, 'last_line' or false
 
         matchup_patterns = {
+          { "^%s*do$", "end" }, -- do ... end blocks
+          { "^%s*if", "end" }, -- if ... end
+          { "^%s*for", "end" }, -- for
+          { "function%s*%(", "end" }, -- 'function( or 'function (''
           { "{", "}" },
           { "%(", ")" }, -- % to escape lua pattern char
           { "%[", "]" }, -- % to escape lua pattern char
@@ -53,5 +56,5 @@ return {
         ft_ignore = { "neorg" },
       })
     end,
-  }
+  },
 }

@@ -237,47 +237,4 @@ return {
             require("snippets")
         end,
     },
-    {
-        "windwp/nvim-autopairs",
-        config = function()
-            require("nvim-autopairs").setup({
-                disable_filetype = { "TelescopePrompt" },
-
-                -- ... fast wrap ...
-                fast_wrap = {
-                    map = "<M-e>",
-                    chars = { "{", "[", "(", '"', "'" },
-                    pattern = [=[[%'%"%)%>%]%)%}%,]]=],
-                    end_key = "$",
-                    keys = "qwertyuiiopzxcvnmasdfghkl",
-                    check_comma = true,
-                    highlight = "Search",
-                    highligh_grey = "Comment",
-                },
-            })
-
-            local npairs = require("nvim-autopairs")
-            local rule = require("nvim-autopairs.rule")
-            local cond = require("nvim-autopairs.conds")
-
-            -- npairs.add_rules({
-            --     rule("\\begin{%w*} $", "tex")
-            --         :replace_endpair(function(opts)
-            --             local beforeText = string.sub(opts.line, 0, opts.col)
-            --             local _, _, match = beforeText:find("\\begin(%w*)")
-            --
-            --             if match and #match > 0 then
-            --                 return "\\end" .. match
-            --             end
-            --
-            --             return ""
-            --         end)
-            --         :with_move(cond.none())
-            --         :use_key("<space>")
-            --         :use_regex(true),
-            -- })
-
-            -- ... add rules ...
-        end,
-    },
 } -- vim: sw=4 sts=4 expandtab fenc=utf-8

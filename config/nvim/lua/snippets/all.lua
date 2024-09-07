@@ -66,6 +66,18 @@ local snippets = {
         },
     }),
 
+    s("q", {
+        c(1, {
+            sn(nil, { t([[']]), r(1, "user_text"), t([[']]) }),
+            sn(nil, { t([["]]), r(1, "user_text"), t([["]]) }),
+            sn(nil, { t([[`]]), r(1, "user_text"), t([[`]]) }),
+        }),
+    }, {
+        stored = {
+            ["user_text"] = i(1, "default_text"),
+        },
+    }),
+
     s("rand", {
         f(function(_, _, _)
             return utils.random0x16x(4)

@@ -15,11 +15,6 @@ return {
     {
         "is0n/jaq-nvim",
     },
-
-    {
-      "stevearc/overseer.nvim",
-      opts = {},
-    }
 }
 
 -- vim: ft=lua sts=4 expandtab fenc=utf-8

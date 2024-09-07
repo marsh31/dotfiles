@@ -28,50 +28,6 @@ return {
         end,
     },
     {
-        "kylechui/nvim-surround",
-        config = function()
-            require("nvim-surround").setup({
-                keymaps = {
-                    -- normal add
-                    normal = "sa",           -- general operation
-                    normal_cur = "sas",      -- line
-                    normal_line = "sA",      -- general operation, insert new line.
-                    normal_cur_line = "sAS", -- line, and insert new line.
-
-                    delete = "ds",
-                    change = "cs",
-                    -- "test"
-
-                    insert = "<C-g>s",
-                    insert_line = "<C-g>S",
-
-                    visual = "S",
-                    visual_line = "gS",
-                },
-            })
-        end,
-    },
-    {
-        "numToStr/Comment.nvim",
-        config = function()
-            require("Comment").setup()
-        end,
-    },
-    {
-        "rmagatti/auto-session",
-        config = function()
-            require("auto-session").setup({
-                -- :SaveSession, :RestoreSession, :DeleteSession
-                -- auto_session_root_dir = vim.fn.stdpath("data") .. "/sessions/",
-            })
-        end,
-    },
-
-    {
-        "rmagatti/session-lens",
-    },
-
-    {
         "mrjones2014/legendary.nvim",
     },
     {

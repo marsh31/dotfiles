@@ -15,23 +15,23 @@ end
 -- })
 
 -- validate file name on save.
-vim.api.nvim_create_autocmd("BufWritePre", {
-    group = augroup("on_save"),
-    pattern = { "*" },
-    callback = function()
-        local filename = vim.fn.expand("<afile>:p")
-
-        local invalid_chars = "!&()[]{}<>^:;'\",`~?|"
-        for i = 1, #invalid_chars do
-            local char = string.sub(invalid_chars, i, i)
-            local res = string.find(filename, char, 1, true)
-
-            if res then
-                error("Filename has invalid char: ", filename)
-            end
-        end
-    end,
-})
+-- vim.api.nvim_create_autocmd("BufWritePre", {
+--     group = augroup("on_save"),
+--     pattern = { "*" },
+--     callback = function()
+--         local filename = vim.fn.expand("<afile>:p")
+--
+--         local invalid_chars = "!&()[]{}<>^:;'\",`~?|"
+--         for i = 1, #invalid_chars do
+--             local char = string.sub(invalid_chars, i, i)
+--             local res = string.find(filename, char, 1, true)
+--
+--             if res then
+--                 error("Filename has invalid char: ", filename)
+--             end
+--         end
+--     end,
+-- })
 
 -- options when enter the command window.
 vim.api.nvim_create_autocmd("CmdwinEnter", {
