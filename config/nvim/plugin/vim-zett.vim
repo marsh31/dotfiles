@@ -1,3 +1,10 @@
+" NAME:   vim-zett
+" AUTHOR: marsh
+" NOTE: 
+" 
+" 
+" 
+" 
 " Global config ============================================
 let g:zettelkasten_shellslashchar = '/'
 
@@ -40,8 +47,10 @@ command! ZMetaStatics             call s:zettelkasten_meta_statics()
 command! ZMakeStoreDir            call s:zettelkasten_store_dir()
 command! ZRegStoreDir             call s:zettelkasten_store_dir_to_register()
 
-command! ZSearchLink              /\[.\+\](\zs.\+\ze)
+command! ZSearchLink              call s:zettelkasten_search_link()
 
+command! ZUpdateTitle             call s:zettelkasten_update_title()
+command! ZUpdateDate              call s:zettelkasten_update_date()
 
 command! Ztest                    call s:auto_inputlink()
 
@@ -60,7 +69,7 @@ function! s:zettelkasten_open(mods, str, config) abort
     exec printf("normal! O%s", l:linktext)
   endif
 
-  exec l:cmd . trim_path(a:config.path) . g:shellslash . l:filename
+  exec l:cmd . s:trim_path(a:config.path) . g:zettelkasten_shellslashchar . l:filename
   if g:zettelkasten_template != ''
     call s:zettelkasten_template_do(l:title, l:tags, a:config.type)
   endif
@@ -128,7 +137,7 @@ endfunction
 
 function! s:zettelkasten_store_dir() abort
   let l:fullpath = s:get_store_dir_fullpath()
-  mkdir(l:fullpath)
+  call mkdir(l:fullpath)
 endfunction
 
 
@@ -138,6 +147,23 @@ function! s:zettelkasten_store_dir_to_register() abort
   let @+ = l:fullpath
   let @* = l:fullpath
 endfunction
+
+
+function! s:zettelkasten_update_title() abort
+  let l:title = s:get_first_h1()
+  exec printf("%s,%ss/%s/%s", s:zettelkasten_header_s, s:zettelkasten_header_e, s:get_regex_update_title(), s:get_update_title(l:title))
+endfunction
+
+function! s:zettelkasten_update_date() abort
+  exec printf("%s,%ss/%s/%s", s:zettelkasten_header_s, s:zettelkasten_header_e, s:get_regex_update_date(), s:get_update_date())
+endfunction
+
+function! s:zettelkasten_search_link() abort
+  let l:regex = s:get_link_regex()
+  let @/ = l:regex
+endfunction
+
+
 
 
 function! s:auto_inputlink() abort
@@ -315,4 +341,40 @@ function! s:trim_path(path) abort
     return a:path[0:-2]
   endif
   return a:path
+endfunction
+
+
+function! s:get_update_title(title) abort
+  return 'title: ' . a:title
+endfunction
+
+
+function! s:get_regex_update_title() abort
+  return 'title: .\+'
+endfunction
+
+
+function! s:get_update_date() abort
+  return 'update: ' . strftime('%Y-%m-%d %H:%M:%S')
+endfunction
+
+
+function! s:get_regex_update_date() abort
+  return 'update: \d\{4}-\d\{2}-\d\{2} \d\{2}:\d\{2}:\d\{2}'
+endfunction
+
+
+function! s:get_link_regex() abort
+  return '\(\[.\+\](\zs.\+\ze)\)'
+endfunction
+
+
+function! s:get_first_h1() abort
+  let l:curpos = getcurpos()
+  call cursor(1, 1)
+  call search('^# \+.\+$')
+  let l:res = matchstrpos(getline("."), '^# \+\zs.\+\ze$')
+  call cursor([l:curpos[1], l:curpos[2], l:curpos[3], l:curpos[4]])
+  
+  return l:res[0]
 endfunction
