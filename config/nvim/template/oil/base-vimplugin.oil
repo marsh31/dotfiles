@@ -1,0 +1,6 @@
+.gitignore
+LICENSE
+README.md
+autoload/{{_input_:project}}.vim
+doc/{{_input_:project}}.txt
+plugin/{{_input_:project}}.vim
