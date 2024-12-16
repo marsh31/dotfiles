@@ -27,12 +27,11 @@
 "
 
 
-command! -range -nargs=* -complete=customlist,zettelkasten#open#complete Zopen call zettelkasten#open#start(<q-mods>, <q-args>)
+let s:note_type     = [ "Fleeting", "Literature", "Permanent", "Index", "Structure" ]
+let s:note_opt      = [ "++replace" ]
+let s:note_opt_dir  = [ "++none", "++forward", "++backward", "++both" ]
 
-let s:note_type    = [ "Fleeting", "Literature", "Permanent", "Index", "Structure" ]
-let s:note_opt     = [ "++replace" ]
-let s:note_opt_dir = [ "++nonedir", "++unidir", "++bidir" ]
-
+let s:template_name = "zett"
 
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -51,42 +50,64 @@ let s:note_opt_dir = [ "++nonedir", "++unidir", "++bidir" ]
 " # return
 "   - result
 "
+" note:
+"   ノートがzettelkastenのディレクトリにすべて保存されることを想定して作られている。
+" もし、パスが変わる可能性がある場合は修正を必要とする。
+"
 function! zettelkasten#open#start(mods, argstring)
+  """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+  " setup parameter
   let args = split(a:argstring)
   let cmds = vim#command#utils#mod_split(a:mods)
 
   let [ has_replace, _ ] = s:judge_replace(args)
   let [ has_note_type, note_type ] = s:judge_note_type(args)
   let [ has_note_opt_dir, note_dir ] = s:judge_direction(args)
+  let metainfo = markdown#meta_header#getmdheader(expand('%'), 15)
 
-  let l:title    = s:get_title(has_replace)
-  let l:tags     = trim(input('tags> '),    " ")
-  let l:date     = strftime(g:zettelkasten_date_format)
-  let l:filename = l:date . '.' . g:zettelkasten_ext
-
-  let l:isOk = s:yninput("Do you want to input link?(Yy/other): ")
-
-  let l:linktext = printf("[%s](%s)", title, l:filename)
-  if l:isOk
-    exec printf("normal! O%s", l:linktext)
+  if !has_key(metainfo, 'title')
+    let metainfo['title'] = expand('%:t:r')
   endif
 
-  " TODO: xxx
-  exec l:cmd . s:trim_path(a:config.path) . g:zettelkasten_shellslashchar . l:filename
+  let l:backward    = expand('%:t')
+  let l:title       = s:get_title(has_replace)
+  let l:tags        = trim(input('tags> '),    " ")
+  let l:date        = strftime(g:zettelkasten_date_format)
+
+  let l:filename    = l:date . '.' . g:zettelkasten_ext
+  let l:storepath   = vim#command#utils#trim_path(g:zettelkasten_dir) . vim#command#utils#get_shellslashchar()
+  let l:filepath    = l:storepath . l:filename
 
   let template_dict = {
   \   'markdown': {
-  \     'title': a:title,
-  \     'tags': a:tags,
-  \     'type': a:type,
+  \     'title': l:title,
+  \     'tags': l:tags,
+  \     'type': l:note_type,
   \   }
   \ }
 
-  if g:zettelkasten_template != ''
-    call s:zettelkasten_template_do(l:title, l:tags, a:config.type)
+
+  """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+  " pre process
+  if has_note_opt_dir && note_dir =~ '\(++both\|++forward\)'
+    let linktext = printf("[%s](%s)", title, l:filename)
+    exec printf("normal! o%s", linktext)
   endif
 
-  " call vim#template#wrap()
+
+  """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+  " main process
+  " 
+  exec l:cmds . l:filepath
+  call vim#template#wrap(template_dict, s:template_name)
+
+
+  """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+  " post process
+  if has_note_opt_dir && note_dir =~ '\(++both\|++backward\)'
+    let linktext = printf("[%s](%s)", metainfo['title'], l:backward)
+    exec printf("normal! o%s", linktext)
+  endif
 endfunction
 
 
@@ -95,9 +116,9 @@ endfunction
 " zettelkasten#open#start の補完関数
 "
 " # arg
-"   - arglead
-"   - cmdline
-"   - cursorpos
+"   - arglead   すでに入力されている補完対象の文字列
+"   - cmdline   コマンドライン全体
+"   - cursorpos カーソル位置
 "
 " # return
 "   - result
@@ -238,4 +259,6 @@ function! s:get_title(is_replace)
     let title = trim(input('title> '), " ")
 
   endif
+  return title
 endfunction
+

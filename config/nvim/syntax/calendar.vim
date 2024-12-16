@@ -10,19 +10,19 @@ syn keyword   MonthL  Jan[uary] Feb[ruary] Mar[ch] Apr[il] May Jun[e] Jul[y] Aug
 syn keyword   WeekL   Mon[day] Tue[sday] Wed[nesday] Thu[rsday] Fri[day] Sat[urday] Sun[day] 
 syn keyword   WeekS4  Mon.   Tue.    Wed.      Thu.     Fri.   Sat.     Sun.
 syn keyword   WeekS3  Mo.    Tu.     We.       Th.      Fr.    Sa.      Su.
+syn keyword   WeekS2  Mo     Tu      We        Th       Fr     Sa       Su
 
 syn match     Holiday '^\s\+\d\+\s\+'
 
 
 
+
+hi def link   CalNavi Type
 hi def link   MonthL  Type
-
-hi def link   WeekL   Special
-hi def link   WeekS4  Special
-hi def link   WeekS3  Special
-
-
-" hi def link   Holiday Special
+hi def link   WeekL   Type
+hi def link   WeekS4  Type
+hi def link   WeekS3  Type
+hi def link   WeekS2  Type
 
 
 

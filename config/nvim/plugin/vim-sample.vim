@@ -11,6 +11,50 @@ function! Default_sample(fn, wait, args = []) abort
 endfunction
 
 
+let s:front = []
+let s:end = []
+let s:text = ""
+
+
+function! Echo() abort
+  echo s:front
+  echo s:end
+  echo s:text
+endfunction
+
+function! OperatorFuncTest(...) range
+  let cpos = getpos('.')
+
+  let [_, flnr, fcol, _] = getpos("'<")
+  let [_, elnr, ecol, _] = getpos("'>")
+
+  let alt_title = getline('.')[fcol-1:ecol]
+  let link_text = printf("[%s]()", alt_title)
+
+  echo link_text
+
+  call setpos('.', cpos)
+endfunction
+
+
+" this is test
+
+let &operatorfunc = "OperatorFuncTest"
+nnoremap <F4> <Cmd>let &opfunc='{t ->
+      \ getline(".")
+      \ ->split("\\zs")
+      \ ->insert("\"", col("'']"))
+      \ ->insert("\"", col("''[") - 1)
+      \ ->join("")
+      \ ->setline(".")}'<CR>g@
+" this is test
+
+
+
+function! VisualRange() range
+
+endfunction
+
 com! -nargs=+ Calendar call s:calendar(<f-args>)
 
 let s:magic_26m1per10 = [ 1, 4, 3, 6, 1, 4, 6, 2, 5, 0, 3, 5]

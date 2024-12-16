@@ -1,8 +1,9 @@
 
 
-command! -nargs=* CaleTest1 call <SID>test(2024, 9, 6)
-command! -nargs=* CaleTest2 call <SID>test(2024, 8, 6)
+command! -nargs=* CaleTest1 call <SID>show(2024, 9, 6)
+command! -nargs=* CaleTest2 call <SID>show(2024, 8, 6)
 command! -nargs=* CaleAction call <SID>action()
+
 
 let s:directionN = 0
 let s:directionH = 1
@@ -43,9 +44,14 @@ let s:macro_function = {
       \ }
 
 
+let s:pre_hook  = ""
+let s:post_hook = ""
+
+
+
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " IF
-"
+
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 function! s:action()
   let [cbuf, clnum, ccol, coff]  = getpos('.')
@@ -69,9 +75,11 @@ function! s:action()
 endfunction
 
 
-function! s:test(year, month, forward)
-  let [buffer, calendar_views] = s:make_calendar_buffer(a:year, a:month, a:forward)
+function! s:show(year, month, forward)
 
+  call s:try_call(s:pre_hook)
+
+  let [buffer, calendar_views] = s:make_calendar_buffer(a:year, a:month, a:forward)
   call Init_window(s:window_dir_bottom)
   call s:init_buffer_config()
   call s:init_syntax()
@@ -90,8 +98,11 @@ function! s:test(year, month, forward)
   hi! def link  CalWSun      CalSunday
   hi! def link  CalWSat      CalSaturday
 
-  nnoremap <buffer> q :<C-u>bd!<CR>
-  nnoremap <buffer> <CR> :<C-u>CaleAction<CR>
+  nnoremap <buffer><nowait> q :<C-u>bd!<CR>
+  nnoremap <buffer><nowait> <CR> :<C-u>CaleAction<CR>
+
+  call s:try_call(s:post_hook)
+
 endfunction
 
 
@@ -100,6 +111,18 @@ endfunction
 " Local Functions
 "
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+
+function! s:try_call(func)
+  try
+    let res = function(a:func)()
+  catch
+    let res = v:false
+  endtry
+
+  return res
+endfunction
+
 
 " setup_buffer
 " 
@@ -156,7 +179,7 @@ endfunction
 "
 " ウィンドウを作成する。
 function! Init_window(dir)
-  let calendar_bufnr = bufnr(s:window_name)
+  let calendar_bufnr = bufnr('^' . s:window_name . '$')
   let calendar_winnr = bufwinnr(calendar_bufnr)
 
   if calendar_winnr >= 0
@@ -267,6 +290,7 @@ function! s:make_calendar_buffer(year, month, forward) abort
   let mw6 = ''
 
   let buffer = []
+  call add(buffer, '	 ' . join(s:macro_word, ' '))
   call add(buffer, '')
 
   let calendar_views = []
@@ -274,7 +298,7 @@ function! s:make_calendar_buffer(year, month, forward) abort
   let add_count = 0
   let prev_lenght = 1
   while add_count < a:forward
-    let mh   = mh   . s:make_moth_header(year, month)
+    let mh   = mh   . s:make_month_head(year, month)
     let mwlh = mwlh . s:make_day_of_the_week_head()
     let mw1  = mw1  . s:make_line_of_month(year, month, 1)
     let mw2  = mw2  . s:make_line_of_month(year, month, 2)
@@ -289,11 +313,9 @@ function! s:make_calendar_buffer(year, month, forward) abort
           \ "cols":  prev_lenght,
           \ "cole":  len(mw1),
           \ }
-    let prev_lenght = len(mw1) + 1
-    let month = month + 1
-
     call add(calendar_views, view)
 
+    let prev_lenght = len(mw1) + 1
     let add_count = add_count + 1
     let month = month + 1
     if month > 12

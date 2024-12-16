@@ -12,33 +12,26 @@ let g:zettelkasten_date_format    = "%Y%m%d%H%M%S"
 let g:zettelkasten_dir            = expand('~/til/learn/memo')
 let g:zettelkasten_ext            = 'md'
 let g:zettelkasten_template       = 'Template zett'
+let g:zettelkasten_notee          = 'zett'
 let g:zettelkasten_store_dir      = g:zettelkasten_dir . '/appendix'
 
 let g:zettelkasten_link           = ''
 
 
 " Local config =============================================
-let s:zettelkasten_fleeting       = { "type": "Fleeting",   "path": g:zettelkasten_dir }
-let s:zettelkasten_literature     = { "type": "Literature", "path": g:zettelkasten_dir }
-let s:zettelkasten_permanent      = { "type": "Permanent",  "path": g:zettelkasten_dir }
-let s:zettelkasten_index          = { "type": "Index",      "path": g:zettelkasten_dir }
-let s:zettelkasten_structure      = { "type": "Structure",  "path": g:zettelkasten_dir }
-
 let s:zettelkasten_header_s       = 1
 let s:zettelkasten_header_e       = 9
 
 
 " Command ==================================================
-command! -nargs=* Zett            call s:zettelkasten_open(<q-mods>, <q-args>, s:zettelkasten_fleeting)
-command! -nargs=* Zfleeting       call s:zettelkasten_open(<q-mods>, <q-args>, s:zettelkasten_fleeting)
-command! -nargs=* Zliterature     call s:zettelkasten_open(<q-mods>, <q-args>, s:zettelkasten_literature)
-command! -nargs=* Zpermanent      call s:zettelkasten_open(<q-mods>, <q-args>, s:zettelkasten_permanent)
-command! -nargs=* Zindex          call s:zettelkasten_open(<q-mods>, <q-args>, s:zettelkasten_index)
-command! -nargs=* Zstructure      call s:zettelkasten_open(<q-mods>, <q-args>, s:zettelkasten_structure)
+command! -range -nargs=* -complete=customlist,zettelkasten#open#complete   Zopen  call zettelkasten#open#start(<q-mods>, <q-args>)
+command!        -nargs=* -complete=customlist,s:zettelkasten_edit_complete Zedit  call s:zettelkasten_edit(<q-args>)
+command!        -nargs=1                                                   Zday   call s:zettelkasten_day_note(<f-args>)
 
 command! ZJumpPrev                call s:zettelkasten_jump_prev()
 command! ZJumpNext                call s:zettelkasten_jump_next()
 
+command! ZCopyMetaLink            call s:zettelkasten_copy_meta_link()
 command! ZCopyLink                call s:zettelkasten_copy_link()
 command! ZPasteLink               call s:zettelkasten_paste_link()
 
@@ -52,28 +45,79 @@ command! ZSearchLink              call s:zettelkasten_search_link()
 command! ZUpdateTitle             call s:zettelkasten_update_title()
 command! ZUpdateDate              call s:zettelkasten_update_date()
 
-command! Ztest                    call s:auto_inputlink()
+command! -range Ztest                   call ZetteTest(<range>)
 
+
+xnoremap <buffer><expr> <Leader>zt      ZetteTest(mode())
+onoremap <buffer><expr> <Leader>zt      ZetteTest(mode())
 
 " IF =======================================================
-function! s:zettelkasten_open(mods, str, config) abort
-  let l:cmd = s:edit_cmd(a:mods)
-  let l:title = trim(input('title> '), " ")
-  let l:tags= trim(input('tags> '), " ")
-  let l:date = strftime(g:zettelkasten_date_format)
-  let l:filename = l:date . '.' . g:zettelkasten_ext
+" virtualedit
+" selection
+function! ZetteTest(mode) range
+  echomsg a:firstline
+  echomsg a:lastline
+  
+  echomsg a:mode
+  echomsg mode()
 
-  let l:isOk = s:yninput("Do you want to input link?(Yy/other): ")
-  let l:linktext = printf("[%s](%s)", title, l:filename)
-  if l:isOk
-    exec printf("normal! O%s", l:linktext)
-  endif
+  normal! 
 
-  exec l:cmd . s:trim_path(a:config.path) . g:zettelkasten_shellslashchar . l:filename
-  if g:zettelkasten_template != ''
-    call s:zettelkasten_template_do(l:title, l:tags, a:config.type)
+  let [_, flnr, fcol, _] = getpos("'<")
+  let [_, elnr, ecol, _] = getpos("'>")
+  if a:firstline == flnr && a:lastline == elnr
+    echomsg "V"
   endif
+  return "\<Ignore>"
 endfunction
+
+
+
+function! s:zettelkasten_edit(filename) abort
+  let l:target_file = ""
+  for l:file in s:get_zettelkasten_dir_files()
+    let l:meta = s:getmdheader(l:file)
+    if has_key(l:meta, 'title') && has_key(l:meta, 'uid')
+      let l:id = l:meta["title"] .. '@' .. l:meta["uid"]
+
+    else
+      let l:id = fnamemodify(l:file, ":t:r")
+
+    endif
+
+    if l:id == a:filename
+      let l:target_file = l:file
+    endif
+  endfor
+
+  exec printf("%s %s", 'edit', l:target_file)
+endfunction
+
+
+
+function! s:zettelkasten_edit_complete(arglead, cmdline, cursorpos)
+  let l:result = []
+  let l:meta = {}
+  for l:file in s:get_zettelkasten_dir_files()
+    let l:meta = s:getmdheader(l:file)
+    if has_key(l:meta, 'title') && has_key(l:meta, 'uid')
+      let l:result = l:result + [ l:meta["title"] .. '@' .. l:meta["uid"] ]
+    else
+      let l:result = l:result + [ fnamemodify(l:file, ":t:r") ]
+    endif
+  endfor
+
+  call filter(l:result, printf('matchstrpos(v:val, "%s")[1] == 0', a:arglead))
+  return l:result
+endfunction
+
+
+function! s:zettelkasten_day_note()
+  let todaynote = strftime('%Y%m%d') . '000000' . '.md'
+
+  echomsg todaynote
+endfunction
+
 
 
 function! s:zettelkasten_jump_prev() abort
@@ -99,6 +143,17 @@ function! s:zettelkasten_jump_next() abort
   let l:open_cmd = "edit " . l:splitted[l:index]
   exec l:open_cmd
 endfunction
+
+function! s:zettelkasten_copy_meta_link() abort
+  let path = expand('%:p')
+  let meta = s:getmdheader(path)
+
+  let result = '[' .. meta['title'] .. '](' .. expand('%:p:h') .. ')'
+  let @" = result
+  let @+ = result
+  let @* = result
+endfunction
+
 
 function! s:zettelkasten_copy_link() abort
   let g:zettelkasten_link = expand('%:p')
@@ -169,6 +224,28 @@ endfunction
 function! s:auto_inputlink() abort
   call s:getmdheader("/home/marsh/til/learn/memo/fleeting/20240820211328.md")
 endfunction
+
+
+
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" get_zettelkasten_dir_files
+" 
+" args
+"   none
+" 
+" return
+"   splitted [string] カレントファイルの存在するディレクトリに存在するファイルの一覧
+" 
+"   現在のバッファの親ディレクトリに存在するファイルの一覧を配列形式で返す。
+" 
+function! s:get_zettelkasten_dir_files() abort
+  let l:dir = g:zettelkasten_dir
+  let l:filelist = glob(l:dir . '/*')
+  let l:splitted = split(filelist, '\n')
+  call filter(splitted, '!isdirectory(v:val)')
+  return l:splitted
+endfunction
+
 
 
 " API ======================================================
@@ -285,7 +362,7 @@ function! s:getmdheader(file) abort
   let l:lines = readfile(a:file, '', 10)
   let l:result = {}
 
-  if l:lines[0] !~ '^-\+$'
+  if empty(l:lines) || l:lines[0] !~ '^-\+$'
     return l:result
   endif
 
@@ -377,4 +454,18 @@ function! s:get_first_h1() abort
   call cursor([l:curpos[1], l:curpos[2], l:curpos[3], l:curpos[4]])
   
   return l:res[0]
+endfunction
+
+
+function! s:get_region() abort
+  " normal! gv
+  echo mode()
+  if mode() =~ '[vV]s\?'
+    let [_, flnr, fcol, _] = getpos("'<")
+    let [_, elnr, ecol, _] = getpos("'>")
+
+    return [ [ flnr, fcol ], [ elnr, ecol ] ]
+  else
+    return []
+  endif
 endfunction
