@@ -9,6 +9,8 @@ return {
   {
     "mattn/vim-sonictemplate",
     cond = (list.sonictemplate),
+    lazy = true,
+    cmd  = { "Template" },
     config = function()
       vim.g["sonictemplate_vim_template_dir"] = {
         "$HOME/.config/nvim/template"
