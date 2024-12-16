@@ -6,7 +6,49 @@
 com! -range -nargs=1 OrderNum  call setline('.', map(range(<line1>, <line2>), 'printf(<f-args>, v:val)'))
 
 
+let s:front = []
+let s:end = []
+let s:text = ""
 
+
+function! Echo() abort
+  echo s:front
+  echo s:end
+  echo s:text
+endfunction
+
+function! OperatorFuncTest(...) range
+  let cpos = getpos('.')
+
+  let [_, flnr, fcol, _] = getpos("'<")
+  let [_, elnr, ecol, _] = getpos("'>")
+
+  let alt_title = getline('.')[fcol-1:ecol]
+  let link_text = printf("[%s]()", alt_title)
+
+  echo link_text
+
+  call setpos('.', cpos)
+endfunction
+
+
+" this is test
+
+let &operatorfunc = "OperatorFuncTest"
+nnoremap <F4> <Cmd>let &opfunc='{t ->
+      \ getline(".")
+      \ ->split("\\zs")
+      \ ->insert("\"", col("'']"))
+      \ ->insert("\"", col("''[") - 1)
+      \ ->join("")
+      \ ->setline(".")}'<CR>g@
+" this is test
+
+
+
+function! VisualRange() range
+
+endfunction
 
 com! -nargs=+ Calendar call s:calendar(<f-args>)
 

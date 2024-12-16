@@ -21,3 +21,23 @@ function! vim#command#utils#mod_split(mods)
   endif
   return cmd
 endfunction
+
+
+function! vim#command#utils#trim_path(path) abort
+  if a:path[-1:-1] == vim#command#utils#get_shellslashchar()
+    return a:path[0:-2]
+  endif
+  return a:path
+endfunction
+
+
+function! vim#command#utils#get_shellslashchar()
+  let char = '/'
+  
+  if has('win32') && ! &shellslash
+    let char = '\'
+
+  endif
+
+  return char
+endfunction
