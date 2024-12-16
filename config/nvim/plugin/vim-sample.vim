@@ -6,6 +6,9 @@
 com! -range -nargs=1 OrderNum  call setline('.', map(range(<line1>, <line2>), 'printf(<f-args>, v:val)'))
 
 
+function! Default_sample(fn, wait, args = []) abort
+  echo a:fn a:wait a:args
+endfunction
 
 
 com! -nargs=+ Calendar call s:calendar(<f-args>)
