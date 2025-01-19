@@ -22,6 +22,7 @@ let g:zettelkasten_link           = ''
 let s:zettelkasten_header_s       = 1
 let s:zettelkasten_header_e       = 9
 
+let s:meta_keys = [ 'uid', 'title', 'date', 'update', 'tags', 'type', 'draft' ]
 
 " Command ==================================================
 command! -range -nargs=* -complete=customlist,zettelkasten#open#complete   Zopen  call zettelkasten#open#start(<q-mods>, <q-args>)
@@ -348,63 +349,10 @@ endfunction
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " getmdheader
 " 
-" args
-"   file string file path
-" 
-" return
-"   result dict メタデータの辞書型データを返す。
-" 
-"   ファイル名を受け取ると、ファイルのヘッダーを読み取り、
-" メタデータがあればメタデータを返す。メタデータがなければ、
-" 空辞書を返す。ヘッダーの有無は先頭行に---があればヘッダーあり。
-" なければ、ヘッダーなしと判定する。
 function! s:getmdheader(file) abort
-  let l:lines = readfile(a:file, '', 10)
-  let l:result = {}
-
-  if empty(l:lines) || l:lines[0] !~ '^-\+$'
-    return l:result
-  endif
-
-  for l:line in l:lines[1:]
-    if l:line =~ '^-\+$'
-      break
-    endif
-
-    let l:mlist = matchlist(l:line, '\(.\+\):\s\+\(.\+\)')
-    if !empty(l:mlist)
-      let l:key = l:mlist[1]
-      let l:val = l:mlist[2]
-
-      let l:result[l:key] = s:get_list(l:val)
-    endif
-  endfor
-
-  return l:result
+  return markdown#meta_header#getmdheader(a:file)
 endfunction
 
-
-function! s:get_list(valstr) abort
-  let l:mlist = matchlist(a:valstr, '\[\(.\+\)\]')
-  let l:start = 0
-  if !empty(l:mlist)
-    let l:result = []
-
-    let l:mres = matchstrpos(l:mlist[1], '\s*\zs\([^,]\+\)\ze,\?', l:start)
-    while l:mres[2] != -1
-      call add(l:result, l:mres[0])
-      let l:mres = matchstrpos(l:mlist[1], '\s*\zs\([^,]\+\)\ze,\?', l:mres[2])
-    endwhile
-
-    return l:result
-  elseif !empty(matchlist(a:valstr, '\[\s\+\]'))
-
-    return []
-  else
-
-    return a:valstr
-  endif
-endfunction
 
 
 function! s:get_store_dir_fullpath() abort
@@ -469,3 +417,24 @@ function! s:get_region() abort
     return []
   endif
 endfunction
+
+
+fun! s:pre_save_action() abort
+  let file = expand('%:p')
+  let meta = markdown#meta_header#getmdheader(file)
+
+  if meta['uid'] == ''
+    let uid = strftime(g:zettelkasten_date_format)
+    exec printf("%s,%ss/uid:\s*/uid: %s", s:zettelkasten_header_s, s:zettelkasten_header_e, , s:get_update_date())
+  endif
+
+  call s:zettelkasten_update_date() 
+endfun
+
+
+augroup my_til_auto_save_meta
+  autocmd!
+  autocmd BufWritePre /home/marsh/til/learn/memo/*.md call <SID>pre_save_action()
+augroup END
+
+
