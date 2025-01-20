@@ -81,7 +81,6 @@ vim.opt.timeout = true
 vim.opt.timeoutlen = 2000
 vim.opt.ttimeout = true
 vim.opt.ttimeoutlen = 300
-vim.opt.wrap = true
 
 vim.opt.autoindent = true
 vim.opt.cindent = true

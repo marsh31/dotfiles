@@ -1,9 +1,10 @@
 " NAME:   vim-zett
 " AUTHOR: marsh
 " NOTE: 
+" '<,'>g/$/let @+ = ' | '.  markdown#meta_header#getmdheader(expand($'~/til/learn/memo/{getline('.')}'), 15).title | normal! $p
+" '<,'>normal! A |
 " 
-" 
-" 
+" 20240822072358.md
 " 
 " Global config ============================================
 let g:zettelkasten_shellslashchar = '/'
@@ -26,30 +27,38 @@ let s:zettelkasten_header_e       = 9
 " Command ==================================================
 command! -range -nargs=* -complete=customlist,zettelkasten#open#complete   Zopen  call zettelkasten#open#start(<q-mods>, <q-args>)
 command!        -nargs=* -complete=customlist,s:zettelkasten_edit_complete Zedit  call s:zettelkasten_edit(<q-args>)
-command!        -nargs=1                                                   Zday   call s:zettelkasten_day_note(<f-args>)
+command!        -nargs=0                                                   Zday   call s:zettelkasten_day_note()
 
-command! ZJumpPrev                call s:zettelkasten_jump_prev()
-command! ZJumpNext                call s:zettelkasten_jump_next()
+command! ZJumpPrev                      call s:zettelkasten_jump_prev()
+command! ZJumpNext                      call s:zettelkasten_jump_next()
 
-command! ZCopyMetaLink            call s:zettelkasten_copy_meta_link()
-command! ZCopyLink                call s:zettelkasten_copy_link()
-command! ZPasteLink               call s:zettelkasten_paste_link()
+command! ZCopyMetaLink                  call s:zettelkasten_copy_meta_link()
+command! ZCopyLink                      call s:zettelkasten_copy_link()
+command! ZPasteLink                     call s:zettelkasten_paste_link()
 
-command! ZMetaStatics             call s:zettelkasten_meta_statics()
+command! ZMetaStatics                   call s:zettelkasten_meta_statics()
 
-command! ZMakeStoreDir            call s:zettelkasten_store_dir()
-command! ZRegStoreDir             call s:zettelkasten_store_dir_to_register()
+command! ZMakeStoreDir                  call s:zettelkasten_store_dir()
+command! ZRegStoreDir                   call s:zettelkasten_store_dir_to_register()
 
-command! ZSearchLink              call s:zettelkasten_search_link()
+command! ZSearchLink                    call markdown#jump_link#search()
+command! ZSearchLinkJumpNext            call markdown#jump_link#jump_next()
+command! ZSearchLinkJumpPrev            call markdown#jump_link#jump_prev()
 
-command! ZUpdateTitle             call s:zettelkasten_update_title()
-command! ZUpdateDate              call s:zettelkasten_update_date()
+command! ZUpdateTitle                   call s:zettelkasten_update_title()
+command! ZUpdateDate                    call s:zettelkasten_update_date()
+command! -nargs=*       ZUpdateTags     call s:zettelkasten_update_tags(<q-args>)
 
 command! -range Ztest                   call ZetteTest(<range>)
 
 
 xnoremap <buffer><expr> <Leader>zt      ZetteTest(mode())
 onoremap <buffer><expr> <Leader>zt      ZetteTest(mode())
+
+nmap <Plug>(markdown-jump-link-search)  :<C-u>ZSearchLink<CR>
+nmap <Plug>(markdown-jump-link-next)    :<C-u>ZSearchLinkJumpNext<CR>
+nmap <Plug>(markdown-jump-link-prev)    :<C-u>ZSearchLinkJumpPrev<CR>
+
 
 " IF =======================================================
 " virtualedit
@@ -72,6 +81,8 @@ function! ZetteTest(mode) range
 endfunction
 
 
+
+"
 
 function! s:zettelkasten_edit(filename) abort
   let l:target_file = ""
@@ -114,8 +125,12 @@ endfunction
 
 function! s:zettelkasten_day_note()
   let todaynote = strftime('%Y%m%d') . '000000' . '.md'
+  let file = expand(g:zettelkasten_dir) . '/' . todaynote
 
-  echomsg todaynote
+  exec printf("edit %s", file)
+  if !(!empty(glob(file)) && filereadable(file))
+    call s:zettelkasten_template_do(strftime("%Y-%m-%d ノート"), "daily", "Fleeting")
+  endif
 endfunction
 
 
@@ -213,12 +228,19 @@ function! s:zettelkasten_update_date() abort
   exec printf("%s,%ss/%s/%s", s:zettelkasten_header_s, s:zettelkasten_header_e, s:get_regex_update_date(), s:get_update_date())
 endfunction
 
-function! s:zettelkasten_search_link() abort
-  let l:regex = s:get_link_regex()
-  let @/ = l:regex
-endfunction
+"
+" s:zettelkasten_update_tags
+" {{{
 
+fun! s:zettelkasten_update_tags(tags) abort
+  let l:add_tags = trim(a:tags, ' ')
+  if empty(l:add_tags)
+    let l:add_tags = trim(input('tags> '), ' ')
+  endif
+  exec $'1,9s/tags: \[\([^]]\+\)\]/tags: [\1, {l:add_tags}]'
+endfun
 
+" }}}
 
 
 function! s:auto_inputlink() abort
@@ -438,11 +460,6 @@ endfunction
 
 function! s:get_regex_update_date() abort
   return 'update: \d\{4}-\d\{2}-\d\{2} \d\{2}:\d\{2}:\d\{2}'
-endfunction
-
-
-function! s:get_link_regex() abort
-  return '\(\[.\+\](\zs.\+\ze)\)'
 endfunction
 
 

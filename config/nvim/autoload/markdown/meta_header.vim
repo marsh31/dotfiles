@@ -1,5 +1,11 @@
+" NAME:   meta_header
+" AUTHOR: marsh
+"
+" NOTE:
+"
+"
 
-function! markdown#meta_header#getmdheader(file, head) abort
+function! markdown#meta_header#getmdheader(file, head = 10) abort
   let l:lines = readfile(a:file, '', a:head)
   let l:result = {}
 
