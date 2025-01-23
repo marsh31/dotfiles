@@ -56,3 +56,8 @@ fun! MakeTabLine()
 endfun
 
 set tabline=%!MakeTabLine()
+
+
+
+nmap <expr> <C-w><C-c> len(tabpagebuflist()) ==# 1 ? ':tabclose\|tabprev<cr>' : ':close<cr>'
+nmap        <C-w><C-u> :<C-u>tab sp<CR>
