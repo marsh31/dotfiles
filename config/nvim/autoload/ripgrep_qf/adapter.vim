@@ -49,10 +49,10 @@ fun! s:process_match(line_object) abort
     endif
     let l:lnum = l:match['line_number']
     let l:submatches = l:match['submatches']
+
     " The start is based 0.
     let l:start = l:submatches[0]['start'] + 1
     let l:end = l:submatches[0]['end'] + 1
-
 
     let l:linetext = s:process_textlike(l:match['lines'])
     if l:linetext is v:null
@@ -126,12 +126,11 @@ endfun
 " ripgrep_qf#adapter#finish(found, arg, status) {{{
 
 fun! ripgrep_qf#adapter#finish(found, arg, status) abort
-  if l:found
+  if a:found
     let l:title = 'Ripgrep'
     if a:arg !=# ''
       let l:title = l:title . ' ' . a:arg
     endif
-
     call setqflist([], 'a', { 'title': l:title })
   endif
 endfun

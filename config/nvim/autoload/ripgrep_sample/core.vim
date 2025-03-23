@@ -1,13 +1,14 @@
-" NAME:   job
+" NAME:   core
 " AUTHOR: marsh
 "
 " NOTE:
 "
-"
+
 
 let s:root_keywords = [ '.git', '.svn' ]
+let s:jobs = {}
 
-" s:ripgre_exec() {{{
+" s:ripgre_exec {{{
 
 
 fun! s:ripgrep_exec() abort
@@ -20,28 +21,28 @@ fun! s:ripgrep_exec() abort
 endfun
 
 " }}}
-" ripgrep#job#exec() {{{
+" ripgrep#core#exec {{{
 
 
-fun! ripgrep#job#exec() abort
+fun! ripgrep#core#exec() abort
   return s:ripgrep_exec()
 endfun
 
 
 " }}}
-" ripgrep#job#executable() {{{
+" ripgrep#core#executable {{{
 
 
-fun! ripgrep#job#executable() abort
+fun! ripgrep#core#executable() abort
   return executable(s:ripgrep_exec())
 endfun
 
 
 "}}}
-" ripgrep#job#get_base_options() {{{
+" ripgrep#core#get_base_options{{{
 
 
-fun! ripgrep#job#get_base_options() abort
+fun! ripgrep#core#get_base_options() abort
   " Get common command-line options for ripgrep.
   " It uses 'ignorecase' and 'smartcase' vim option.
   let l:opts = ['--json', '--no-line-buffered', '--no-block-buffered']
@@ -56,61 +57,49 @@ endfun
 
 
 " }}}
-" ripgrep#job#start(args, cwd, callback) {{{
+" ripgrep#core#search(arg, name, callback) {{{
 " callback
 " - reset
 " - on_stdout
 " - on_stderr
 " - on_exit
+" - on_begin
+" - on_match
+" - on_end
 
-fun! ripgrep#job#start(arg, cwd, callback) abort
-  let l:exe = ripgrep#job#exec()
-  if !ripgrep#job#executable()
+fun! ripgrep#core#search(arg, name, callback) abort
+  let [ l:cwd, l:rel] = vim#root#search(getcwd(), s:root_keywords)
+  let l:exe = ripgrep#core#exec()
+  if !ripgrep#core#executable()
     echoerr 'Rg is not executable'
   endif
 
   let l:cmds = [ l:exe ]
-  call extend(l:cmds, ripgrep#job#get_base_options())
+  call extend(l:cmds, ripgrep#core#get_base_options())
 
   let l:cmd = join(l:cmds, ' ')
-  return s:call({
+  call s:call(a:name, {
         \ 'cmd':        l:cmd,
         \ 'arg':        a:arg,
         \ 'normalize':  'array',
         \ 'overlapped': v:true,
-        \ 'cwd':        a:cwd,
+        \ 'cwd':        l:cwd,
+        \ 'rel':        l:rel,
         \ }, a:callback)
 endfun
 
 
 " }}}
-" s:call(data, callback) {{{
-" info {{{
-"
-" a:data
-"   - cmd
-"   - arg
-"   - cwd
-"   - normalize
-"   - overlapped
-"
-" a:callback
-"   - reset
-"   - on_stdout
-"   - on_stderr
-"   - on_exit
-"
-" }}}
-"
+" s:call(name, data, callback) {{{
 
-fun! s:call(data, callback) abort
+fun! s:call(name, data, callback) abort
   let l:cmd = a:data.cmd
   if a:data.arg !=# ''
     let l:cmd = l:cmd . ' ' . a:data.arg
   endif
 
   call a:callback.reset()
-  let l:jobid = vim#async#job#start(l:cmd, {
+  let l:jobid = vim#async#start(l:cmd, {
         \ 'on_stdout':  a:callback.on_stdout,
         \ 'on_stderr':  a:callback.on_stderr,
         \ 'on_exit':    a:callback.on_exit,
@@ -123,42 +112,52 @@ fun! s:call(data, callback) abort
     echoerr 'Failed to be call ripgrep'
   endif
 
-  return l:jobid
+  call ripgrep#manager#set(a:name, {
+        \ 'jobid': l:jobid,
+        \ 'callback': a:callback,
+        \ 'data': a:data,
+        \ 'parser': ripgrep#parser#parser()
+        \ })
 endfun
 
 " }}}
-" ripgrep#job#wait(jobid, ...) {{{
+" ripgrep#core#wait(name, ...) {{{
 
-fun! ripgrep#job#wait(jobid, ...) abort
-  let l:jobid = a:jobid
+fun! ripgrep#core#wait(name, ...) abort
+  let l:info = ripgrep#manager#get(a:name)
+  let l:jobid = info.jobid
   if l:jobid <= 0
     return
   endif
   try
     let l:timeout = get(a:000, 0, -1)
-    call vim#async#job#wait([l:jobid], l:timeout)
+    call async#job#wait([l:jobid], l:timeout)
   catch
   endtry
 endfun
 
 " }}}
-" ripgrep#job#stop(jobid) {{{
+" ripgrep#core#stop(name) {{{
 
-fun! ripgrep#job#stop(jobid) abort
-  let l:jobid = a:jobid
+fun! ripgrep#core#stop(name) abort
+  let l:info = ripgrep#manager#get(a:name)
+  let l:jobid = l:info.jobid
   if l:jobid <= 0
     return
   endif
 
-  silent call vim#async#job#stop(l:jobid)
+  silent call async#job#stop(l:jobid)
+  silent call ripgrep3manager#unset(a:name)
 endfun
 
 " }}}
-" ripgrep#job#call(data, callback) {{{
+" ripgrep#core#call(name, data, callback) {{{
 
-fun! ripgrep#job#call(data, callback) abort
-  return s:call(a:data, a:callback)
+fun! ripgrep#core#call(name, data, callback) abort
+  call s:call(a:name, a:data, a:callback)
 endfun
+
+
 
 
 " }}}
