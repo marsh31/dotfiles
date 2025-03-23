@@ -395,13 +395,7 @@ endfunction
 
 
 function! s:get_first_h1() abort
-  let l:curpos = getcurpos()
-  call cursor(1, 1)
-  call search('^# \+.\+$')
-  let l:res = matchstrpos(getline("."), '^# \+\zs.\+\ze$')
-  call cursor([l:curpos[1], l:curpos[2], l:curpos[3], l:curpos[4]])
-  
-  return l:res[0]
+call cursor(1, 1)
 endfunction
 
 
@@ -432,9 +426,9 @@ fun! s:pre_save_action() abort
 endfun
 
 
-augroup my_til_auto_save_meta
-  autocmd!
-  autocmd BufWritePre /home/marsh/til/learn/memo/*.md call <SID>pre_save_action()
-augroup END
-
+" augroup my_til_auto_save_meta
+"   autocmd!
+"   autocmd BufWritePre /home/marsh/til/learn/memo/*.md call <SID>pre_save_action()
+" augroup END
+"
 
