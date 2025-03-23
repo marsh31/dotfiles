@@ -72,7 +72,7 @@ return {
 
     {
         dir = "~/src/vimscript/lua-gf",
-        -- cond = false,
+        cond = false,
         config = function()
             require("lreload").enable("gf")
             require("gf").setup({

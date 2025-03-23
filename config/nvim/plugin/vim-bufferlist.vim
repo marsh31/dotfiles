@@ -1,6 +1,8 @@
 " Buffer Remover
 " Version: 1.1
 " Author : marsh
+"
+" CRM   Buffere Size Extension File
 
 let s:buffer_name   = "bufferlist"
 
@@ -64,10 +66,46 @@ endfunction
 "
 " SCRIPT LOCAL
 "
+" TODO: bufnr('$') を参照して %3d の 3 数値を変更する。 10の何乗か求める。
+" TODO: フラグを追加する。 
+" u     .listed
+"  %    expand('%')
+"  #    expand('#')
+"   a   active loaded
+"   h   hiddend loaded
+"    -  modifieable off
+"    =  read only
+"    R  terminal
+"    F  
+"    ?  
+"     + 
+"     x 
+"
 function! s:get_bufferlist()
   let buffers = map(filter(copy(getbufinfo()), 'v:val.listed && bufname(v:val.bufnr) != s:buffer_name'),
-        \ 'printf("%3d: %s", v:val.bufnr, v:val.name == "" ? "[No Name]" : v:val.name)')
+        \ 's:get_bufferline(v:val)')
+
   return buffers
+endfunction
+
+
+function! s:get_bufferline(val)
+  let format = s:get_bufferformat()
+  let line = printf(format, a:val.bufnr, a:val.name == "" ? "[No Name]" : a:val.name)
+  return line
+endfunction
+
+function! s:get_bufferformat()
+  let bufnrend = bufnr('$')
+  let cnt = 0
+  while bufnrend > 0
+
+    
+    let bufnrend = bufnrend % 10
+  endwhile
+
+  let format = "%" .  . "s: %s"
+  return format
 endfunction
 
 
@@ -147,8 +185,6 @@ endfunction
 
 function! s:buffer_buffer_open()
   let bufnum = str2nr(s:parse(getline('.'))[0])
-  echomsg bufnum
-
   execute winnr('#') .. 'wincmd w'
   execute 'b' .. bufnum
 endfunction

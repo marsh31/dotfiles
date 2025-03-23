@@ -69,10 +69,58 @@ local command_index = {
 }
 
 
+
 -- noplist("i", insert_index)
 -- noplist("n", normal_index)
 -- noplist("v", visual_index)
 -- noplist("c", command_index)
+
+
+
+-- 20250101160230.md {{{
+-- 
+
+for _, quote in ipairs({ '"', "'", "`" }) do
+  keymap({ "x", "o" }, "a" .. quote, "2i" .. quote)
+end
+
+-- }}}
+
+
+-- 20250101115232.md  {{{
+-- 空行を編集する時に、インデントを揃えて編集を開始する。
+
+keymap('n', 'i', function ()
+    return vim.fn.empty(vim.fn.getline('.')) == 1 and '"_cc' or 'i'
+end, { expr = true })
+
+keymap('n', 'A', function ()
+    return vim.fn.empty(vim.fn.getline('.')) == 1 and '"_cc' or 'A'
+end, { expr = true })
+
+keymap('n', 'gi', 'i')
+
+-- }}}
+
+
+-- 20250101141348.md  {{{
+-- Space区切りでオブジェクトを受ける。
+
+keymap({ 'x', 'o' }, 'i<Space>', 'iW')
+
+-- }}}
+
+
+-- 20250101141520.md {{{
+-- x map の拡張。
+
+keymap('n', 'x', '"_x')
+keymap('n', 'X', '"_D')
+keymap('x', 'x', '"_x')
+keymap('o', 'x', 'd')
+
+-- }}} --
+
 
 
 -- @global
@@ -298,6 +346,15 @@ vim.api.nvim_create_autocmd("FileType", {
                 ["<C-o>"] = { "<cmd>lua require('nvim_qf_helper').edit()<CR>", "edit" },
                 ["<C-v>"] = { "<cmd>lua require('nvim_qf_helper').vsplit()<CR>", "vsplit" },
                 ["<C-x>"] = { "<cmd>lua require('nvim_qf_helper').vsplit()<CR>", "split" },
+            }, nopts)
+        elseif filetype == "markdown" then
+            -- 20250101144201.md
+            --
+            wk.register({
+                ["<Leader>"] = {
+                    ["sln"] = { "<Plug>(markdown-jump-link-next)", "search link" },
+                    ["slN"] = { "<Plug>(markdown-jump-link-prev)", "search link" },
+                },
             }, nopts)
         elseif filetype == "vim" then
             if filename == "[Command Line]" then

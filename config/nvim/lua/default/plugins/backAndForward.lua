@@ -4,7 +4,7 @@
 return {
   {
     "Bakudankun/BackAndForward.vim",
-    cond = true,
+    cond = false,
     config = function()
       vim.g.backandforward_config = {
         always_last_pos = 1,

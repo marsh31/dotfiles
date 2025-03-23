@@ -117,7 +117,7 @@ local function dynamic_node_external_update(func_indx)
     end
 end
 
-vim.api.nvim_set_keymap("i", "<C-t>", "<cmd>lua _G.dynamic_node_external_update(1)<Cr>", { noremap = true })
-vim.api.nvim_set_keymap("s", "<C-t>", "<cmd>lua _G.dynamic_node_external_update(1)<Cr>", { noremap = true })
+-- vim.api.nvim_set_keymap("i", "<C-t>", "<cmd>lua _G.dynamic_node_external_update(1)<Cr>", { noremap = true })
+-- vim.api.nvim_set_keymap("s", "<C-t>", "<cmd>lua _G.dynamic_node_external_update(1)<Cr>", { noremap = true })
 
 -- vim: sw=4 sts=4 expandtab fenc=utf-8

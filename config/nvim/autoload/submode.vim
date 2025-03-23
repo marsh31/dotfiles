@@ -344,49 +344,49 @@ endfunction
 
 
 function! s:named_key_before_action(submode)  "{{{2
-  return printf('<Plug>(submode-before-action:%s)', a:submode)
+  return printf('<Plug>(subm-be-act:%s)', a:submode)
 endfunction
 
 
 
 
 function! s:named_key_before_entering(submode)  "{{{2
-  return printf('<Plug>(submode-before-entering:%s)', a:submode)
+  return printf('<Plug>(subm-be-enter:%s)', a:submode)
 endfunction
 
 
 
 
 function! s:named_key_before_entering_with(submode, lhs)  "{{{2
-  return printf('<Plug>(submode-before-entering:%s:with:%s)', a:submode, a:lhs)
+  return printf('<Plug>(subm-be-enter:%s:with:%s)', a:submode, a:lhs)
 endfunction
 
 
 
 
 function! s:named_key_enter(submode)  "{{{2
-  return printf('<Plug>(submode-enter:%s)', a:submode)
+  return printf('<Plug>(subm-enter:%s)', a:submode)
 endfunction
 
 
 
 
 function! s:named_key_leave(submode)  "{{{2
-  return printf('<Plug>(submode-leave:%s)', a:submode)
+  return printf('<Plug>(subm-leave:%s)', a:submode)
 endfunction
 
 
 
 
 function! s:named_key_prefix(submode)  "{{{2
-  return printf('<Plug>(submode-prefix:%s)', a:submode)
+  return printf('<Plug>(subm-prefix:%s)', a:submode)
 endfunction
 
 
 
 
 function! s:named_key_rhs(submode, lhs)  "{{{2
-  return printf('<Plug>(submode-rhs:%s:for:%s)', a:submode, a:lhs)
+  return printf('<Plug>(subm-rhs:%s:for:%s)', a:submode, a:lhs)
 endfunction
 
 

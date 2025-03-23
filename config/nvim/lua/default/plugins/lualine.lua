@@ -3,6 +3,12 @@
 -- NOTE:
 --
 
+
+local function recording_macro()
+  local rec_reg = vim.fn.reg_recording()
+  return rec_reg
+end
+
 return {
     {
         "nvim-lualine/lualine.nvim",
@@ -30,7 +36,7 @@ return {
                 },
                 sections = {
                     lualine_a = { "mode" },
-                    lualine_b = { "branch", "diff", "diagnostics" },
+                    lualine_b = { "branch", "diff", "diagnostics", recording_macro },
                     lualine_c = { { "filename", path = 1 } },
                     lualine_x = {
                         -- {
