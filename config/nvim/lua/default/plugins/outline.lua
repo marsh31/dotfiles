@@ -12,6 +12,6 @@ return {
     },
 
     {
-      "sidebar-nvim/sidebar.nvim",
+        "sidebar-nvim/sidebar.nvim",
     },
 }
