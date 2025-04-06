@@ -2,6 +2,7 @@ return {
     {
         "lukas-reineke/headlines.nvim",
         ft = "markdown",
+        enabled = false,
         opts = {
             markdown = {
                 query = vim.treesitter.query.parse(
@@ -26,7 +27,8 @@ return {
                         (block_quote (block_continuation) @quote)
                     ]]
                 ),
-                headline_highlights = { "Headline" },
+                -- headline_highlights = { "Headline" },
+                headline_highlights = false,
                 bullet_highlights = {
                     "@text.title.1.marker.markdown",
                     "@text.title.2.marker.markdown",
@@ -35,7 +37,7 @@ return {
                     "@text.title.5.marker.markdown",
                     "@text.title.6.marker.markdown",
                 },
-                bullets = { "◉", "○", "✸", "✿" },
+                bullets = { "#", "##", "###", "####" },
                 codeblock_highlight = "CodeBlock",
                 dash_highlight = "Dash",
                 dash_string = "-",
@@ -50,6 +52,7 @@ return {
     {
         "jakewvincent/mkdnflow.nvim",
         ft = "markdown",
+        enabled = false,
         config = function()
             require("mkdnflow").setup({
                 modules = {

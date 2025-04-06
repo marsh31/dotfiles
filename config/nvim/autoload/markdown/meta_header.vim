@@ -1,12 +1,35 @@
+<<<<<<< HEAD
+" NAME:   meta_header
+" AUTHOR: marsh
+"
+"
+"
+||||||| ccb9261
+=======
 " NAME:   meta_header
 " AUTHOR: marsh
 "
 " NOTE:
 "
 "
+>>>>>>> 6355ed1d14b7876fb916169552e171850247f501
 
-function! markdown#meta_header#getmdheader(file, head = 10) abort
-  let l:lines = readfile(a:file, '', a:head)
+<<<<<<< HEAD
+" markdown#meta_header#getmdheader(file, head) {{{
+" args
+"   file string file path
+" 
+" return
+"   result dict メタデータの辞書型データを返す。
+" 
+"   ファイル名を受け取ると、ファイルのヘッダーを読み取り、
+" メタデータがあればメタデータを返す。メタデータがなければ、
+" 空辞書を返す。ヘッダーの有無は先頭行に---があればヘッダーあり。
+" なければ、ヘッダーなしと判定する。
+"
+
+fun! markdown#meta_header#getmdheader(file) abort
+  let l:lines = readfile(a:file)
   let l:result = {}
 
   if empty(l:lines) || l:lines[0] !~ '^-\+$'
@@ -18,17 +41,20 @@ function! markdown#meta_header#getmdheader(file, head = 10) abort
       break
     endif
 
-    let l:mlist = matchlist(l:line, '\(.\+\):\s\+\(.\+\)')
+    let l:mlist = matchlist(l:line, '\(.\+\):\s\+\(.*\)')
     if !empty(l:mlist)
       let l:result[l:mlist[1]] = s:get_list(l:mlist[2])
     endif
   endfor
 
   return l:result
-endfunction
+endfun
 
+" }}}
+" s:get_list(valstr) {{{
+"
 
-function! s:get_list(valstr) abort
+fun! s:get_list(valstr) abort
   let l:mlist = matchlist(a:valstr, '\[\(.\+\)\]')
   let l:start = 0
   if !empty(l:mlist)
@@ -48,4 +74,7 @@ function! s:get_list(valstr) abort
 
     return a:valstr
   endif
-endfunction
+endfun
+
+" }}}
+

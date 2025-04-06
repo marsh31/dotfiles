@@ -63,7 +63,7 @@ function! zettelkasten#open#start(mods, argstring)
   let [ has_replace, _ ] = s:judge_replace(args)
   let [ has_note_type, note_type ] = s:judge_note_type(args)
   let [ has_note_opt_dir, note_dir ] = s:judge_direction(args)
-  let metainfo = markdown#meta_header#getmdheader(expand('%'), 15)
+  let metainfo = markdown#meta_header#getmdheader(expand('%'))
 
   if !has_key(metainfo, 'title')
     let metainfo['title'] = expand('%:t:r')
