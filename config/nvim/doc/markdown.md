@@ -1,5 +1,3 @@
-# Markdown setup
-
 ## Table of Contents
 
 <!-- mtoc start {{{ -->

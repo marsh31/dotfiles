@@ -20,12 +20,14 @@ fun! ripgrep_qf#search#search(args) abort
   let cwd = "."
   let s:fount = v:false
 
+  call s:log.debug("ok", $"{cwd}")
   let s:jobid = ripgrep#job#start(args, cwd, {
         \ 'reset':     function('s:reset_handler'),
         \ 'on_stdout': function('s:stdout_handler'),
         \ 'on_stderr': function('s:stderr_handler'),
         \ 'on_exit':   function('s:exit_handler'),
         \ })
+  call s:log.debug("ok", $'* Start!!! {s:jobid}')
 endfun
 
 
@@ -55,10 +57,17 @@ endfun
 
 
 fun! s:stderr_handler(id, data, event_type) abort
-  call s:log.debug("ok", "+ errout +++++")
-  for l:line in a:data
-    call s:log.error("ng", l:line)
-  endfor
+  if a:data != [""]
+    call s:log.debug("ok", "+ errout +++++")
+    echomsg "*-*-*-*-*"
+    echomsg a:data
+    for l:line in a:data
+      call s:log.error("ng", l:line)
+    endfor
+
+    echomsg "Ripgrep error!!"
+    call s:reset_handler()
+  endif
 endfun
 
 " }}}
@@ -67,6 +76,7 @@ endfun
 fun! s:exit_handler(id, data, event_type) abort
   call s:log.info("OK", "+ exit +++++")
   let l:status = a:data
+  echomsg $"Ripgrep finish!!"
 endfun
 
 " }}}

@@ -156,7 +156,7 @@ endfun
 " }}}
 " ripgrep#job#call(data, callback) {{{
 
-fun! ripgrep#core#call(data, callback) abort
+fun! ripgrep#job#call(data, callback) abort
   return s:call(a:data, a:callback)
 endfun
 
