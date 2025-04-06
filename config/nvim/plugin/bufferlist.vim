@@ -40,28 +40,23 @@ let s:BufferListConfigTIL = {
 
 " IF {{{
 
-" BufferListOpen
-" {{{
+" BufferListOpen {{{
+
 
 fun! BufferListOpen() abort
   call s:BufferListConfig.Open()
 endfun
 
+
 " }}}
-
-
-" BufferListUpdate()
-" {{{
+" BufferListUpdate() {{{
 
 fun! BufferListUpdate() abort
   call s:BufferListConfig.Update()
 endfun
 
 " }}}
-
-
-" BufferListConfigPrint
-" {{{
+" BufferListConfigPrint {{{
 
 fun! BufferListConfigPrint() abort
   echomsg s:BufferListConfig
@@ -72,14 +67,12 @@ endfun
 " }}}
 
 
-
 " }}}
 
 
 " BufferListConfig {{{
 "
-" s:BufferListConfig.Open
-" {{{
+" s:BufferListConfig.Open {{{
 
 fun! s:BufferListConfig.Open() 
   let self.log = LogConfig("bl")
@@ -105,11 +98,7 @@ fun! s:BufferListConfig.Open()
 endfun
 
 " }}}
-
-
-"
-" s:BufferListConfig.Init
-" {{{
+" s:BufferListConfig.Init {{{
 
 fun! s:BufferListConfig.Init() abort
   call self.log.info("OK", "Init BufferList")
@@ -121,10 +110,7 @@ fun! s:BufferListConfig.Init() abort
 endfun
 
 " }}}
-
-"
-" s:BufferListConfig.Update
-" {{{
+" s:BufferListConfig.Update {{{
 
 fun! s:BufferListConfig.Update() abort
   call self.log.info("OK", "Update BufferList")
@@ -143,14 +129,9 @@ endfun
 
 
 " }}}
-
-
 " BufferListConfigTIL {{{
 
-
-
-" s:BufferListConfigTIL.Update
-" {{{
+" s:BufferListConfigTIL.Update {{{
 
 fun! s:BufferListConfigTIL.Update() abort
   let buffer_name = 'bl://'
@@ -180,9 +161,7 @@ endfun
 " s:get_bufferformat
 " script local {{{
 
-"
-" s:protect_buffer
-" {{{
+" s:protect_buffer {{{
 
 function! s:protect_buffer(bufnr)
   call setbufvar(a:bufnr, "&modified", 0)
@@ -191,11 +170,7 @@ function! s:protect_buffer(bufnr)
 endfunction
 
 " }}}
-
-
-"
-" s:unprotect_buffer
-" {{{
+" s:unprotect_buffer {{{
 
 function! s:unprotect_buffer(bufnr)
   call setbufvar(a:bufnr, "&modified", 0)
@@ -204,11 +179,7 @@ function! s:unprotect_buffer(bufnr)
 endfunction
 
 " }}}
-
-
-"
-" s:open_buffer_cmd
-" {{{
+" s:open_buffer_cmd {{{
 
 fun! s:open_buffer_cmd(name, direction = 'rightbelow', size = '10', opener = 'split') abort
   let cmd = printf("%s %s%s %s", a:direction, a:size, a:opener, a:name)
@@ -217,11 +188,7 @@ fun! s:open_buffer_cmd(name, direction = 'rightbelow', size = '10', opener = 'sp
 endfun
 
 " }}}
-
-
-"
-" s:get_bufferlist
-" {{{
+" s:get_bufferlist {{{
 
 fun! s:get_bufferlist(buffer_name) abort
   let buffers = map(filter(copy(getbufinfo()), 'v:val.listed && bufname(v:val.bufnr) != a:buffer_name'),
@@ -230,11 +197,7 @@ fun! s:get_bufferlist(buffer_name) abort
 endfun
 
 " }}}
-
-
-"
-" s:get_bufferline
-" {{{
+" s:get_bufferline {{{
 
 fun! s:get_bufferline(val) abort
   let format = s:get_bufferformat()
@@ -243,11 +206,7 @@ fun! s:get_bufferline(val) abort
 endfun
 
 " }}}
-
-
-"
-" s:get_bufferformat
-" {{{
+" s:get_bufferformat {{{
 
 fun! s:get_bufferformat() abort
   " TODO: bufnr の桁数によって計算を変える。
@@ -263,23 +222,21 @@ fun! s:get_bufferformat() abort
 endfun
 
 " }}}
-
-
-"
-" s:enter_buffer
-" {{{
+" s:enter_buffer {{{
 
 fun! s:enter_buffer() abort
   let line = matchlist(getline('.'), '\(\d\+\)\s\+\(.\+\)')
 
   call s:BufferListConfig.log.debug("OK", 'cmd len > ' .. len(line))
   if !empty(line)
-    execute 'b' .. line[1]
-    call s:BufferListConfig.log.debug("OK", 'cmd > ' .. 'b' .. line[1])
+    quit
+    execute 'vs | b ' . line[1]
+    call s:BufferListConfig.log.debug("OK", 'cmd > ' .. 'vs | b ' .. line[1])
   endif
 endfun
 
 " }}}
+
 
 " }}}
 

@@ -97,7 +97,7 @@ function! s:zettelkasten_edit(filename) abort
 
     endif
 
-    if l:id == a:filename
+    if trim(l:id) == trim(a:filename)
       let l:target_file = l:file
     endif
   endfor

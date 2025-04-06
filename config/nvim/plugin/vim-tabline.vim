@@ -42,7 +42,10 @@ endfun
 
 
 fun! s:tabpage_info() abort
-  let label = pathshorten(getcwd(0))
+  let date = strftime('%Y-%m-%d')
+  let cwd = pathshorten(getcwd(0))
+
+  let label = date . ' / ' . 'cwd: ' . cwd
   return label
 endfun
 
@@ -59,5 +62,28 @@ set tabline=%!MakeTabLine()
 
 
 
-nmap <expr> <C-w><C-c> len(tabpagebuflist()) ==# 1 ? ':tabclose\|tabprev<cr>' : ':close<cr>'
+nmap <expr> <C-w><C-c> (len(tabpagebuflist()) ==# 1 && tabpagenr() !=# tabpagenr('$')) ? ':tabclose\|tabprev<cr>' : ':close<cr>'
 nmap        <C-w><C-u> :<C-u>tab sp<CR>
+
+
+nnoremap     <C-t>                   <Plug>(tabpage)
+
+nmap         <Plug>(tabpage)q        :<C-u>tabclose <bar> tabprev<cr>
+nmap         <Plug>(tabpage)<C-q>    :<C-u>tabclose <bar> tabprev<cr>
+
+
+nmap         <Plug>(tabpage)<C-j>    :<C-u>tabnext<cr>
+nmap         <Plug>(tabpage)<C-k>    :<C-u>tabprev<cr>
+nmap         <Plug>(tabpage)j        :<C-u>tabnext<cr>
+nmap         <Plug>(tabpage)k        :<C-u>tabprev<cr>
+
+
+nmap <expr>  <Plug>(tabpage)<C-l>    tabpagenr() ==# tabpagenr('$') ? ':<C-u>0tabmove<cr>' : ':<C-u>tabmove +1<cr>'
+nmap <expr>  <Plug>(tabpage)l        tabpagenr() ==# tabpagenr('$') ? ':<C-u>0tabmove<cr>' : ':<C-u>tabmove +1<cr>'
+
+nmap <expr>  <Plug>(tabpage)<C-h>    tabpagenr() ==# 1 ? ':<C-u>$tabmove<cr>' : ':<C-u>tabmove -1<cr>'
+nmap <expr>  <Plug>(tabpage)h        tabpagenr() ==# 1 ? ':<C-u>$tabmove<cr>' : ':<C-u>tabmove -1<cr>'
+
+
+nmap         <Plug>(tabpage)0        :<C-u>tabfirst<cr>
+nmap         <Plug>(tabpage)$        :<C-u>tablast<cr>

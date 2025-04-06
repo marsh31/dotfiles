@@ -66,7 +66,11 @@ fun! vim#path#join(paths) abort
 
   let l:result = vim#path#trim_last_separator(a:paths[0])
   for i in range(1, (len(a:paths) - 1))
-    let l:result .= (vim#path#get_separator() . a:paths[i])
+    if !empty(l:result)
+      let l:result .= (vim#path#get_separator() . a:paths[i])
+    else
+      let l:result = a:paths[i]
+    endif
   endfor
 
   return l:result
