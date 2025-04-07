@@ -1,5 +1,8 @@
 # ripgrep_qf
 
+
+## TOC
+
 <!-- mtoc start {{{ -->
 
 * [Overview](#overview)

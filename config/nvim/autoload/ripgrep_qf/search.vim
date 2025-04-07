@@ -28,7 +28,7 @@ fun! ripgrep_qf#search#search(args, cwd = '.') abort
   let s:rel = fnamemodify(s:cwd, ':p:.')
   let s:fount = v:false
 
-  call s:log.debug("ok", $"{cwd}")
+  call s:log.debug("ok", $"{s:cwd}")
   let s:jobid = ripgrep#job#start(s:args, s:cwd, {
         \ 'reset':     function('s:reset_handler'),
         \ 'on_stdout': function('s:stdout_handler'),
@@ -93,6 +93,7 @@ endfun
 fun! s:exit_handler(id, data, event_type) abort
   call s:log.info("OK", "+ exit +++++")
 
+  let l:status = a:data
   call ripgrep_qf#adapter#finish(s:found, s:args, l:status)
   if l:status !=# 0
     echomsg "Failed to find " . s:args
