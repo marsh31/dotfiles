@@ -1,7 +1,7 @@
 
 
-command! -nargs=* CaleTest1 call <SID>show(2024, 9, 6)
-command! -nargs=* CaleTest2 call <SID>show(2024, 8, 6)
+command! -nargs=* CaleTest1 call <SID>show(2025, 5, 6)
+command! -nargs=* CaleTest2 call <SID>show(2025, 3, 6)
 command! -nargs=* CaleAction call <SID>action()
 
 
@@ -397,7 +397,7 @@ endfunction
 " 月の見出しを作る
 "
 function! s:make_month_head(year, month)
-  return printf('%s     %4d/%02d(%s)     ', s:window_partition, a:year, a:month, s:calendar_days[a:month][2])
+  return printf('%s     %4d/%02d(%.3s)     ', s:window_partition, a:year, a:month, s:calendar_days[a:month][2])
 endfunction
 
 
@@ -408,9 +408,9 @@ endfunction
 "
 " 月の曜日の見出しを作る
 "
-function! s:make_day_of_the_week_head()
+fun! s:make_day_of_the_week_head()
   return printf('%s Su Mo Tu We Th Fr Sa ', s:window_partition)
-endfunction
+endfun
 
 
 

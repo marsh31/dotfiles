@@ -12,15 +12,16 @@
 "
 " }}}
 
-finish
 if exists('b:did_loaded_ftplugin_markdown')
   finish
 endif
 let b:did_loaded_ftplugin_markdown = 1
 
-setlocal tabstop = 2
-setlocal softtabstop = 2
-setlocal shiftwidth = 2
+setlocal tabstop=2
+setlocal softtabstop=2
+setlocal shiftwidth=2
 setlocal expandtab
 
+" syntax match MyMarkdownHeader /^\s*#\+.*$/
+" highlight MyMarkdownHeader cterm=NONE ctermbg=DarkBlue guifg=#161b22 guibg=#ec8e2c
 " vim:tw=2 ts=2 et sw=2 wrap ff=unix fenc=utf-8 :

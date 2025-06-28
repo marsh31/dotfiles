@@ -1,20 +1,11 @@
-<<<<<<< HEAD
 " NAME:   meta_header
 " AUTHOR: marsh
 "
 "
 "
-||||||| ccb9261
-=======
-" NAME:   meta_header
-" AUTHOR: marsh
-"
-" NOTE:
 "
 "
->>>>>>> 6355ed1d14b7876fb916169552e171850247f501
 
-<<<<<<< HEAD
 " markdown#meta_header#getmdheader(file, head) {{{
 " args
 "   file string file path

@@ -3,6 +3,26 @@
 marsh neovim config.  
 
 
+#### フォルダ構成
+
+```txt
+~/.config/nvim
+|-- init.lua
+`-- lua
+    |-- config
+    |   |-- options.lua
+    |   |-- keymap.lua
+    |   `-- autocmds.lua
+    `-- plugins
+        |-- init.lua
+        |-- lsp.lua
+        |-- completion.lua
+        |-- formatters.lua
+        |-- kms.lua
+        `-- others.lua
+```
+
+
 #### Plugin List
 
 プラグイン一覧。  
