@@ -29,6 +29,8 @@ fun! ripgrep_qf#search#search(args, cwd = '.') abort
   let s:fount = v:false
 
   call s:log.debug("ok", $"{s:cwd}")
+
+  call ripgrep_qf#adapter#init()
   let s:jobid = ripgrep#job#start(s:args, s:cwd, {
         \ 'reset':     function('s:reset_handler'),
         \ 'on_stdout': function('s:stdout_handler'),

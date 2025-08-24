@@ -5,6 +5,9 @@
 "
 "
 
+let s:matchlist = []
+
+
 "
 " ripgrep_qf#adapter#convert {{{
 
@@ -106,18 +109,21 @@ endfun
 
 
 " }}}
+" ripgrep_qf#adapter#init() {{{
+
+
+fun! ripgrep_qf#adapter#init()
+  let s:matchlist = []
+endfun
+
+
+" }}}
 " ripgrep_qf#adapter#add_match(match_object) {{{
 
 
 fun! ripgrep_qf#adapter#add_match(found, match_object) abort
-  let l:found = a:found
-  if !l:found
-    bo copen
-  endif
-
   let l:found = v:true
-  call setqflist([a:match_object], 'a')
-
+  call add(s:matchlist, a:match_object)
   return l:found
 endfun
 
@@ -125,12 +131,20 @@ endfun
 " }}}
 " ripgrep_qf#adapter#finish(found, arg, status) {{{
 
+fun! QfComp_func(s1, s2)
+  return a:s1.filename == a:s2.filename ? 0 : a:s1.filename > a:s2.filename ? 1 : -1
+endfun
+
 fun! ripgrep_qf#adapter#finish(found, arg, status) abort
   if a:found
     let l:title = 'Ripgrep'
     if a:arg !=# ''
       let l:title = l:title . ' ' . a:arg
     endif
+
+    " let s:matchlist = sort(s:matchlist, 'QfComp_func')
+
+    call setqflist(s:matchlist, 'a')
     call setqflist([], 'a', { 'title': l:title })
   endif
 endfun
@@ -138,6 +152,7 @@ endfun
 " }}}
 " ripgrep_qf#adapter#reset() {{{
 fun! ripgrep_qf#adapter#reset() abort
+  call ripgrep_qf#adapter#init()
   call setqflist([], ' ')
 endfun
 
