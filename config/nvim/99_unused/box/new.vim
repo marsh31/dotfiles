@@ -208,7 +208,6 @@ for s:p in glob('~/Develop/Vim/*', v:false, v:true, v:false)
   let &runtimepath = escape(s:p, ',') .. ',' .. &runtimepath
   let g:vimrc.pkg.paths[fnamemodify(s:p, ':t')] = fnamemodify(s:p, ':p')
 endfor
-set runtimepath+=~/.fzf
 
 " }}}
 
@@ -315,17 +314,6 @@ endif
 " SubSection: @FuzzyFinder {{{
 
 if jetpack#tap('fzf.vim')
-  function! s:build_quickfix_list(lines)
-    call setreg("+", a:lines)
-    call setqflist(map(copy(a:lines), '{ "filename": v:val }'))
-    copen
-    cc
-  endfunction
-
-  let g:fzf_action              = { 'ctrl-q': function('s:build_quickfix_list'),
-                                  \ 'ctrl-t': 'tab split',
-                                  \ 'ctrl-s': 'split',
-                                  \ 'ctrl-v': 'vsplit' }
   let g:fzf_buffers_jump        = 1
   let g:fzf_commits_log_options = '--graph --color=always --format="%C(auto)%h%d %s %C(black)%C(bold)%cr"'
   let g:fzf_layout              = { 'down': '20%' }
