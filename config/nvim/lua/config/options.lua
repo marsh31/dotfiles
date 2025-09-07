@@ -145,5 +145,10 @@ if vim.fn.executable("rg") then
     vim.opt.grepformat = "%f:%l:%c:%m"
 end
 
--- vim: sw=4 sts=4 expandtab fenc=utf-8
 
+
+------------------------------------------------------------
+-- Quickfix
+------------------------------------------------------------
+
+-- vim: sw=4 sts=4 expandtab fenc=utf-8

@@ -123,6 +123,7 @@ endfun
 
 fun! ripgrep_qf#adapter#add_match(found, match_object) abort
   let l:found = v:true
+  copen
   call add(s:matchlist, a:match_object)
   return l:found
 endfun

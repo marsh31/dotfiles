@@ -18,6 +18,10 @@ command! FrontMatterRange echo markdown#frontmatter#FrontMatterRange()
 
 
 fun! s:update_frontmatter_update() abort
+  if !&modified
+    return
+  endif
+
   let fm = markdown#frontmatter#DetectFrontMatter()
   if fm.type !=# 'none'
     sp
@@ -41,4 +45,5 @@ augroup UpdateFrontMatterOnFileType
   autocmd!
   autocmd FileType markdown,markdown.pandoc call s:setup_front_matter_autocmds()
 augroup END
+
 

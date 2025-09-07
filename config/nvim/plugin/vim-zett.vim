@@ -30,6 +30,11 @@ command! -range -nargs=* -complete=customlist,zettelkasten#open#complete   Zopen
 command!        -nargs=* -complete=customlist,s:zettelkasten_edit_complete Zedit  call s:zettelkasten_edit(<q-args>)
 command!        -nargs=0                                                   Zday   call s:zettelkasten_day_note()
 
+command! Zenew                          call zettelkasten#create#enew()
+command! Znew                           call zettelkasten#create#new()
+command! Zvnew                          call zettelkasten#create#vnew()
+command! Ztabnew                        call zettelkasten#create#tabnew()
+
 command! ZJumpPrev                      call s:zettelkasten_jump_prev()
 command! ZJumpNext                      call s:zettelkasten_jump_next()
 

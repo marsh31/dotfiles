@@ -26,7 +26,8 @@ fun! move_to_nnday(count)
   if calendar#buffer#in_buffer()
     call search('\*\zs\d\{1,2}\ze', 'cw')
   endif
-endfun
+
+nndfun
 
 " }}}
 

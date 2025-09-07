@@ -128,6 +128,14 @@ local snippets = {
     t(" : "),
     i(0, "msg"),
   }),
+
+  s(";link", {
+    t("["),
+    i(1, "title"),
+    t("]("),
+    i(2),
+    t(")"),
+  }),
 }
 
 return snippets

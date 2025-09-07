@@ -1,1 +1,1 @@
-:tag:{{_cursor_}}:  
+#{{_cursor_}}  

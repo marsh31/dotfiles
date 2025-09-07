@@ -17,7 +17,7 @@ function! MarkdownImageLink()
   return { 'path': path }
 endfunction
 
-call preview_image#extend('MarkdownImageLink', 1000, "markdown")
+" call preview_image#extend('MarkdownImageLink', 1000, "markdown")
 
 
 " }}}

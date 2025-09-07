@@ -52,7 +52,7 @@ end, {
 })
 
 -- command! Tig :tabnew term://tig
-vim.api.nvim_create_user_command("Tig", function(opts) 
+vim.api.nvim_create_user_command("Tig", function(opts)
     local cmd = "tab sp | terminal tig"
     vim.cmd(cmd)
 end, {
@@ -75,14 +75,12 @@ end, {
     end,
 })
 
-
 -- command! W execute 'w !sudo tee % > /dev/null' <bar> edit!
 vim.api.nvim_create_user_command("W", function(opts)
     vim.cmd("'w !sudo tee % > /dev/null' <bar> edit!")
 end, {
     nargs = 0,
 })
-
 
 ------------------------------------------------------------
 -- Toggle
@@ -103,7 +101,6 @@ vim.api.nvim_create_user_command("ToggleRelativeNum", function(opts)
     vim.opt.relativenumber = not vim.o.relativenumber
 end, { nargs = 0 })
 
-
 -- function! s:toggleQuickfix() abort
 --   let nr = winnr('$')
 --   cwindow
@@ -113,15 +110,56 @@ end, { nargs = 0 })
 --   endif
 -- endfunction
 -- command! ToggleQuickfix :silent call s:toggleQuickfix()<CR>
-vim.api.nvim_create_user_command("ToggleQuickfix", function (opts)
-    local nr1 = vim.fn.winnr('$')
+vim.api.nvim_create_user_command("ToggleQuickfix", function(opts)
+    local nr1 = vim.fn.winnr("$")
     vim.cmd("cwindow")
 
-    local nr2 = vim.fn.winnr('$')
+    local nr2 = vim.fn.winnr("$")
     if nr1 == nr2 then
         vim.cmd("cclose")
     end
 end, { nargs = 0 })
+
+--
+-- キーマップを書き出す :WriteKeymaps [path]
+--
+vim.api.nvim_create_user_command("WriteKeymaps", function(opts)
+    local modes = { "n", "v", "x", "s", "o", "i", "c", "t" }
+    local labels = {
+        n = "NORMAL",
+        v = "VISUAL",
+        x = "V-BLOCK",
+        s = "SELECT",
+        o = "OP-PEND",
+        i = "INSERT",
+        c = "CMDLINE",
+        t = "TERMINAL",
+    }
+    local lines = {}
+    table.insert(lines, ("# Neovim Keymaps dump (%s)"):format(os.date("%Y-%m-%d %H:%M:%S")))
+    table.insert(lines, "")
+
+    -- verbose 出力をそのまま取得（参照元つき）
+    local function grab(cmd)
+        local ok, res = pcall(vim.api.nvim_exec2, "silent verbose " .. cmd, { output = true })
+        return ok and res.output or ""
+    end
+
+    for _, m in ipairs(modes) do
+        table.insert(lines, ("## %s (%s)"):format(labels[m], m))
+        table.insert(lines, "```")
+
+        -- 具体モード / 全体両方を拾う（被りはそのまま出ます）
+        table.insert(lines, grab(m .. "map"))
+        table.insert(lines, "```")
+        table.insert(lines, "")
+    end
+
+    local path = opts.args ~= "" and opts.args
+        or (vim.fn.stdpath("state") .. "/keymaps-" .. os.date("%Y%m%d-%H%M%S") .. ".md")
+    vim.fn.writefile(lines, path)
+    print("Keymaps written to: " .. path)
+end, { nargs = "?", complete = "file" })
 
 
 -- vim: sw=4 sts=4 expandtab fenc=utf-8

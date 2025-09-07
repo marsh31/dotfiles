@@ -197,5 +197,3 @@ function! s:todo_get_context() range
     endfor
     return l:contexts
 endfunction
-
-" vim: set ft=vim

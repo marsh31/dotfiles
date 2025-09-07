@@ -23,7 +23,7 @@ vim.g["python_recommended_style"] = 0
 -- ./lua/config/manager.lua
 local pm = require("config/manager")
 pm.setup()
-pm.load_plugins("default/plugins")
+pm.load_plugins("plugins")
 
 -- ./lua/config/options.lua
 require("config/options")
@@ -34,8 +34,9 @@ require("config/command")
 -- ./lua/config/autocmd.lua
 require("config/autocmd")
 
--- ./lua/default/keymaps.lua
+-- ./lua/config/keymaps.lua
 require("config/keymaps")
+
 
 -- -- highlight Normal ctermbg=NONE guibg=NONE
 -- vim.api.nvim_set_hl(0, "Normal", {
@@ -45,6 +46,7 @@ require("config/keymaps")
 
 -- vim.cmd.colorscheme([[kanagawa-dragon]])
 -- vim.cmd.colorscheme([[carbonfox]])
-vim.cmd.colorscheme([[github_dark_colorblind]])
+-- vim.cmd.colorscheme([[github_dark_colorblind]])
+vim.cmd.colorscheme([[dracula]])
 
 -- vim: sw=4 sts=4 expandtab fenc=utf-8
