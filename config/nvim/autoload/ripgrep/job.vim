@@ -6,161 +6,207 @@
 "
 
 let s:root_keywords = [ '.git', '.svn' ]
+let s:default_base_options = ['--json', '--no-line-buffered', '--no-block-buffered']
 
-" s:ripgre_exec() {{{
+fun! s:noop(...) abort
+endfun
 
+let s:noop_cb = function('s:noop')
 
-fun! s:ripgrep_exec() abort
-  " Get ripgrep executable from global variable 
+fun! s:get_default_command() abort
   if has('win32')
     return 'rg.exe'
-  else
-    return 'rg'
   endif
+  return 'rg'
 endfun
 
-" }}}
-" ripgrep#job#exec() {{{
-
-
-fun! ripgrep#job#exec() abort
-  return s:ripgrep_exec()
+fun! s:get_command() abort
+  return get(g:, 'ripgrep_command', s:get_default_command())
 endfun
 
-
-" }}}
-" ripgrep#job#executable() {{{
-
-
-fun! ripgrep#job#executable() abort
-  return executable(s:ripgrep_exec())
+fun! s:is_executable() abort
+  return executable(s:get_default_command())
 endfun
 
+fun! s:get_base_options() abort
+  let l:opts = get(g:, 'ripgrep_base_options', s:default_base_options)
 
-"}}}
-" ripgrep#job#get_base_options() {{{
+  if type(l:opts) != v:t_list
+    let l:opts = copy(s:default_base_options)
+  else
+    let l:opts = copy(l:opts)
+  endif
 
-
-fun! ripgrep#job#get_base_options() abort
-  " Get common command-line options for ripgrep.
-  " It uses 'ignorecase' and 'smartcase' vim option.
-  let l:opts = ['--json', '--no-line-buffered', '--no-block-buffered']
-  if &ignorecase == 1
+  if &ignorecase
     call add(l:opts, '--ignore-case')
   endif
-  if &smartcase == 1
+
+  if &smartcase
     call add(l:opts, '--smart-case')
   endif
+
   return l:opts
 endfun
 
-
-" }}}
-" ripgrep#job#start(args, cwd, callback) {{{
-" callback
-" - reset
-" - on_stdout
-" - on_stderr
-" - on_exit
-
-fun! ripgrep#job#start(arg, cwd, callback) abort
-  let l:exe = ripgrep#job#exec()
-  if !ripgrep#job#executable()
-    echoerr 'Rg is not executable'
-  endif
-
-  let l:cmds = [ l:exe ]
-  call extend(l:cmds, ripgrep#job#get_base_options())
-
-  let l:cmd = join(l:cmds, ' ')
-  return s:call({
-        \ 'cmd':        l:cmd,
-        \ 'arg':        a:arg,
-        \ 'normalize':  'array',
-        \ 'overlapped': v:true,
-        \ 'cwd':        a:cwd,
-        \ }, a:callback)
+fun! s:get_normalize_option() abort
+  let l:normalize = get(g:, 'ripgrep_normalize', 'array')
+  return type(l:normalize) == v:t_string ? l:normalize : 'array'
 endfun
 
+fun! s:get_overlapped_option() abort
+  return get(g:, 'ripgrep_overlapped', v:true)
+endfun
 
-" }}}
-" s:call(data, callback) {{{
-" info {{{
-"
-" a:data
-"   - cmd
-"   - arg
-"   - cwd
-"   - normalize
-"   - overlapped
-"
-" a:callback
-"   - reset
-"   - on_stdout
-"   - on_stderr
-"   - on_exit
-"
-" }}}
-"
+fun! s:normalize_args(arg) abort
+  if type(a:arg) == v:t_list
+    return copy(a:arg)
+  elseif type(a:arg) == v:t_string
+    if empty(a:arg)
+      return []
+    endif
+    return split(a:arg)
+  endif
+  return []
+endfun
 
-fun! s:call(data, callback) abort
-  let l:cmd = a:data.cmd
-  if a:data.arg !=# ''
-    let l:cmd = l:cmd . ' ' . a:data.arg
+fun! s:split_command(cmd) abort
+  if type(a:cmd) == v:t_list
+    return copy(a:cmd)
+  elseif type(a:cmd) == v:t_string
+    if empty(a:cmd)
+      return []
+    endif
+    return split(a:cmd)
+  endif
+  return []
+endfun
+
+fun! s:build_default_command(arg) abort
+  let l:list = [s:get_command()]
+  call extend(l:list, s:get_base_options())
+  call extend(l:list, s:normalize_args(a:arg))
+  return l:list
+endfun
+
+fun! s:prepare_command(command, arg) abort
+  let l:cmd = s:split_command(a:command)
+  call extend(l:cmd, s:normalize_args(a:arg))
+  return l:cmd
+endfun
+
+fun! s:resolve_cwd(data) abort
+  let l:cwd = get(a:data, 'cwd', '')
+  if type(l:cwd) != v:t_string || empty(l:cwd)
+    let l:cwd = get(g:, 'ripgrep_cwd', '')
+  endif
+  return l:cwd
+endfun
+
+fun! s:fetch_callback(callback, key) abort
+  if has_key(a:callback, a:key) && type(a:callback[a:key]) == v:t_func
+    return a:callback[a:key]
+  endif
+  return s:noop_cb
+endfun
+
+fun! s:build_job_options(data, callback) abort
+  let l:options = {
+        \ 'on_stdout': s:fetch_callback(a:callback, 'on_stdout'),
+        \ 'on_stderr': s:fetch_callback(a:callback, 'on_stderr'),
+        \ 'on_exit':   s:fetch_callback(a:callback, 'on_exit'),
+        \ 'normalize': get(a:data, 'normalize', s:get_normalize_option()),
+        \ 'overlapped': get(a:data, 'overlapped', s:get_overlapped_option()),
+        \ }
+  let l:cwd = s:resolve_cwd(a:data)
+  if type(l:cwd) == v:t_string && !empty(l:cwd)
+    let l:options.cwd = l:cwd
+  endif
+  return l:options
+endfun
+
+fun! s:start_job(data, callback) abort
+  let l:command = s:prepare_command(get(a:data, 'cmd', []), get(a:data, 'arg', []))
+  if empty(l:command)
+    echoerr 'ripgrep: command is empty'
+    return -1
   endif
 
-  call a:callback.reset()
-  let l:jobid = vim#async#job#start(l:cmd, {
-        \ 'on_stdout':  a:callback.on_stdout,
-        \ 'on_stderr':  a:callback.on_stderr,
-        \ 'on_exit':    a:callback.on_exit,
-        \ 'normalize':  a:data.normalize,
-        \ 'overlapped': a:data.overlapped,
-        \ 'cwd':        a:data.cwd,
-        \ })
+  let ResetFunc = get(a:callback, 'reset', v:null)
+  if type(ResetFunc) == v:t_func
+    call ResetFunc()
+  endif
 
+  let l:jobid = vim#async#job#start(l:command, s:build_job_options(a:data, a:callback))
   if l:jobid <= 0
-    echoerr 'Failed to be call ripgrep'
+    echoerr 'ripgrep: failed to start job'
   endif
-
   return l:jobid
 endfun
 
-" }}}
-" ripgrep#job#wait(jobid, ...) {{{
-
-fun! ripgrep#job#wait(jobid, ...) abort
-  let l:jobid = a:jobid
-  if l:jobid <= 0
+fun! s:wait(jobid, timeout) abort
+  if a:jobid <= 0
     return
   endif
   try
-    let l:timeout = get(a:000, 0, -1)
-    call vim#async#job#wait([l:jobid], l:timeout)
+    call vim#async#job#wait([a:jobid], a:timeout)
   catch
   endtry
 endfun
 
-" }}}
-" ripgrep#job#stop(jobid) {{{
-
-fun! ripgrep#job#stop(jobid) abort
-  let l:jobid = a:jobid
-  if l:jobid <= 0
+fun! s:stop(jobid) abort
+  if a:jobid <= 0
     return
   endif
-
-  silent call vim#async#job#stop(l:jobid)
+  silent call vim#async#job#stop(a:jobid)
 endfun
 
-" }}}
-" ripgrep#job#call(data, callback) {{{
+" *ripgrep#job#exec()* ripgrep の実行コマンド名を返す。
+fun! ripgrep#job#exec() abort
+  return s:get_command()
+endfun
 
+" *ripgrep#job#executable()* ripgrep が実行可能かを確認する。
+fun! ripgrep#job#executable() abort
+  return s:is_executable()
+endfun
+
+" *ripgrep#job#get_base_options()* ripgrep の基本オプション一覧を取得する。
+fun! ripgrep#job#get_base_options() abort
+  return s:get_base_options()
+endfun
+
+" *ripgrep#job#start()* ripgrep ジョブを非同期に起動する。
+" 引数:
+"   arg: ripgrep へ渡す追加引数 (リストまたは文字列)
+"   cwd: 実行ディレクトリ
+"   callback: stdout/stderr/exit/reset ハンドラを持つ辞書
+fun! ripgrep#job#start(arg, cwd, callback) abort
+  if !s:is_executable()
+    echoerr 'Rg is not executable'
+    return -1
+  endif
+  let l:data = {
+        \ 'cmd': s:build_default_command(a:arg),
+        \ 'cwd': a:cwd,
+        \ }
+  return s:start_job(l:data, a:callback)
+endfun
+
+" *ripgrep#job#wait()* 指定したジョブの終了を待機する。
+fun! ripgrep#job#wait(jobid, ...) abort
+  let l:timeout = get(a:000, 0, -1)
+  call s:wait(a:jobid, l:timeout)
+endfun
+
+" *ripgrep#job#stop()* 指定したジョブを停止する。
+fun! ripgrep#job#stop(jobid) abort
+  call s:stop(a:jobid)
+endfun
+
+" *ripgrep#job#call()* 任意のコマンド仕様で ripgrep ジョブを開始する。
 fun! ripgrep#job#call(data, callback) abort
-  return s:call(a:data, a:callback)
+  return s:start_job(a:data, a:callback)
 endfun
 
-
-" }}}
 " END {{{
 " vim:tw=2 ts=2 et sw=2 wrap ff=unix fenc=utf-8 foldmethod=marker:
