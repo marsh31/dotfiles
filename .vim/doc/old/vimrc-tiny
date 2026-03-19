@@ -15,15 +15,15 @@ endfunction
 
 function! s:statusline() abort
     return join([
-	\ s:modename(),
+        \ s:modename(),
         \ '%f%m%r%h%w',
         \ '%{exists("w:quickfix_title") ? w:quickfix_title : ""}',
         \ '%=',
         \ '%{&fileencoding}',
         \ '%{&filetype}',
-	\ '[%n]',
-	\ '%p%%',
-	\ '%l:%c',
+        \ '[%n]',
+        \ '%p%%',
+        \ '%l:%c',
         \])
 endfunction
 

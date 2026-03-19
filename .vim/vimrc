@@ -5,46 +5,1141 @@
 " Last Modified: August 15, 2020
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
-" Set setting files path and load the files.
-" runtime! testconfig/*.vim
+scriptencoding utf-8
+syntax on
+filetype indent on
 
-function s:read_config(path)
-  let filelist = glob(a:path)
-  let splitted = split(filelist, "\n")
+" core ================================================ {{{1
+"
+"   基本的には編集機能に影響する設定と表示見た目に影響する
+" 設定の２つに影響する設定をする。根幹に近い設定。
+" 設定の基本は、使っていて楽しい設定にすること。
+" これわかりにくいな、使いにくいなってなったときは必ず
+" 改善する。
+"
 
-  for l:file in splitted
-    " echo l:file
-    exe 'source' l:file
+" 'autochdir'        'acd'         現在編集中のファイルのディレクトリに変更する
+" 'autoread'         'ar'          vim以外でファイル変更した時に自動再読み込みする
+" 'autoshelldir'     'asd'         シェルのカレントディレクトリに変更する
+" 'autowrite'        'aw'          変更があったら、自動的に書き出す
+" 'autowriteall'     'awa'         'autowrite' と同様だが、より多くのコマンドと連動
+"
+" 'backspace'        'bs'          行頭でのバックスペースの振る舞いをカスタマイズ
+" 'belloff'          'bo'          指定した場合にベルを鳴らさない
+
+set belloff=all
+
+
+ 
+" }}}
+" vi {{{1
+"
+" 'compatible'       'cp'          可能な限りVi互換で動く
+" 'cpoptions'        'cpo'         vi互換な振る舞いのフラグ集
+"
+" compatible は予期しない設定をする可能性があるから、一番先頭に入れる。
+" vi互換を使わないため、nocompatible(default) をつかう。
+"
+" cpoptionを設定できるほど知識がないので、一旦追加だけ考える。
+" 
+
+" set nocompatible
+
+
+" }}}
+" chars {{{1
+"
+" 'isfname'          'isf'         ファイル名、パス名に含まれる文字
+" 'isident'          'isi'         識別子に含まれる文字
+" 'iskeyword'        'isk'         キーワードに含まれる文字
+" 'isprint'          'isp'         視覚可能な文字
+"
+" 下手にいじると面倒なので、触らない。
+"
+
+
+" }}}
+" modes {{{1
+"
+" 'insertmode'       'im'          挿入モードで編集を開始する
+" 
+" ノーマルモードから始めたいので、いじらない。
+
+" }}}
+" Plugin Install {{{1
+"
+" 最低限のプラグインのインストールに制限する。
+" できれば自分で作れるものは作ってみたい。
+
+call plug#begin()
+  Plug 'vim-jp/vimdoc-ja'
+  Plug 'mattn/vim-sonictemplate'
+
+  Plug 'kana/vim-operator-user'
+
+  Plug 'kana/vim-submode'
+
+  Plug 'junegunn/vim-easy-align'
+
+  " textobj-user
+  " operator-user
+  " surround
+  " expand yank
+  " notification
+  " partedit
+  " ripgrep
+call plug#end()
+
+" }}}
+" lang {{{1
+" 'allowrevins'   'ari'            挿入モードとコマンドラインモードで、CTRL-_ を使うことを認める
+" 'aleph'         'al'             Aleph文字(ヘブライ語)用のASCIIコードとする
+" 'altkeymap'     'akm'            Farsi(ペルシア語)のための廃止オプション
+" 'antialias'     'anti'           Mac OS X: フォントを滑らかに表示する
+" 'arabic'        'arab'           デフォルトでアラビア語を2番目の言語にする
+" 'arabicshape'   'arshape'        アラビア文字を整える
+" 'fkmap'         'fk'             Farsi(ペルシア語)のための廃止オプション
+" 'hkmap'         'hk'             ヘブライ語のキーボードマッピング
+" 'hkmapp'        'hkp'            発音に即したヘブライ語のキーボードマッピング
+" 'rightleftcmd'  'rlc'            "右から左" に入力するコマンド
+"
+" 'textauto'      'ta'             廃止。今は 'fileformats' を使う
+" 'textmode'      'tx'             廃止。今は 'fileformat' を使う
+"
+" 'revins'           'ri'          挿入モードで入力方向が逆になる
+" 'rightleft'        'rl'          "右から左" 指向のウィンドウ
+"
+" ひとまず、各種言語設定はデフォルトのままとする。
+" 触らない。
+
+" }}}
+" encoding {{{1
+" 
+" 'encoding'       'enc'    内部で使用する文字コード
+"   encoding-names
+"   multibyte
+"
+" 'fileencoding'   'fenc'   ファイルの文字コード指定
+"
+"
+" 'fileencodings'  'fencs'  自動認識する 'fileencoding' のリスト
+" 'fileformat'     'ff'     ファイル入出力時のファイルのフォーマット
+" 'fileformats'    'ffs'    自動認識する 'fileformat' のリスト
+"
+"
+" 基本はUTF-8を使うことにする。
+" フォーマット違いなどに対応する場合は、 `:e ++enc=sjis などで再読み込みする。
+" fileencodings は不正なバイト列を読み込む可能性がでるので、
+" 基本はデフォルトのままにする。
+"
+
+set encoding=utf-8
+set fileencodings=utf-8,sjis
+set fileformats=unix,dos,mac
+
+
+" }}}
+" modeline {{{1
+"
+" 'modeline'        'ml'          ファイルの先頭や末尾のモードラインを許可する
+" 'modelines'       'mls'         モードラインをチェックする行数
+" 'modelineexpr'    'mle'         モードラインから式オプションの設定を許可する
+"
+" モードラインは許可する。
+" このとき、モードラインを余計な誤爆を避けるために、１行にする。
+
+set modeline
+set modelines=1
+
+" }}}
+" mouse {{{1
+"
+" 'mouse'                          マウスを使うか
+" 'mousefocus'       'mousef'      マウスの移動でキーボードのフォーカスを移動する
+" 'mousehide'        'mh'          入力時にマウスポインタを非表示にする
+" 'mousemodel'       'mousem'      マウスボタンの機能を変える
+" 'mousemoveevent'   'mousemev'    <MouseMove> によるマウス移動通知
+" 'mouseshape'       'mouses'      モード別にマウスポインタの形を変える
+" 'mousetime'        'mouset'      ダブルクリックの間隔時間
+" 
+
+set mouse=n
+
+
+
+" }}}
+" ex {{{1
+" 'shell'            'sh'    外部プログラム使用時のシェル
+" 'shellcmdflag'     'shcf'  シェル実行時のフラグ
+" 'shellpipe'        'sp'    |:make|の出力をエラーファイルに入れるのに使う文字
+" 'shellquote'       'shq'   シェルで使う引用符
+" 'shellredir'       'srr'   フィルタの出力を一時ファイルに入れるのに使う文字
+" 'shellslash'       'ssl'   シェルで使うファイルのパス区切りに使う
+" 'shelltemp'        'stmp'  シェルコマンドに一時ファイルを使うかどうか
+" 'shelltype'        'st'    Amiga: シェルの使い方に影響する
+" 'shellxescape'     'sxe'   'shellxquote' が '(' のときにエスケープする文字
+" 'shellxquote'      'sxq'   'shellquote' に似ているがリダイレクションを含む
+"
+"
+" 'pythondll'                Python 2 動的ライブラリの名前
+" 'pythonhome'               Python 2 ホームディレクトリの名前
+" 'pythonthreedll'           Python 3 動的ライブラリの名前
+" 'pythonthreehome'          Python 3 ホームディレクトリの名前
+" 'pyxversion'       'pyx'   pyx* コマンドに使用される Python のバージョン
+" 
+" 'perldll'                  Perl 動的ライブラリの名前
+" 'rubydll'                  Ruby 動的ライブラリの名前
+" 
+" 'luadll'                   Lua 動的ライブラリの名前
+" 'mzschemedll'              MzScheme 動的ライブラリの名前
+" 'mzschemegcdll'            MzScheme GC 動的ライブラリの名前
+" 'rubydll'                  Ruby 動的ライブラリの名前
+" 'tcldll'                   Tcl 動的ライブラリの名前
+" 'winptydll'                winpty 動的ライブラリの名前
+"
+
+
+" }}}
+" editing.txt ========================================= {{{1
+" 
+" 編集関連の設定。大小さまざま
+"
+"
+" }}}
+" buffer {{{1
+"
+" 'splitbelow'       'sb'          ウィンドウの横分割で新規ウィンドウを下に作る
+" 'splitkeep'        'spk'         分割ウィンドウのスクロール動作を決定する
+" 'splitright'       'spr'         ウィンドウの縦分割で新規ウィンドウを右に作る
+"
+" 'equalalways'      'ea'          ウィンドウを自動で同じ大きさに調整する
+"
+
+set splitbelow
+set splitkeep=cursor
+set splitright
+
+set noequalalways
+
+" }}}
+" comment {{{1
+"
+" 'comments'            'com'         コメント行の開始を示すパターン
+" 'commentstring'       'cms'         コメント用テンプレート(foldマーカー用)
+"
+" 特にいじらない
+
+
+
+" }}}
+" completion {{{1
+"
+" 'autocomplete'         'ac'     挿入モードで自動補完を有効にする
+" 'autocompletedelay'    'acl'    入力後にメニューが表示されるまでの遅延 (msec)
+" 'autocompletetimeout'  'act'    自動補完アルゴリズムの初期減衰タイムアウト
+" 'complete'             'cpt'    挿入モードでの補完の動きを指定する
+" 'completefunc'         'cfu'    挿入モードでの補完に使われる関数
+" 'completeopt'          'cot'    挿入モードでの補完のオプション
+" 'completepopup'        'cpp'    挿入モード補完情報ポップアップのオプション
+" 'completeslash'        'csl'    補完用の 'shellslash' のようなもの
+" 'completetimeout'      'cto'    CTRL-N と CTRL-P の初期減衰タイムアウト
+"
+" 'dictionary'           'dict'   キーワード補完に使うファイルのリスト
+" 'infercase'            'inf'    キーワード補完で大文字小文字を調整する
+" 'omnifunc'             'ofu'    ファイルタイプごとの補完に使われる
+" 'thesaurus'            'tsr'    キーワード補完に使う thesaurus ファイルのリスト
+" 'thesaurusfunc'        'tsrfu'  同義語補完に使われる関数
+"
+" 今のところタグ補完とかを使う予定がないからタグ補完を削除
+" インクルードを探すのは信用していないかつ、プロジェクトによっては
+" 重くなるため、削除。
+"
+
+set noautocomplete
+set autocompletedelay=300
+set autocompletetimeout=100
+
+set complete=.,w,w,b,u
+set completefunc=
+set completeopt=menu,preview
+
+set completetimeout=1000
+
+
+
+
+
+" }}}
+" cmdline {{{
+" 'cmdheight'        'ch'    コマンドラインの行数
+" 'cedit'                    コマンドラインウィンドウを開くためのキー
+" 'cmdwinheight'     'cwh'   コマンドラインウィンドウの行数
+" 
+" 'history'          'hi'    コマンドライン履歴の記録数
+"
+" cmdwin は 8行表示に変更する
+" また、<C-f> は emacs風の編集の動きに変更するために
+" 未使用で、Openを表す<C-o>に変える。
+"
+"
+" 'wildmode'         'wim'   'wildchar' の補完モード
+"
+" 'wildchar'         'wc'    コマンドラインでワイルドカードの展開に使うキー
+" 'wildcharm'        'wcm'   'wildchar' に似た、マッピング内で使うもの
+" 'wildignore'       'wig'   リスト内のどれかにマッチしたファイル名は補完しない
+" 'wildignorecase'   'wic'   ファイル名を補完するときに大文字と小文字を無視する
+" 'wildmenu'         'wmnu'  コマンドラインで補完候補をメニュー表示する
+" 'wildoptions'      'wop'   コマンドライン補完をどう行うか指定する
+"
+
+set cmdheight=1
+set cedit=<C-o>
+set cmdwinheight=8
+
+set history=1000
+
+
+set wildmode=full
+set wildchar=<Tab>
+
+
+set wildignore+=*.o,*.obj
+set wildignorecase
+
+set wildmenu
+set wildoptions=exacttext
+
+
+
+" }}}
+" clipboard {{{1
+"
+" clipboard は unnamed(*) と unnamedplus(+) を設定する。
+" clipmethod は今は気にしない。
+"
+" 'clipboard'   'cb'   無名レジスタ操作でクリップボードを使う
+" 'clipmethod'  'cpm'  使用するクリップボードのメソッドの順序を指定する
+"
+ 
+set clipboard=unnamed,unnamedplus
+
+
+" }}}
+" diff {{{1
+"
+" 'diff'                           そのウィンドウで差分モードを使う
+" 'diffanchors'      'dia'         差分のアンカーを強制する {address} のリスト
+" 'diffexpr'         'dex'         差分取得に使う式
+" 'diffopt'          'dip'         差分モードに使うオプション
+"
+
+" }
+" find/grep/make {{{1
+"
+" 'findfunc'        'ffu'   |:find| コマンドで呼び出される関数
+" 'grepformat'      'gfm'   'grepprg' の出力の書式
+" 'grepprg'         'gp'    |:grep|で使う外部プログラム
+"
+"
+" 'makeef'          'mef'         |:make|用のエラーファイル
+" 'makeencoding'    'menc'        外部 make/grep コマンドのエンコーディング
+" 'makeprg'         'mp'          |:make|で使う外部プログラム
+"
+
+
+fun! s:RgFindFunc(cmdarg, cmdcomplete)
+  let l:result = systemlist('rg --files | rg ' . a:cmdarg)
+  if v:shell_error != 0
+    echoerr l:result
+    return []
+  endif
+  return l:result
+endfun
+
+if executable('rg')
+  set findfunc=s:RgFindFunc
+  set grepprg=rg\ --vimgrep\ -H\ --no-heading
+  set grepformat=%f:%l:%c:%m
+endif
+
+
+" }}}
+" indent {{{1
+"
+" 'autoindent'      'ai'          直前の行から新しい行のインデントを得る
+"
+" 'smartindent'     'si'          C言語用の高度な自動インデント
+"
+" 'cindent'         'cin'         C言語用のインデントを行う
+" 'cinkeys'         'cink'        'cindent' が有効な際に押すとインデントするキー
+" 'cinoptions'      'cino'        'cindent' が有効な際のインデント方法
+" 'cinwords'        'cinw'        'si'、'cin' によるインデントの開始文字
+"
+" 'indentexpr'      'inde'        行をインデントする式
+" 'indentkeys'      'indk'        'indentexpr' でインデントを開始するキー
+"
+" 'copyindent'      'ci'          'autoindent' がすでにあるインデントを参考にする
+" 'preserveindent'  'pi'          再インデント時にインデントの構造を保つ
+"
+" 'lisp'                          Lisp用自動インデント
+" 'lispoptions'     'lop'         Lisp用インデントの動作定義
+" 'lispwords'       'lw'          Lispでインデントする単語の定義
+"
+
+
+
+
+
+
+" }}}
+" tab char {{{1
+"
+" 'expandtab'           'et'          <Tab>入力でスペースを入力する
+" 'shiftround'          'sr'          インデントを 'shiftwidth' の倍数に丸める
+" 'shiftwidth'          'sw'          (自動的な)インデントに使うシフト幅
+" 'smarttab'            'sta'         先頭空白部分での <Tab> 入力は 'shiftwidth' でインデントする
+" 'tabstop'             'ts'          2 つのタブストップ間のカラム数
+
+set expandtab
+set smarttab
+set shiftround
+set shiftwidth=2
+set tabstop=2
+
+
+" }}}
+" backup {{{1
+"
+" 'backup'           'bk'          上書きした時にバックアップを作成する
+" 'backupcopy'       'bkc'         ファイルをリネームするのではなく、コピーする
+" 'backupdir'        'bdir'        バックアップファイル用のディレクトリを指定
+" 'backupext'        'bex'         バックアップファイル用の拡張子
+" 'backupskip'       'bsk'         指定のパターンに合致するファイルはバックアップしない
+" 'writebackup'      'wb'          上書きする時にはバックアップを作る
+"
+
+" }}}
+" swap {{{1
+"
+" 'directory'        'dir'         スワップファイル用のディレクトリのリスト
+" 'swapfile'         'swf'         スワップファイルを使うかどうか
+" 'swapsync'         'sws'         スワップファイルの同期方法
+" 'updatecount'      'uc'          この回数だけ入力するとスワップファイルを更新する
+" 'updatetime'       'ut'          この時間だけ入力がなければスワップファイルを更新
+"
+
+
+
+" }}}
+" undo.txt {{{1
+"
+" 'undodir'          'udir'  アンドゥファイルの保存場所
+" 'undofile'         'udf'   アンドゥ情報をファイルに保存する
+" 'undolevels'       'ul'    アンドゥ可能な回数の最大値
+" 'undoreload'       'ur'    バッファ再読み込み時にアンドゥを保存するかどうかを行数で制限する
+"
+
+set undodir=$HOME/.vim/undo
+set undofile
+set undolevels=100
+set undoreload=5000
+
+" }}}
+" tag files {{{1
+"
+" 'tagbsearch'     'tbs'         タグファイル内の検索に二分探索を使う
+" 'tagcase'        'tc'          タグファイル内検索で大文字小文字の扱いを指定する
+" 'tagfunc'        'tfu'         タグマッチのリストを取得する関数
+" 'taglength'      'tl'          タグ名はこの文字数までしか意味を持たない
+" 'tagrelative'    'tr'          タグファイル内のファイル名が相対的になる
+" 'tags'           'tag'         タグコマンドで使うファイルのリスト
+" 'tagstack'       'tgst'        タグスタックにタグをプッシュする
+"
+"
+
+
+
+
+" }}}
+" view ================================================ {{{1
+"
+" 'ambiwidth'       'ambw'        Unicode文字の不明瞭な文字幅を決定する
+" 'emoji'           'emo'         絵文字を全角として扱う
+"
+" 'colorcolumn'     'cc'          列を強調表示する
+"
+" 'display'         'dy'          テキストの表示方法を指定する
+" 
+" 'fillchars'       'fcs'         特殊な表示に使う文字
+" 
+" 'list'                          <Tab>や<EOL>を表示する
+" 'listchars'       'lcs'         'list' オン時に使う文字
+" 
+" 'showbreak'       'sbr'         折り返し表示された行の最初に表示する文字
+" 'showcmd'         'sc'          コマンド (の一部) を何処かに表示
+" 'showcmdloc'      'sloc'        コマンド (の一部) を何処に表示するか
+" 'showfulltag'     'sft'         タグで補完する時完全なタグのパターンを表示する
+" 'showmatch'       'sm'          括弧入力時に対応する括弧を知らせる
+" 'showmode'        'smd'         ステータスラインに現在のモードを表示する
+" 'showtabline'     'stal'        いつタブページ行を表示するか
+"
+
+
+set ambiwidth=single
+set emoji
+
+" set fillchars=vert:\ ,fold:\ ,foldopen:,foldclose:,foldsep:│,foldinner:│
+set fillchars=vert:│,fold:\ ,foldopen:,foldclose:,foldsep:│,foldinner:│
+
+set list
+set listchars=tab:>-
+
+set showbreak=>\ 
+set showcmd
+set showcmdloc=last
+
+set showmatch
+set showmode
+set showtabline=2
+
+ 
+" 
+" }}}
+" gui {{{1
+"
+" 'columns'          'co'          画面上の桁数
+" 'lines'                          表示行数
+" 'linespace'        'lsp'         行間のピクセル数
+"  表示ウィンドウの行数と行間のサイズを変えることができる。
+"
+" 'browsedir'        'bsdir'       ブラウズを始めるディレクトリ
+" 'guicursor'        'gcr'         GUI: カーソルの形と点滅を設定する
+" 'guifont'          'gfn'         GUI: 使用するフォント(複数可)
+" 'guifontset'       'gfs'         GUI: マルチバイト用のフォント
+" 'guifontwide'      'gfw'         全角文字用のフォントのリスト
+" 'guiheadroom'      'ghr'         GUI: ウィンドウ装飾用の余地。ピクセル単位
+" 'guiligatures'     'gli'         GTK GUI: 図形を作れるASCII文字セット
+" 'guioptions'       'go'          GUI: GUIに特化したオプション
+" 'guipty'                         GUI: |:!|でpseudo-ttyの使用を試みる
+" 'guitablabel'      'gtl'         GUI: タブページのラベル設定
+" 'guitabtooltip'    'gtt'         GUI: タブページのツールチップ設定
+" 'macatsui'                       Mac GUI: ATSUI テキスト描画を使う
+" 'toolbar'          'tb'          GUI: ツールバーに表示する内容
+" 'toolbariconsize'  'tbis'        ツールバーアイコンのサイズ(GTK2だけ)
+"
+" 'restorescreen'    'rs'          Win32: 終了時スクリーンを更新する
+" 'winaltkeys'       'wak'         GUIでのALTキーの使い方
+"
+" 特に設定することはない
+"
+"
+
+
+" }}}
+" sign.txt {{{1
+"
+" signcolumn=yes
+"
+" hi SignColumn
+"
+
+set signcolumn=yes
+
+" }}}
+" syntax {{{1
+" 
+" 'background'  'bg'   "dark"/"light": ハイライト色の指定に使用
+" 'synmaxcol'   'sws'  この桁までしか構文アイテムを探さない
+" 'syntax'      'syn'  カレントバッファの構文強調表示の定義
+
+set background=dark
+set syntax=ON
+
+
+" }}}
+" fold.txt {{{1
+"
+" 'foldenable'      'fen'        全ての折り畳みの開閉を設定する
+" 'foldopen'        'fdo'        折り畳みを開くことのできるコマンド
+" 'foldclose'       'fcl'        カーソル下以外の折り畳みを閉じる
+" 'foldcolumn'      'fdc'        折り畳みを示すのに使う列幅
+" 'foldmethod'      'fdm'        折り畳みの種類
+" 'foldtext'        'fdt'        閉じた折り畳みの表示に使う式
+" 
+" 'foldexpr'        'fde'        'foldmethod' が "expr" の時に使う式
+" 'foldignore'      'fdi'        'foldmethod' が "indent" の時に無視する行
+" 
+" 'foldmarker'      'fmr'        'foldmethod' が "marker" の時に使うマーカー
+" 
+" 'foldlevelstart'  'fdls'       'foldlevel' の初期値
+" 'foldminlines'    'fml'        閉じることのできる折り畳みの最小行数
+" 'foldlevel'       'fdl'        この値より高いレベルの折り畳みを閉じる
+" 'foldnestmax'     'fdn'        折り畳みの深さの制限
+"
+" 'equalprg'         'ep'          |=|で使用する外部プログラム
+"
+
+set foldmethod=marker
+set foldlevel=99
+set foldtext=MyFoldText()
+fun! MyFoldText()
+  let l:first = substitute(getline(v:foldstart), '^\s*', '', '')
+  let l:lines = v:foldend - v:foldstart + 1
+  let l:info  = printf("󱞤 %4d lines ", l:lines)
+  " 󰤻
+  " 󱞤
+  " 
+  " 
+
+  " TODO: 表示領域の幅の取得はもう少し賢くしても良いかも。
+  let l:width = winwidth(0)
+
+  let l:available = l:width - strdisplaywidth(l:info) - 5
+  let l:text = strcharpart(l:first, 0, l:available)
+  return l:text . repeat(' ', l:available - strdisplaywidth(l:text)) . l:info
+endfun
+
+set foldcolumn=1
+
+" highlight Folded
+" highlight FoldColumn
+
+" }}}
+" statusline {{{1
+" 
+" 'laststatus'  'ls'   最下ウィンドウにいつステータス行を表示するか
+" 'ruler'       'ru'   ステータスラインにカーソルが位置する場所を表示する
+" 'statusline'  'stl'  ステータスラインの表示内容を設定する
+
+language en_US.utf8
+set termguicolors
+set laststatus=2
+set cmdheight=1
+
+fun! s:get_main_mode_name()
+  let l:m = mode()
+  if l:m =~ 'i'
+    return 'INS'
+  elseif l:m =~ 'n'
+    return 'NOR'
+  elseif l:m =~ 'v'
+    return 'VIS'
+  elseif l:m =~ 'V'
+    return 'V-LINE'
+  elseif l:m =~ 'c'
+    return 'COM'
+  endif
+endfun
+
+fun! GetModename() abort
+
+  let l:st           = ''
+  let l:timeout_icon = ['󰔞 ', '󰔛 ']
+  let l:main         = s:get_main_mode_name()
+  let l:sub          = submode#current()
+
+  let l:st ..= (l:timeout_icon[&timeout] .. l:main)
+  if ! empty(l:sub)
+    let l:st ..= l:sub
+  endif
+  return ( l:st .. ' ' )
+endfun
+
+fun! MyStatusLine()
+  " left align
+  "  mode
+  "  file name / (bufnr) / modified / ro / help preview
+  "
+  " right align
+  "  file encodeing
+  "  file type
+  "  cursor byte
+  "  line : col
+  "  percent
+  return ' ' .. join([
+        \ '%{GetModename()}',
+        \ '%t(%n)%m%r%h%w',
+        \ '%{exists("w:quickfix_title") ? w:quickfix_title : ""}',
+        \ '%=',
+        \ '%{&fileencoding}',
+        \ '%{&filetype}',
+        \ '0x%B',
+        \ '%l:%c',
+        \ '%p%%',
+        \]) .. ' '
+endfun
+set statusline=%!MyStatusLine()
+
+
+" }}}
+" tabline {{{1
+"
+"  'tabclose'        'tcl'         タブを閉じるときにどのタブページにフォーカスするか
+"  'tabline'         'tal'         コンソールのタブページラインのカスタムフォーマット
+"  'tabpagemax'      'tpm'         タブページの最大数。|-p|と "tab all" に使われる
+
+set tabclose=left
+
+fun! MyTabLabel(n)
+  let l:buflist = tabpagebuflist(a:n)
+  let l:winnr   = tabpagewinnr(a:n)
+  let l:name    = fnamemodify(bufname(l:buflist[l:winnr - 1]), ':t')
+
+  if l:name ==# ''
+    let l:name  = '[No Name]'
+  endif
+
+  return printf("%2d.%s", a:n, l:name)
+endfun
+
+fun! MyTabline()
+  let l:showmax    = 5
+  let l:ctabpagenr = tabpagenr()
+  let l:tabpagemax = tabpagenr('$')
+  let s = ''
+
+  " tab count
+  let s ..= '%#TabLine#'
+  let s ..= printf(' %2d/%d ', l:ctabpagenr, tabpagenr('$'))
+
+  " tab list
+  let l:tabstart   = l:ctabpagenr
+  let l:tabend     = min([(l:ctabpagenr+l:showmax-1), tabpagenr('$')])
+  if ((l:tabend - l:tabstart + 1) < l:showmax)
+    let l:tabstart -= (l:showmax - (l:tabend - l:tabstart + 1))
+    let l:tabstart = max([l:tabstart, 1])
+  endif
+  for i in range(l:tabstart, l:tabend)
+    if i == tabpagenr()
+      let s ..= '%#TabLineSel#'
+    else
+      let s ..= '%#TabLine#'
+    endif
+
+    let s ..= '%' .. (i) .. 'T'
+    let s ..= ' %{MyTabLabel(' .. (i) .. ')} '
   endfor
-endfunction
 
 
-" config list {{{
-source $HOME/.vim/config/plugins.vim
-source $HOME/.vim/config/base.vim
-source $HOME/.vim/config/commandline.vim
-source $HOME/.vim/config/diff.vim
-source $HOME/.vim/config/files.vim
-source $HOME/.vim/config/fold.vim
-source $HOME/.vim/config/indent.vim
-source $HOME/.vim/config/mark.vim
-source $HOME/.vim/config/plugins.vim
-source $HOME/.vim/config/qf.vim
-source $HOME/.vim/config/search.vim
-source $HOME/.vim/config/session.vim
-source $HOME/.vim/config/tabpage.vim
-source $HOME/.vim/config/keys.vim
-source $HOME/.vim/config/statusline.vim
-source $HOME/.vim/config/color.vim
-source $HOME/.vim/config/abbreviation.vim
+  " 最後のタブページの後は TabLineFill で埋め、タブページ番号をリセットする
+  let s ..= '%#TabLineFill#%T'
 
-call s:read_config("$HOME/.vim/config/plugged/*.vim")
-call s:read_config("$HOME/.vim/config/keys/*.vim")
+  " カレントタブページを閉じるボタンのラベルを右添えで作成
+  " NOTE: 使わないため削除
+  " if tabpagenr('$') > 1
+  "   let s ..= '%=%#TabLine#%999Xclose'
+  " endif
+
+  return s
+endfun
+set tabline=%!MyTabline()
+
+
+" }}}
+" im {{{1
+"
+" 'imactivatefunc'      'imaf'        X のインプットメソッドをオン/オフにする関数
+" 'imactivatekey'       'imak'        X のインプットメソッドをオンにするキー
+" 'imcmdline'           'imc'         コマンドライン入力時にIMを有効にする
+" 'imdisable'           'imd'         どのモードでもIMを使わない
+" 'iminsert'            'imi'         挿入モードで|:lmap|やIMを使う
+" 'imstatusfunc'        'imsf'        X のインプットメソッドの状態を得る関数
+" 'imstyle'             'imst'        インプットメソッドの入力スタイルを指定する
+
+" }}}
+" other =============================================== {{{1
+" }}}
+" print not used {{{1
+" 
+" 'printdevice'     'pdev'     |:hardcopy|で使うプリンタの名前
+" 'printencoding'   'penc'     印刷で使う文字コード
+" 'printexpr'       'pexpr'    |:hardcopy|でPostScriptを印刷するための式
+" 'printfont'       'pfn'      |:hardcopy|で使用するフォント
+" 'printheader'     'pheader'  |:hardcopy|で使用するヘッダー
+" 'printmbcharset'  'pmbcs'    |:hardcopy|に使われるCJK文字セット
+" 'printmbfont'     'pmbfn'    |:hardcopy|の出力に使われるフォント名
+" 'printoptions'    'popt'     |:hardcopy|の出力をコントロールする
+"
+" 使わない。印刷することない。
+"
+
+" }}}
+" menu {{{1
+"
+" 'langmenu'         'lm'          メニュー表示用言語
+" 'menuitems'        'mis'         メニューに登録できる項目の最大数
+"
+
+" }}}
+" Plugins ============================================= {{{1
+
+let g:sonictemplate_vim_template_dir = [
+  \ '$HOME/.vim/template',
+  \ ]
+
+" }}}
+" Highlight =========================================== {{{1
+colorscheme desert
+
+hi! FoldColumn ctermfg=226 guifg=#eeee00
+hi! clear SignColumn
+
+
+
 " }}}
 
-" source $HOME/.vim/vimrc-tiny
+
+" match {{{
+" 'matchpairs'       'mps'         |%|で探す文字ペア
+" 'matchtime'        'mat'         'showmatch' で対応カッコを表示する時間。0.1秒単位
 
 
+
+" }}}
+
+
+set synmaxcol=500
+set lazyredraw
+
+" search
+set nohlsearch
+set ignorecase
+set smartcase
+
+set incsearch
+set wrapscan
+
+
+" Keymap / keycode timeout
+" 'timeout'          'to'          マッピングやキーコード入力の時間制限
+" 'timeoutlen'       'tm'          入力をタイムアウトにするミリ秒単位の時間
+" 'ttimeout'                       マッピング入力の時間制限
+" 'ttimeoutlen'      'ttm'         キーコード入力をタイムアウトにするミリ秒単位の時間
+
+set timeout
+set timeoutlen=5000
+
+set ttimeout
+set ttimeoutlen=50
+
+
+" buffer
+set hidden
+
+
+" term options {{{
+" 
+
+let &t_SH = "\<Esc>[4 q"
+let &t_EI = "\<Esc>[4 q"
+let &t_SI = "\<Esc>[6 q"
+
+" }}}
+
+
+" function {{{1
+fun! s:show_highlight_group()
+  let l:hlgroup = synIDattr(synID(line('.'), col('.'), 1), 'name')
+  let l:group_chain = []
+
+  while l:hlgroup !=# ''
+    call add(l:group_chain, hlgroup)
+    let l:hlgroup = matchstr(trim(execute('hi ' .. l:hlgroup)), '\<links\s\+to\>\s\+\zs\w\+$')
+  endwhile
+
+  if empty(l:group_chain)
+    echomsg 'No highlight groups'
+    return
+  endif
+
+  for l:group in l:group_chain
+    execute 'hi ' .. l:group
+  endfor
+endfun
+
+
+
+" command {{{1
+
+command! -bar Hlgroup call <sid>show_highlight_group()
+
+command! FocusOnFold  %foldclose! | normal! zozz
+command! W            execute 'w !sudo tee % > /dev/null' <bar> edit!
+
+command! Gfsp         split      | normal! gf
+command! Gfvs         vert split | normal! gf
+command! Gftab        tab split  | normal! gf
+
+
+
+
+
+
+" keymap {{{1
+"
+let mapleader = "\<Space>"
+
+noremap   <MiddleMouse>  <Nop>
+noremap!  <MiddleMouse>  <Nop>
+
+
+nnoremap  <ESC><ESC>  :<c-u>noh<cr>
+
+
+
+" remove 
+nnoremap  x   "_x
+nnoremap  X   "_X
+
+xnoremap  x   "_x
+xnoremap  X   "_X
+
+
+nnoremap  *   *N
+nnoremap  n   nzz
+nnoremap  N   Nzz
+
+nnoremap  gq  :<C-u>botright copen<CR>
+
+" magic move
+nnoremap  <expr><silent>  0  col('.') == match(getline('.'), '\S')+1 ? '0' : '^'
+" nnoremap  <silent>        $  :<c-u>call <sid>magic_end()<cr>                
+fun! s:magic_end()
+  let l:line = getline('.')
+  let l:mend = (match(getline('.'), '\S\s*$')+1)
+
+  echomsg col('.') .. ' ' .. l:mend
+  call setpos('.', [bufnr(), line('.'), l:mend, 0])
+  if col('.') < l:mend
+  endif
+
+endfun
+
+
+" 足元を検索して変更する。
+
+" nnoremap           <Space>d  *N"_cgn
+xnoremap  <expr>   <Space>d  "\<esc>/\<c-r>=<sid>search()\<cr>\<cr>N\"_cgn"
+fun! s:search() abort
+  let tmp = @"
+  normal! gv""y
+  let [ text, @" ] = [ escape(@", '\/'), tmp ]
+  return '\V' .. substitute(text, "\n", '\\n', 'g')
+endfun
+
+
+" Easy Align
+nmap ga <Plug>(EasyAlign)
+xmap ga <Plug>(EasyAlign)
+
+
+" operator {{{2
+onoremap i<space> iW
+vnoremap i<space> iW
+
+
+
+" cnoremap {{{2
+
+cnoremap  <C-b>  <Left>
+cnoremap  <C-f>  <Right>
+cnoremap  <C-a>  <Home>
+cnoremap  <C-e>  <End>
+
+
+" inoremap {{{2
 
 inoremap jj <ESC>
-command! W execute 'w !sudo tee % > /dev/null' <bar> edit!
+
+
+
+" submode {{{1
+"
+
+nnoremap  <plug>(keytimeout-lock)    :<c-u>set timeout<cr>
+nnoremap  <plug>(keytimeout-unlock)  :<c-u>set notimeout<cr>
+nnoremap  <plug>(keytimeout-toggle)  :<c-u>set timeout!<cr>
+
+
+" submodes {{{2
+" submode-gjk {{{3
+"
+
+call submode#enter_with( 'gjk', 'n', '', 'gj', 'gj' )
+call submode#enter_with( 'gjk', 'n', '', 'gk', 'gk' )
+call submode#map(        'gjk', 'n', '', 'j',  'gj' )
+call submode#map(        'gjk', 'n', '', 'k',  'gk' )
+
+
+" submode-scroll {{{3
+
+let s:scroll_latest = reltime()
+let s:scroll_state = 0
+fun! Do_scroll()
+  let l:dftime_ms = (reltimefloat(reltime(s:scroll_latest)) * 1000)
+  let s:scroll_latest = reltime()
+
+  if (&timeout && (l:dftime_ms > &timeoutlen))
+    let s:scroll_state = 0
+  endif
+
+  if     s:scroll_state == 0
+    let s:scroll_state = 1
+    normal! zz
+
+  elseif s:scroll_state == 1
+    let s:scroll_state = 2
+    normal! zt
+
+  elseif s:scroll_state == 2
+    let s:scroll_state = 0
+    normal! zb
+  endif
+endfun
+
+  
+
+call submode#enter_with( 'scroll', 'n', '',  '<Leader>zz',     '<Nop>' )
+call submode#map(        'scroll', 'n', '',  'z',              ':<c-u>call Do_scroll()<cr>'   )
+"    上下スクロール
+call submode#map(        'scroll', 'n', '',  'j',              '<c-e>j'                       )
+call submode#map(        'scroll', 'n', '',  'k',              '<c-y>k'                       )
+call submode#map(        'scroll', 'n', '',  'n',              '5<c-e>5j'                     )
+call submode#map(        'scroll', 'n', '',  'p',              '5<c-y>5k'                     )
+"    左右スクロール
+call submode#map(        'scroll', 'n', '',  'l',              'zl<Space>'                    )
+call submode#map(        'scroll', 'n', '',  'h',              'zh<bs>'                       )
+call submode#map(        'scroll', 'n', 'r', '<space><space>', '<plug>(keytimeout-toggle)'    )
+
+
+" submode-win {{{3
+
+" TODO: close try n count
+" 関数を連続でN回以上コールしたときにクローズする。
+" 連続で実行したときの防止
+
+" function " {{{4
+"
+"
+
+
+" keymap " {{{4
+"
+"
+
+call submode#enter_with( 'Win', 'n', '', '<Leader>w', '<Nop>'            )
+call submode#map(        'Win', 'n', '', 'h',         '<C-w>h'           )
+call submode#map(        'Win', 'n', '', 'j',         '<C-w>j'           )
+call submode#map(        'Win', 'n', '', 'k',         '<C-w>k'           )
+call submode#map(        'Win', 'n', '', 'l',         '<C-w>l'           )
+call submode#map(        'Win', 'n', '', 'w',         '<C-w>w'           )
+call submode#map(        'Win', 'n', '', '>',         '5<C-w>>'          )
+call submode#map(        'Win', 'n', '', '<',         '5<C-w><'          )
+call submode#map(        'Win', 'n', '', '+',         '1<C-w>+'          )
+call submode#map(        'Win', 'n', '', '-',         '1<C-w>-'          )
+call submode#map(        'Win', 'n', '', 's',         ':<c-u>sp<cr>'     )
+call submode#map(        'Win', 'n', '', 'v',         ':<c-u>vs<cr>'     )
+call submode#map(        'Win', 'n', '', 't',         ':<c-u>tab sp<cr>' )
+call submode#map(        'Win', 'n', '', 'd',         ':<c-u>close<cr>'  )
+call submode#map(        'Win', 'n', '', 'H',         '<C-w>H'           )
+call submode#map(        'Win', 'n', '', 'J',         '<C-w>J'           )
+call submode#map(        'Win', 'n', '', 'K',         '<C-w>K'           )
+call submode#map(        'Win', 'n', '', 'L',         '<C-w>L'           )
+
+
+" submode-tab {{{3
+call submode#enter_with( 'Tab', 'n', '',  'gt',             '<Nop>'                     )
+call submode#enter_with( 'Tab', 'n', '',  'gT',             '<Nop>'                     )
+" タブ移動
+call submode#map(        'Tab', 'n', '',  'h',              'gT'                        )
+call submode#map(        'Tab', 'n', '',  'l',              'gt'                        )
+call submode#map(        'Tab', 'n', '',  'H',              ':<c-u>tabfirst<cr>'        )
+call submode#map(        'Tab', 'n', '',  'L',              ':<c-u>tablast<cr>'         )
+" タブ内の移動
+call submode#map(        'Tab', 'n', '',  'j',              '<c-e>j'                    )
+call submode#map(        'Tab', 'n', '',  'k',              '<c-y>k'                    )
+call submode#map(        'Tab', 'n', '',  'n',              '5<c-e>5j'                  )
+call submode#map(        'Tab', 'n', '',  'p',              '5<c-y>5k'                  )
+" タブの操作
+call submode#map(        'Tab', 'n', '',  'w',              ':<c-u>write<cr>'           )
+call submode#map(        'Tab', 'n', '',  'q',              ':<c-u>tabclose<cr>'        )
+call submode#map(        'Tab', 'n', '',  'c',              ':<c-u>tab sp<cr>'          )
+call submode#map(        'Tab', 'n', '',  'an',             ':<c-u>tabnew<cr>'          )
+call submode#map(        'Tab', 'n', 'r', '<space><space>', '<plug>(keytimeout-toggle)' )
+
+
+" submode-buffer {{{3
+"
+"
+"
+
+call submode#enter_with( 'Buffer', 'n', '', '<Leader>b', '<Nop>'               )
+call submode#map(        'Buffer', 'n', '', 'h',         ':<c-u>bprevious<cr>' )
+call submode#map(        'Buffer', 'n', '', 'l',         ':<c-u>bnext<cr>'     )
+
+
+
+
+
+
+" {{{
+"
+" checkbox
+"
+" - [ ] 󰄰  nf-md-checkbox_blank_circle_outline
+" - [/] 󱎖  nf-md-circle_half_full
+" - [/] 󰦕  nf-md-progress_check
+" - [x] 󰗠  nf-fa-check_circle
+" - [-] 󰜺  nf-md-cancel
+" - [>] 󰒊  nf-md-send
+" - [<]   nf-fa-calendar_week
+" - [?]   nf-fa-circle_question
+" - [!]   nf-fa-exclamation_triangle
+" - [*]   nf-fa-star
+" - ["]   nf-cod-quote
+" - [l]   nf-fa-location_crosshairs
+" - [b] 󰃀  nf-md-bookmark
+" - [i] 󰋼  nf-md-information
+" - [S]   nf-fa-sack_dollar
+" - [I] 󰛨  nf-md-lightbulb_on
+" - [p] 󰔓  nf-md-thumb_up
+" - [c] 󰔑  nf-md-thumb_down
+" - [f] 󰈸  nf-md-fire
+" - [k]   nf-fa-key
+" - [w]   nf-fa-birthday_cake
+" - [u] 󰔵  nf-md-trending_up
+" - [d] 󰔳  nf-md-trending_down
+" 
+"
+" markdown info box   
+" :::note \%(info\|warn\|alert)
+" :::
+" 0xDFF4CF 0xFFF0B3 0xFFDBDB
+"
+"  
+
+" Keep last position.
+augroup KeepLastPos
+  autocmd!
+  autocmd Bufread * if line("'\"") > 0 && line("'\"") <= line("$") | exe "normal g`\"zz" | endif
+augroup END
+
+" 
+call abbrev#commandline#clear()
+call abbrev#commandline#add({
+      \ 'gsp':  { 'cmd': 'Gfsp',  'desc': '' },
+      \ 'gvs':  { 'cmd': 'Gfvs',  'desc': '' },
+      \ 'gtab': { 'cmd': 'Gftab', 'desc': '' },
+      \ 'fof':  { 'cmd': 'FocusOnFold', 'desc': '' },
+      \ })
+
+call abbrev#commandline#add({
+      \ 'w]':    { 'cmd': 'w',                'desc': '' },
+      \ 'vterm': { 'cmd': 'vert terminal',    'desc': '' },
+      \ 'tterm': { 'cmd': 'tab terminal',     'desc': '' },
+      \ 'qq':    { 'cmd': 'tabdo windo if !&modified \| try \| close \| catch \| quit \| endtry \| endif',     'desc': '' },
+      \ })
+
+
+" END: {{{1
+" vim: set ft=vim

@@ -1,0 +1,286 @@
+
+" 'bioskey'          'biosk'       MS-DOS専用: 文字入力にbiosコールを使う もうサポートされていない。
+" 'conskey'          'consk'       コンソールからの直接キー検出(MS-DOSのみ) もうサポートされていない。
+
+" 'binary'           'bin'         バイナリモードで、読み/書き/編集する
+" 'bomb'                           ファイルの先頭にBOMを付加する
+
+" 'bufhidden'        'bh'          ウィンドウに繋がったバッファがなくなった時の動作
+" 'buflisted'        'bl'          バッファリストにバッファを表示するかどうか
+" 'buftype'          'bt'          バッファのタイプ
+
+" 'casemap'          'cmp'         文字の大小の変換方法を決める
+" 'charconvert'      'ccv'         文字コードの変換に使用する式
+
+" 'cdhome'           'cdh'         ":cd" でディレクトリをホームディレクトリに変える
+
+" 'chistory'         'chi'         履歴内の quickfix リストの最大数
+
+" 'cinscopedecls'    'cinsd'       'cino-g' によって認識される単語
+
+
+" 'confirm'          'cf'          未保存ファイル、リードオンリーファイルの確認方法
+
+" 'cryptmethod'      'cm'          ファイルの保存に使用する暗号化の種類
+
+" 'cscopepathcomp'   'cspc'        表示するファイルパスの深さ
+" 'cscopeprg'        'csprg'       cscopeの実行可能ファイル
+" 'cscopequickfix'   'csqf'        cscopeの結果の表示にquickfixウィンドウを使う
+" 'cscoperelative'   'csre'        cscope.out のディレクトリパスをプリフィックスとして使う
+" 'cscopetag'        'cst'         タグコマンドでcscopeを使う
+" 'cscopeverbose'    'csverb'      cscopeデータベースに追加時にメッセージを表示
+
+
+" 'debug'                          "msg" と設定すると全てのエラーが表示される
+" 'delcombine'       'deco'        合成文字の削除時に構成要素を全て消す
+" 'digraph'          'dg'          挿入モードでダイグラフの入力を有効にする
+" 'eadirection'      'ead'         'equalalways' の適用方向を決める
+" 'edcompatible'     'ed'          |:substitute|のフラグを切替える
+" 'endoffile'        'eof'         ファイル末尾に CTRL-Z を書く
+" 'endofline'        'eol'         ファイル最終行に <EOL> を書く
+" 'equalalways'      'ea'          ウィンドウを自動で同じ大きさに調整する
+" 'equalprg'         'ep'          |=|で使用する外部プログラム
+" 'errorbells'       'eb'          エラー表示時にベルを鳴らす
+" 'errorfile'        'ef'          QuickFixモードで使うファイルの名前
+" 'errorformat'      'efm'         エラーファイルの書式の定義
+" 'esckeys'          'ek'          挿入モードでファンクションキーを有効にする
+" 'eventignore'      'ei'          無視される自動コマンドイベント
+" 'eventignorewin'   'eiw'         ウィンドウ内で無視される自動コマンドイベント
+" 'exrc'             'ex'          カレントディレクトリの.vimrcと.exrcを読み込む
+
+" 'fileignorecase'   'fic'         ファイル名の大文字と小文字を区別するかどうか
+" 'filetype'         'ft'          自動コマンドで使うファイルタイプ名
+" 'fixendofline'     'fixeol'      ファイル末尾に <EOL> を必ずつける
+
+" 'formatexpr'       'fex'         |gq|で使う式
+" 'formatlistpat'    'flp'         リストのヘッダーを認識するためのパターン
+" 'formatoptions'    'fo'          自動整形の動作定義
+" 'formatprg'        'fp'          |gq|で使う外部プログラム
+
+" 'fsync'            'fs'          ファイルを書き込んだ後に fsync() を呼ぶかどうか
+" 'gdefault'         'gd'          |:substitute|で "g" を既定で有効にする
+" 'helpfile'         'hf'          メインのヘルプファイルのフルパス指定
+" 'helpheight'       'hh'          ヘルプウィンドウの最小高さ
+" 'helplang'         'hlg'         優先するヘルプ用の言語
+" 'hidden'           'hid'         バッファが|abandon|(捨て)られても破棄しない
+" 'highlight'        'hl'          様々な対象に対する強調表示モードの設定
+" 'icon'                           Vimのアイコン表示でテキストを変更するようにする
+" 'iconstring'                     Vimのアイコン表示に使用するテキスト
+ 
+ 
+
+" 'joinspaces'       'js'          行連結時にピリオドの後に空白を2つ入れる
+" 'jumpoptions'      'jop'         ジャンプがどのように行われるかを指定する
+" 'key'                            暗号鍵
+" 'keymap'           'kmp'         キーボードマッピングの名前
+" 'keymodel'         'km'          範囲選択を開始/終了するキー
+" 'keyprotocol'      'kpc'         どの端末でどのキーボードプロトコルを使うか
+" 'keywordprg'       'kp'          |K|で使う外部プログラム
+" 'langmap'          'lmap'        他の言語モードでの文字
+" 'langnoremap'      'lnr'         マッピングされた文字に 'langmap' を適用しない
+" 'langremap'        'lrm'         マッピングされた文字に 'langmap' を適用する
+" 'lazyredraw'       'lz'          マクロ実行中に表示を更新しない
+" 'lhistory'         'lhi'         履歴内の location リストの最大数
+" 'linebreak'        'lbr'         長い行を空白で折り返す
+" 'loadplugins'      'lpl'         起動時にプラグインスクリプトを読み込む
+ 
+ 
+" 'matchpairs'       'mps'         |%|で探す文字ペア
+" 'matchtime'        'mat'         'showmatch' で対応カッコを表示する時間。0.1秒単位
+ 
+" 'maxcombine'       'mco'         表示できる文字の組合せの最大数
+" 'maxfuncdepth'     'mfd'         ユーザー定義関数の再帰呼び出しの最大数
+" 'maxmapdepth'      'mmd'         マッピングの再帰定義の最大数
+" 'maxmem'           'mm'          1つのバッファに使える最大メモリ(Kbyte単位)
+" 'maxmemtot'        'mmt'         全てのバッファに使える最大メモリ(Kbyte単位)
+ 
+" 'mkspellmem'       'msm'         |:mkspell|がツリーを圧縮する前に使われるメモリ
+ 
+" 'modifiable'       'ma'          ファイルの変更許可
+" 'modified'         'mod'         バッファが変更されているか
+" 'more'                           スクリーンを埋めるような出力で一時停止するか
+ 
+ 
+" 'mzquantum'        'mzq'         MzSchemeスレッドに切り替える間隔
+" 'nrformats'        'nf'          CTRL-A用の数値書式
+ 
+" 'opendevice'       'odev'        MS-Windows上でデバイスの読み書きを許可する
+" 'operatorfunc'     'opfunc'      オペレータ|g@|で呼ばれる関数
+" 'osfiletype'       'oft'         もうサポートされていない
+" 'paragraphs'       'para'        段落を分けるためのnroffのマクロ
+" 'paste'                          Pasteモードに移行
+" 'pastetoggle'      'pt'          'paste' を切替えるキー
+" 'patchexpr'        'pex'         パッチを適用するための式
+" 'patchmode'        'pm'          最初のバージョンを保全する
+ 
+ 
+" 'prompt'           'prompt'      Ex モードでプロンプトを有効にする
+" 'pumheight'        'ph'          ポップアップメニューの高さの最大値
+" 'pumwidth'         'pw'          ポップアップメニューの幅の最小値
+" 'quickfixtextfunc' 'qftf'        quickfixウィンドウのテキストに使われる関数
+" 'quoteescape'      'qe'          文字列中に使われるエスケープ文字
+" 'readonly'         'ro'          バッファの書き込みを制限する
+" 'redrawtime'       'rdt'         'hlsearch' と |:match| のハイライトのタイムアウト
+" 'regexpengine'     're'          デフォルトで使用する正規表現エンジン
+" 'relativenumber'   'rnu'         相対行番号を表示する
+" 'remap'                          再帰的マッピングを有効にする
+" 'renderoptions'    'rop'         Windows でのテキストレンダリングの設定
+" 'report'                         変更された行の数の方向が出る最小値
+
+
+" 'rulerformat'      'ruf'         'ruler' 用のフォーマット
+" 'scroll'           'scr'         CTRL-UやCTRL-Dでスクロールする行数
+" 'scrollbind'       'scb'         他のウィンドウと同期してスクロールする
+" 'scrollfocus'      'scf'         スクロールホイールはポインタの下のウィンドウに適用
+" 'scrolljump'       'sj'          スクロールする行数の最小値
+" 'scrolloff'        'so'          カーソルの上下に確保する表示行
+" 'scrollopt'        'sbo'         'scrollbind' がどのように振舞うか
+" 'sections'         'sect'        節を分けるためのnroffのマクロ
+" 'secure'                         カレントディレクトリの.vimrcを安全に読む
+" 'selection'        'sel'         選択時の動作を設定する
+" 'selectmode'       'slm'         ビジュアルモードでなく選択モードを開始する条件
+" 'sessionoptions'   'ssop'        |:mksession|用のオプション
+" 'shortmess'        'shm'         メッセージを短縮するフラグのリスト
+" 'shortname'        'sn'          ファイル名が8.3形式であると仮定する
+" 'sidescroll'       'ss'          水平スクロールの刻み幅
+" 'sidescrolloff'    'siso'        カーソルの左右に確保する表示幅
+" 'smartcase'        'scs'         パターンが大文字を含むときは文字の大小を区別する
+" 'smoothscroll'     'sms'         'wrap' の設定時にスクリーン行でスクロールする
+" 'softtabstop'      'sts'         2 つのソフトタブストップ間のカラム数
+
+" 'spell'                          スペルチェッキングを有効にする
+" 'spellcapcheck'    'spc'         スペルチェッキングを有効にする
+" 'spellfile'        'spf'         |zg|と|zw|が単語を保存するファイル
+" 'spelllang'        'spl'         スペルチェックをする言語
+" 'spelloptions'     'spo'         スペルチェックのオプション
+" 'spellsuggest'     'sps'         スペリング訂正をするのに使われるメソッド
+
+
+" 'startofline'      'sol'         カーソル移動コマンドで行の最初の非空白へ移動する
+" 'suffixes'         'su'          ファイルが複数マッチした時に無視する拡張子
+ 
+" 'switchbuf'        'swb'         バッファ切替え時の動作
+
+" 'term'                           ターミナルの名前
+" 'termbidi'         'tbidi'       ターミナルが双方向性を持っている
+" 'termencoding'     'tenc'        ターミナルが使用する文字コード
+" 'termguicolors'    'tgc'         ターミナルで GUI カラーを使う
+" 'termwinkey'       'twk'         端末で Vim コマンドを開始するためのキー
+" 'termwinscroll'    'twsl'        端末ウィンドウでスクロールバックできる行数の最大値
+" 'termwinsize'      'tws'         端末ウィンドウのサイズ
+" 'termwintype'      'twt'         MS-Windows: 端末ウィンドウに使用するptyのタイプ
+
+" 'terse'                          いくつかのメッセージを省略する
+" 'textwidth'        'tw'          入力されているテキストの最大幅
+" 'tildeop'          'top'         "~" がオペレータのように振舞う
+
+
+" 'title'                          ウィンドウのタイトルを変更するようにする
+" 'titlelen'                       ウィンドウのタイトルの 'columns' (列幅)の割合
+" 'titleold'                       終了時に戻す古いタイトル
+" 'titlestring'                    ウィンドウのタイトル
+" 'ttybuiltin'       'tbi'         外部のtermcapの前に組込みのtermcapを探す
+" 'ttyfast'          'tf'          高速ターミナル接続を行う
+" 'ttymouse'         'ttym'        マウスコードの種類
+" 'ttyscroll'        'tsl'         画面をスクロールする行数の最大値
+" 'ttytype'          'tty'         'term' の別名
+" 'varsofttabstop'   'vsts'        ソフトタブストップ間のカラム数のリスト
+" 'vartabstop'       'vts'         タブストップ間のカラム数のリスト
+" 'verbose'          'vbs'         有益なメッセージを表示する
+" 'verbosefile'      'vfile'       メッセージを書き込むファイル
+
+" 'viewdir'          'vdir'        |:mkview|によるファイルを格納するディレクトリ
+" 'viewoptions'      'vop'         |:mkview|の保存内容を決める
+" 'viminfo'          'vi'          起動時と終了時に.viminfoファイルを使う
+" 'viminfofile'      'vif'         viminfo ファイル用のファイル名
+" 'virtualedit'      've'          フリーカーソルモードを使う場面
+" 'visualbell'       'vb'          ビープの代わりにvisualベル(画面フラッシュ)を使用
+
+" 'warn'                           バッファ変更済み時にシェル使用で警告する
+" 'weirdinvert'      'wiv'         変な強調表示方法を持つターミナル用
+" 'whichwrap'        'ww'          行を越えて機能するキーを設定する
+
+" 'wincolor'         'wcr'         ウィンドウローカルのハイライト
+" 'window'           'wi'          CTRL-F と CTRL-B でスクロールする行数
+" 'winfixbuf'        'wfb'         ウィンドウを単一のバッファにフォーカスしたままにする
+" 'winfixheight'     'wfh'         ウィンドウの高さをキープする
+" 'winfixwidth'      'wfh'         ウィンドウの幅をキープする
+" 'winheight'        'wh'          カレントウィンドウの行数の最小値
+" 'winminheight'     'wmh'         カレントウィンドウ以外のウィンドウの高さの最小値
+" 'winminwidth'      'wmw'         カレントウィンドウ以外のウィンドウの幅の最小値
+" 'winwidth'         'wiw'         カレントウィンドウの幅の最小値
+ 
+" 'wlseat'           'wse'         使用する Wayland シート
+" 'wlsteal'          'wst'         Wayland のフォーカスを奪う機能を許可する
+" 'wltimeoutlen'     'wtm'         Wayland でポーリング時に使用するタイムアウト
+ 
+ 
+" 'write'                          ファイルへの保存を許可する
+" 'writeany'         'wa'          ファイルへの保存時は "!" がなくても上書きする
+" 'writedelay'       'wd'          入力の延滞時間を1/1000秒単位で指定(デバッグ用)
+" 'xtermcodes'                     xterm からの端末コードを要求する
+
+
+
+<balloon> ======================================================================
+'balloondelay'	      'bdlay'       バルーンウィンドウが出るまでの遅延時間(ms)
+'ballooneval'	      'beval'       GUI でのバルーン評価の ON/OFF
+'balloonevalterm'     'bevalterm'   端末でのバルーン評価の ON/OFF
+'balloonexpr'	      'bexpr'       バルーンウィンドウに表示する式
+
+
+<view> =========================================================================
+
+" 'cursorbind'       'crb'         カーソルを移動させたときに他のウィンドウ内でもカーソルを移動させる
+" 'cursorcolumn'     'cuc'         カーソルがある桁を強調表示する
+" 'cursorline'       'cul'         カーソルがある行を強調表示する
+" 'cursorlineopt'    'culopt'      'cursorline' のための設定
+
+" 'concealcursor'    'cocu'        カーソル行の Conceal テキストを表示するかどうか
+" 'conceallevel'     'cole'        Conceal テキストを表示するかどうか
+
+" 'number'           'nu'          行番号を表示する
+" 'numberwidth'      'nuw'         行番号に使われる桁数
+
+  <preview> ====================================================================
+  'previewheight'          'pvh'         プレビューウィンドウの高さ
+  'previewpopup'          'pvp'         プレビューのためにポップアップウィンドウを使う
+  'previewwindow'          'pvw'         プレビューウィンドウかどうか
+
+  <wrap> =======================================================================
+  'wrap'                            長い行を折り返して表示する
+  'wrapmargin'        'wm'          折り返しを開始する右端からの文字数
+
+
+
+
+" 'breakat'             'brk'         'linebreak' がオンのとき、改行を引き起こす文字
+" 'breakindent'         'bri'         折り返された行でインデントを繰り返す
+" 'breakindentopt'      'briopt'      'breakindent' のための設定
+ 
+
+
+" 'cdpath'              'cd'          ":cd" コマンドで検索するディレクトリ
+" 'cscopetagorder'      'csto'        |:cstag|が検索する順番を決める
+" 'packpath'            'pp'          パッケージのために使われるディレクトリのリスト
+" 'path'                'pa'          |gf|などでファイルを検索するディレクトリのリスト
+" 'runtimepath'         'rtp'         ランタイムファイル用のディレクトリのリスト
+
+" 'define'              'def'         マクロ定義検索パターン
+
+" 'hlsearch'            'hls'         最後に検索したパターンを強調表示する
+" 'ignorecase'          'ic'          検索パターンで大文字と小文字を区別しない
+
+" 'imsearch'            'ims'         検索パターン入力時に|:lmap|やIMを使う
+" 'include'             'inc'         インクルードファイルの検索パターン
+" 'includeexpr'         'inex'        インクルード行を処理する式
+" 'incsearch'           'is'          検索パターン入力中にその文字を強調表示する
+" 'magic'                             検索パターン内の特殊文字を変更する
+" 'maxmempattern'       'mmp'         検索に使える最大メモリ(Kbyte単位)
+" 'suffixesadd'         'sua'         検索対象のファイルの拡張子
+" 'wrapscan'            'ws'          検索がファイル末尾まで進んだら先頭から再検索
+
+
+
+
+
