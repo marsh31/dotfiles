@@ -55,7 +55,8 @@ vim.o.foldlevelstart = 99
 vim.wo.signcolumn = "yes:2"
 vim.wo.foldmethod = "marker"
 vim.wo.fillchars = "vert: ,fold: "
-vim.wo.foldtext = "fold#MyFoldText()"
+-- vim.wo.foldtext = "fold#MyFoldText()"
+vim.wo.foldtext = vim.treesitter.foldtext()
 
 vim.o.hlsearch = true
 vim.o.ignorecase = true

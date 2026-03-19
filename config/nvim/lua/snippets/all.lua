@@ -54,11 +54,23 @@ local snippets = {
         utils.date_input(),
     }),
 
-    s("pnode", {
+    s("p", {
         c(1, {
             sn(nil, { t("("), r(1, "user_text"), t(")") }),
             sn(nil, { t("["), r(1, "user_text"), t("]") }),
             sn(nil, { t("{"), r(1, "user_text"), t("}") }),
+        }),
+    }, {
+        stored = {
+            ["user_text"] = i(1, "default_text"),
+        },
+    }),
+
+    s("q", {
+        c(1, {
+            sn(nil, { t([[']]), r(1, "user_text"), t([[']]) }),
+            sn(nil, { t([["]]), r(1, "user_text"), t([["]]) }),
+            sn(nil, { t([[`]]), r(1, "user_text"), t([[`]]) }),
         }),
     }, {
         stored = {

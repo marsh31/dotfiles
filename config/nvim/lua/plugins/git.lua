@@ -1,33 +1,40 @@
+-- NAME:   lua/plugins/git.lua
+-- AUTHOR: marsh
+-- NOTE:
+--
+--
+--
+--
 
 
 return {
-  {
-    "dinhhuy258/git.nvim"
-  },
+    {
+        "dinhhuy258/git.nvim",
+        cond = false,
+    },
 
-  {
-    "lewis6991/gitsigns.nvim",
-    config = function()
-      require("gitsigns").setup({
-        signcolumn = false,
-        numhl = true,
-      })
-    end,
-  },
+    {
+        "TimUntersberger/neogit",
+        cond = false,
+        cmd = "Neogit",
+    },
+    {
+        "tanvirtin/vgit.nvim",
+        cond = false,
+        enabled = false,
+        config = function()
+            require("vgit").setup({
+                settings = {},
+            })
+        end,
+    },
 
-  {
-    "TimUntersberger/neogit",
-    cmd = "Neogit",
-  },
-  {
-    "tanvirtin/vgit.nvim",
-    enabled = false,
-    config = function()
-      require("vgit").setup({
-        settings = {},
-      })
-    end,
-  },
-
-  { "sindrets/diffview.nvim" }
+    {
+      "sindrets/diffview.nvim",
+      cond = false,
+    },
+    {
+      "akinsho/git-conflict.nvim",
+      cond = false,
+    },
 }

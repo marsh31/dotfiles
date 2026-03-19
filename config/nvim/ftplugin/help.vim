@@ -12,6 +12,8 @@ let b:did_help_ftplugin = 1
 
 setlocal wrap
 setlocal signcolumn=no
+setlocal conceallevel=0
+
 nnoremap <buffer> q <C-w>c
 
 " vim: sw=2 sts=2 expandtab fenc=utf-8

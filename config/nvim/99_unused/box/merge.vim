@@ -73,7 +73,6 @@ let g:jetpack#ignore_patterns = [
 "
 "
 call jetpack#begin(g:vimrc.pkg.plugins)
-call jetpack#add('~/.fzf')
 call jetpack#add('andymass/vim-matchup')
 call jetpack#add('bluz71/vim-nightfly-guicolors')
 call jetpack#add('haya14busa/vim-asterisk')
@@ -83,7 +82,6 @@ call jetpack#add('hrsh7th/vim-gindent')
 call jetpack#add('hrsh7th/vim-searchx')
 call jetpack#add('hrsh7th/vim-vsnip')
 call jetpack#add('itchyny/lightline.vim')
-call jetpack#add('junegunn/fzf.vim')
 call jetpack#add('junegunn/gv.vim')
 call jetpack#add('kana/vim-operator-user')
 call jetpack#add('kana/vim-textobj-entire')
@@ -182,7 +180,6 @@ for s:p in glob('~/Develop/Vim/*', v:false, v:true, v:false)
   let &runtimepath = escape(s:p, ',') .. ',' .. &runtimepath
   let g:vimrc.pkg.paths[fnamemodify(s:p, ':t')] = fnamemodify(s:p, ':p')
 endfor
-set runtimepath+=~/.fzf
 
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -614,17 +611,6 @@ endif
 " SubSection: plugins@fzf.vim
 " {{{
 if jetpack#tap('fzf.vim')
-  function! s:build_quickfix_list(lines)
-    call setreg("+", a:lines)
-    call setqflist(map(copy(a:lines), '{ "filename": v:val }'))
-    copen
-    cc
-  endfunction
-
-  let g:fzf_action              = { 'ctrl-q': function('s:build_quickfix_list'),
-                                  \ 'ctrl-t': 'tab split',
-                                  \ 'ctrl-s': 'split',
-                                  \ 'ctrl-v': 'vsplit' }
   let g:fzf_buffers_jump        = 1
   let g:fzf_commits_log_options = '--graph --color=always --format="%C(auto)%h%d %s %C(black)%C(bold)%cr"'
   let g:fzf_layout              = { 'down': '20%' }

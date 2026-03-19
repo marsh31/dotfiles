@@ -1,4 +1,3 @@
-"                                                                                                                                                                                                                                                                                     12
 let g:vimrc#project_root_markers = ['.git', 'tsconfig.json']
 
 let s:special_filetypes = ['fern', 'denite', 'deol']

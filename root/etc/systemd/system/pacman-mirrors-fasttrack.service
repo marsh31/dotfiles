@@ -1,0 +1,10 @@
+[Unit]
+Description=Fasttrack pacman-mirrors update
+
+
+[Service]
+Type=oneshot
+ExecStart=/usr/bin/pacman-mirrors --fasttrack
+ExecStart=pacman-key --populate
+
+

@@ -22,20 +22,19 @@ return {
         },
       })
 
+      vim.lsp.handlers["textDocument/publishDiagnostics"] =
+      vim.lsp.with(vim.lsp.diagnostic.on_publish_diagnostics, {
+        underline = true,
+        virtual_text = false,
+        signs = true,
+        update_in_insert = false,
+      })
+
       mason_lspconfig.setup_handlers({
         function(server_name)
           local opts = {
             -- capabilities = require('cmp_nvim_lsp').update_capabilities(vim.lsp.protocol.make_client_capabilities()),
             capabilities = require("cmp_nvim_lsp").default_capabilities(),
-
-            handlers = {
-              ["textDocument/publishDiagnostics"] = vim.lsp.with(
-                vim.lsp.diagnostic.on_publish_diagnostics,
-                {
-                  virtual_text = false,
-                }
-              ),
-            },
           }
 
           lsp_config[server_name].setup(opts)
@@ -54,8 +53,25 @@ return {
                 },
 
                 completion = {
-                  callSnippet = "Replace"
-                }
+                  callSnippet = "Replace",
+                },
+              },
+            },
+          })
+        end,
+
+        ["rust_analyzer"] = function()
+          lsp_config.rust_analyzer.setup({
+            settings = {
+              ["rust-analyzer"] = {
+                procMacro = {
+                  enable = true,
+                },
+
+                diagnostics = {
+                  enable = true,
+                  disabled = { "unresolved-proc-macro", "missing-unsafe" },
+                },
               },
             },
           })
@@ -116,6 +132,8 @@ return {
   },
   {
     "j-hui/fidget.nvim",
+    tag = "legacy",
+    event = "LspAttach",
     config = function()
       require("fidget").setup()
     end,

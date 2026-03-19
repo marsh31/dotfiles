@@ -1,0 +1,9 @@
+BEGIN:VEVENT
+UID:{{_input_:uid}}
+DTSTAMP:20230907T120000Z
+DTSTART;TZID=Asia/Tokyo:{{_input_:開始時間}}
+DTEND;TZID=Asia/Tokyo:{{_input_:終了時間}}
+SUMMARY:{{_input_:件名}}
+DESCRIPTION:{{_input_:詳細}}
+LOCATION:{{_input_:場所}}
+END:VEVENT

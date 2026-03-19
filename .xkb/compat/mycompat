@@ -1,0 +1,10 @@
+// NAME:   mycompat
+// AUTHOR: marsh
+// NOTE:
+//
+//
+
+
+//xkb_compatibility "<HKTG>" {
+//  interpret KANA_Mode { action = SetMods(modifiers=Mod5); };
+//};

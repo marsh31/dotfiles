@@ -36,8 +36,8 @@ local snippets = {
         i(1),
         t("("),
         c(2, {
-          sn(nil, { i(1, "args") } ),
-          sn(nil, { i(1, "") } )
+            sn(nil, { i(1, "args") }),
+            sn(nil, { i(1, "") }),
         }),
         t(")"),
         t({ "", "\t" }),
@@ -74,7 +74,8 @@ local snippets = {
             sn(nil, { t("elif"), i(1) }),
             sn(nil, { t("else"), i(1) }),
             sn(nil, { t(""), i(1) }),
-        }), i(0),
+        }),
+        i(0),
         t({ "", "end" }),
     }),
     s("elif", {
@@ -97,11 +98,42 @@ local snippets = {
     }),
 
     s("while", {
-      t("while "), i(1, "condition"), t({ " do", "\t" }),
-      i(2, "process"), t({ "", "end" })
-    })
+        t("while "),
+        i(1, "condition"),
+        t({ " do", "\t" }),
+        i(2, "process"),
+        t({ "", "end" }),
+    }),
 
+    -- MARK: vim-lua snippet
+    s("table_map", {
+        t("vim.tble_map(function"),
+        i(1),
+        t(", "),
+        i(2, "array"),
+        t(")"),
+    }),
 
+    -- MARK: for snippet
+    s("snippet_s", {
+        t('s("'),
+        i(1, "snip_name"),
+        t({ '", {', "\t" }),
+        i(2, "snip_body"),
+        t({ "", "})," }),
+    }),
+
+    s("snippet_t_nl", {
+        t("t({ "),
+        i(1, "snip_body"),
+        t(" })"),
+    }),
+
+    s("snippet_t", {
+        t("t("),
+        i(1, "snip_body"),
+        t(")"),
+    }),
 }
 
 return snippets
