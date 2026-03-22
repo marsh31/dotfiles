@@ -1,6 +1,6 @@
 
 
-nnoremap <buffer> gq  :<c-u>tab sp | b 1 | aboveleft 5copen<cr>
+nnoremap <buffer> gq  :<c-u>tab sp\|b 1\|aboveleft 5copen<cr>
 
 
 

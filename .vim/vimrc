@@ -1,15 +1,22 @@
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" File: vimrc
-" Author: marsh31
-" Description: vimrc
-" Last Modified: August 15, 2020
+" File:       vimrc
+" Author:     marsh31
+" Updated_at: 2026-03-21T01:00:33
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
 scriptencoding utf-8
-syntax on
-filetype indent on
 
-" core ================================================ {{{1
+if v:version >= 900
+  let $VIMFILES = expand('<script>:p:h')
+else
+  let $VIMFILES = expand('<sfile>:p:h')
+endif
+
+
+
+
+
+" core ================================================ {{{2
 "
 "   基本的には編集機能に影響する設定と表示見た目に影響する
 " 設定の２つに影響する設定をする。根幹に近い設定。
@@ -28,11 +35,12 @@ filetype indent on
 " 'belloff'          'bo'          指定した場合にベルを鳴らさない
 
 set belloff=all
+set backspace=indent,eol,start
 
 
  
 " }}}
-" vi {{{1
+" vi {{{2
 "
 " 'compatible'       'cp'          可能な限りVi互換で動く
 " 'cpoptions'        'cpo'         vi互換な振る舞いのフラグ集
@@ -47,7 +55,7 @@ set belloff=all
 
 
 " }}}
-" chars {{{1
+" chars {{{2
 "
 " 'isfname'          'isf'         ファイル名、パス名に含まれる文字
 " 'isident'          'isi'         識別子に含まれる文字
@@ -59,17 +67,20 @@ set belloff=all
 
 
 " }}}
-" modes {{{1
+" modes {{{2
 "
 " 'insertmode'       'im'          挿入モードで編集を開始する
 " 
 " ノーマルモードから始めたいので、いじらない。
 
 " }}}
-" Plugin Install {{{1
+" Plugin Install {{{2
 "
 " 最低限のプラグインのインストールに制限する。
 " できれば自分で作れるものは作ってみたい。
+
+syntax on
+filetype indent on
 
 call plug#begin()
   Plug 'vim-jp/vimdoc-ja'
@@ -80,6 +91,7 @@ call plug#begin()
   Plug 'kana/vim-submode'
 
   Plug 'junegunn/vim-easy-align'
+  Plug 'junegunn/fzf.vim'
 
   " textobj-user
   " operator-user
@@ -91,7 +103,7 @@ call plug#begin()
 call plug#end()
 
 " }}}
-" lang {{{1
+" lang {{{2
 " 'allowrevins'   'ari'            挿入モードとコマンドラインモードで、CTRL-_ を使うことを認める
 " 'aleph'         'al'             Aleph文字(ヘブライ語)用のASCIIコードとする
 " 'altkeymap'     'akm'            Farsi(ペルシア語)のための廃止オプション
@@ -113,7 +125,7 @@ call plug#end()
 " 触らない。
 
 " }}}
-" encoding {{{1
+" encoding {{{2
 " 
 " 'encoding'       'enc'    内部で使用する文字コード
 "   encoding-names
@@ -139,7 +151,7 @@ set fileformats=unix,dos,mac
 
 
 " }}}
-" modeline {{{1
+" modeline {{{2
 "
 " 'modeline'        'ml'          ファイルの先頭や末尾のモードラインを許可する
 " 'modelines'       'mls'         モードラインをチェックする行数
@@ -152,7 +164,7 @@ set modeline
 set modelines=1
 
 " }}}
-" mouse {{{1
+" mouse {{{2
 "
 " 'mouse'                          マウスを使うか
 " 'mousefocus'       'mousef'      マウスの移動でキーボードのフォーカスを移動する
@@ -168,7 +180,7 @@ set mouse=n
 
 
 " }}}
-" ex {{{1
+" ex {{{2
 " 'shell'            'sh'    外部プログラム使用時のシェル
 " 'shellcmdflag'     'shcf'  シェル実行時のフラグ
 " 'shellpipe'        'sp'    |:make|の出力をエラーファイルに入れるのに使う文字
@@ -200,13 +212,13 @@ set mouse=n
 
 
 " }}}
-" editing.txt ========================================= {{{1
+" editing.txt ========================================= {{{2
 " 
 " 編集関連の設定。大小さまざま
 "
 "
 " }}}
-" buffer {{{1
+" buffer {{{2
 "
 " 'splitbelow'       'sb'          ウィンドウの横分割で新規ウィンドウを下に作る
 " 'splitkeep'        'spk'         分割ウィンドウのスクロール動作を決定する
@@ -222,7 +234,7 @@ set splitright
 set noequalalways
 
 " }}}
-" comment {{{1
+" comment {{{2
 "
 " 'comments'            'com'         コメント行の開始を示すパターン
 " 'commentstring'       'cms'         コメント用テンプレート(foldマーカー用)
@@ -232,7 +244,7 @@ set noequalalways
 
 
 " }}}
-" completion {{{1
+" completion {{{2
 "
 " 'autocomplete'         'ac'     挿入モードで自動補完を有効にする
 " 'autocompletedelay'    'acl'    入力後にメニューが表示されるまでの遅延 (msec)
@@ -270,7 +282,7 @@ set completetimeout=1000
 
 
 " }}}
-" cmdline {{{
+" cmdline {{{2
 " 'cmdheight'        'ch'    コマンドラインの行数
 " 'cedit'                    コマンドラインウィンドウを開くためのキー
 " 'cmdwinheight'     'cwh'   コマンドラインウィンドウの行数
@@ -312,7 +324,7 @@ set wildoptions=exacttext
 
 
 " }}}
-" clipboard {{{1
+" clipboard {{{2
 "
 " clipboard は unnamed(*) と unnamedplus(+) を設定する。
 " clipmethod は今は気にしない。
@@ -325,7 +337,7 @@ set clipboard=unnamed,unnamedplus
 
 
 " }}}
-" diff {{{1
+" diff {{{2
 "
 " 'diff'                           そのウィンドウで差分モードを使う
 " 'diffanchors'      'dia'         差分のアンカーを強制する {address} のリスト
@@ -334,7 +346,7 @@ set clipboard=unnamed,unnamedplus
 "
 
 " }
-" find/grep/make {{{1
+" find/grep/make {{{2
 "
 " 'findfunc'        'ffu'   |:find| コマンドで呼び出される関数
 " 'grepformat'      'gfm'   'grepprg' の出力の書式
@@ -364,7 +376,7 @@ endif
 
 
 " }}}
-" indent {{{1
+" indent {{{2
 "
 " 'autoindent'      'ai'          直前の行から新しい行のインデントを得る
 "
@@ -386,13 +398,12 @@ endif
 " 'lispwords'       'lw'          Lispでインデントする単語の定義
 "
 
-
-
+set autoindent
 
 
 
 " }}}
-" tab char {{{1
+" tab char {{{2
 "
 " 'expandtab'           'et'          <Tab>入力でスペースを入力する
 " 'shiftround'          'sr'          インデントを 'shiftwidth' の倍数に丸める
@@ -403,12 +414,12 @@ endif
 set expandtab
 set smarttab
 set shiftround
-set shiftwidth=2
-set tabstop=2
+set tabstop=4
+set shiftwidth=0
 
 
 " }}}
-" backup {{{1
+" backup {{{2
 "
 " 'backup'           'bk'          上書きした時にバックアップを作成する
 " 'backupcopy'       'bkc'         ファイルをリネームするのではなく、コピーする
@@ -419,7 +430,7 @@ set tabstop=2
 "
 
 " }}}
-" swap {{{1
+" swap {{{2
 "
 " 'directory'        'dir'         スワップファイル用のディレクトリのリスト
 " 'swapfile'         'swf'         スワップファイルを使うかどうか
@@ -431,7 +442,7 @@ set tabstop=2
 
 
 " }}}
-" undo.txt {{{1
+" undo.txt {{{2
 "
 " 'undodir'          'udir'  アンドゥファイルの保存場所
 " 'undofile'         'udf'   アンドゥ情報をファイルに保存する
@@ -445,7 +456,7 @@ set undolevels=100
 set undoreload=5000
 
 " }}}
-" tag files {{{1
+" tag files {{{2
 "
 " 'tagbsearch'     'tbs'         タグファイル内の検索に二分探索を使う
 " 'tagcase'        'tc'          タグファイル内検索で大文字小文字の扱いを指定する
@@ -461,7 +472,7 @@ set undoreload=5000
 
 
 " }}}
-" view ================================================ {{{1
+" view ================================================ {{{2
 "
 " 'ambiwidth'       'ambw'        Unicode文字の不明瞭な文字幅を決定する
 " 'emoji'           'emo'         絵文字を全角として扱う
@@ -494,6 +505,7 @@ set fillchars=vert:│,fold:\ ,foldopen:,foldclose:,foldsep:│,foldinner:
 set list
 set listchars=tab:>-
 
+
 set showbreak=>\ 
 set showcmd
 set showcmdloc=last
@@ -505,7 +517,7 @@ set showtabline=2
  
 " 
 " }}}
-" gui {{{1
+" gui {{{2
 "
 " 'columns'          'co'          画面上の桁数
 " 'lines'                          表示行数
@@ -536,7 +548,7 @@ set showtabline=2
 
 
 " }}}
-" sign.txt {{{1
+" sign.txt {{{2
 "
 " signcolumn=yes
 "
@@ -546,7 +558,7 @@ set showtabline=2
 set signcolumn=yes
 
 " }}}
-" syntax {{{1
+" syntax {{{2
 " 
 " 'background'  'bg'   "dark"/"light": ハイライト色の指定に使用
 " 'synmaxcol'   'sws'  この桁までしか構文アイテムを探さない
@@ -557,7 +569,7 @@ set syntax=ON
 
 
 " }}}
-" fold.txt {{{1
+" fold.txt {{{2
 "
 " 'foldenable'      'fen'        全ての折り畳みの開閉を設定する
 " 'foldopen'        'fdo'        折り畳みを開くことのできるコマンド
@@ -580,12 +592,12 @@ set syntax=ON
 "
 
 set foldmethod=marker
-set foldlevel=99
+set foldlevel=1
 set foldtext=MyFoldText()
 fun! MyFoldText()
   let l:first = substitute(getline(v:foldstart), '^\s*', '', '')
   let l:lines = v:foldend - v:foldstart + 1
-  let l:info  = printf("󱞤 %4d lines ", l:lines)
+  let l:info  = printf("  󱞤 %4d lines ", l:lines)
   " 󰤻
   " 󱞤
   " 
@@ -605,7 +617,7 @@ set foldcolumn=1
 " highlight FoldColumn
 
 " }}}
-" statusline {{{1
+" statusline {{{2
 " 
 " 'laststatus'  'ls'   最下ウィンドウにいつステータス行を表示するか
 " 'ruler'       'ru'   ステータスラインにカーソルが位置する場所を表示する
@@ -628,11 +640,14 @@ fun! s:get_main_mode_name()
     return 'V-LINE'
   elseif l:m =~ 'c'
     return 'COM'
+  elseif l:m =~ 't'
+    return 'TER'
+  else
+    return 'UNK:' .. l:m
   endif
 endfun
 
 fun! GetModename() abort
-
   let l:st           = ''
   let l:timeout_icon = ['󰔞 ', '󰔛 ']
   let l:main         = s:get_main_mode_name()
@@ -658,7 +673,7 @@ fun! MyStatusLine()
   "  percent
   return ' ' .. join([
         \ '%{GetModename()}',
-        \ '%t(%n)%m%r%h%w',
+        \ '<%t>(%n)%m%r%h%w',
         \ '%{exists("w:quickfix_title") ? w:quickfix_title : ""}',
         \ '%=',
         \ '%{&fileencoding}',
@@ -672,7 +687,7 @@ set statusline=%!MyStatusLine()
 
 
 " }}}
-" tabline {{{1
+" tabline {{{2
 "
 "  'tabclose'        'tcl'         タブを閉じるときにどのタブページにフォーカスするか
 "  'tabline'         'tal'         コンソールのタブページラインのカスタムフォーマット
@@ -736,7 +751,7 @@ set tabline=%!MyTabline()
 
 
 " }}}
-" im {{{1
+" im {{{2
 "
 " 'imactivatefunc'      'imaf'        X のインプットメソッドをオン/オフにする関数
 " 'imactivatekey'       'imak'        X のインプットメソッドをオンにするキー
@@ -747,9 +762,9 @@ set tabline=%!MyTabline()
 " 'imstyle'             'imst'        インプットメソッドの入力スタイルを指定する
 
 " }}}
-" other =============================================== {{{1
+" other =============================================== {{{2
 " }}}
-" print not used {{{1
+" print not used {{{2
 " 
 " 'printdevice'     'pdev'     |:hardcopy|で使うプリンタの名前
 " 'printencoding'   'penc'     印刷で使う文字コード
@@ -764,42 +779,99 @@ set tabline=%!MyTabline()
 "
 
 " }}}
-" menu {{{1
+" menu {{{2
 "
 " 'langmenu'         'lm'          メニュー表示用言語
 " 'menuitems'        'mis'         メニューに登録できる項目の最大数
 "
 
 " }}}
-" Plugins ============================================= {{{1
+" Plugins ============================================= {{{2
 
+
+" mattn/vim-sonictemplate {{{3
 let g:sonictemplate_vim_template_dir = [
   \ '$HOME/.vim/template',
   \ ]
 
+
+
+" }}}3
+
+" junegunn/fzf.vim {{{3
+set rtp+=/usr/share/fzf
+let s:fzf_prefix = 'Fzf'
+
+function! s:build_quickfix_list(lines)
+  call setqflist(map(copy(a:lines), '{ "filename": v:val, "lnum": 1 }'))
+  copen
+  cc
+endfunction
+
+let g:fzf_action = {
+  \ 'ctrl-q': function('s:build_quickfix_list'),
+  \ 'ctrl-t': 'tab split',
+  \ 'ctrl-x': 'split',
+  \ 'ctrl-v': 'vsplit'
+  \ }
+
+let g:fzf_vim = {
+  \ 'buffers_jump':        1,
+  \ 'command_prefix':      s:fzf_prefix,
+  \ 'commits_log_options': '--graph --color=always --format="%C(auto)%h%d %s %C(black)%C(bold)%cr"',
+  \ 'grep_multi_line':     1,
+  \ 'tags_command':        'ctags -R'
+  \ }
+
+
+exec 'nnoremap  <Plug>(fzf-abbrev-cmd)  :<c-u>' .. s:fzf_prefix
+
+" }}}3
+
+
+
+
 " }}}
-" Highlight =========================================== {{{1
+" Highlight =========================================== {{{2
 colorscheme desert
 
-hi! FoldColumn ctermfg=226 guifg=#eeee00
 hi! clear SignColumn
+hi! clear Conceal
+hi! clear NonText
+
+hi! FoldColumn      ctermfg=226 guifg=#eeee00
+
+
+" cursor
+hi! CursorLine                                 ctermbg=239 guibg=#444444
+hi! CursorColumn                               ctermbg=239 guibg=#444444
+hi! CursorIM                                   ctermbg=239 guibg=#888888
 
 
 
 " }}}
-
-
-" match {{{
+" match {{{2
 " 'matchpairs'       'mps'         |%|で探す文字ペア
 " 'matchtime'        'mat'         'showmatch' で対応カッコを表示する時間。0.1秒単位
 
 
 
 " }}}
-
+" tmp {{{2
 
 set synmaxcol=500
 set lazyredraw
+
+augroup DefaultSyntax
+  autocmd!
+  autocmd FileType * syntax include syntax/custom.vim
+augroup END
+
+
+set cursorline
+set textwidth=0
+set modeline
+
 
 " search
 set nohlsearch
@@ -827,17 +899,35 @@ set ttimeoutlen=50
 set hidden
 
 
-" term options {{{
+set virtualedit=block
+set nonumber
+set noruler
+set nowrap
+set scrolloff=2
+set emoji
+
+
+
+
+
+set matchpairs+=（:）,〔:〕,［:］,｛:｝,〈:〉,《:》,「:」,『:』,【:】,＜:＞
+
+" }}}
+" term options {{{2
 " 
+" t_SH カーソルの形状を設定
+" t_SI 挿入モードの開始
+" t_EI 挿入モードの終了
 
 let &t_SH = "\<Esc>[4 q"
 let &t_EI = "\<Esc>[4 q"
 let &t_SI = "\<Esc>[6 q"
 
+
+
+
 " }}}
-
-
-" function {{{1
+" function {{{2
 fun! s:show_highlight_group()
   let l:hlgroup = synIDattr(synID(line('.'), col('.'), 1), 'name')
   let l:group_chain = []
@@ -859,7 +949,7 @@ endfun
 
 
 
-" command {{{1
+" command {{{2
 
 command! -bar Hlgroup call <sid>show_highlight_group()
 
@@ -873,19 +963,18 @@ command! Gftab        tab split  | normal! gf
 
 
 
-
-
-" keymap {{{1
+" keymap {{{2
 "
 let mapleader = "\<Space>"
+
+
+" normal {{{3
+
 
 noremap   <MiddleMouse>  <Nop>
 noremap!  <MiddleMouse>  <Nop>
 
-
 nnoremap  <ESC><ESC>  :<c-u>noh<cr>
-
-
 
 " remove 
 nnoremap  x   "_x
@@ -894,12 +983,15 @@ nnoremap  X   "_X
 xnoremap  x   "_x
 xnoremap  X   "_X
 
-
 nnoremap  *   *N
 nnoremap  n   nzz
 nnoremap  N   Nzz
 
 nnoremap  gq  :<C-u>botright copen<CR>
+
+
+nnoremap  <Leader>fa  <Plug>(fzf-abbrev-cmd)
+
 
 " magic move
 nnoremap  <expr><silent>  0  col('.') == match(getline('.'), '\S')+1 ? '0' : '^'
@@ -933,36 +1025,57 @@ nmap ga <Plug>(EasyAlign)
 xmap ga <Plug>(EasyAlign)
 
 
-" operator {{{2
+" operator {{{3
 onoremap i<space> iW
 vnoremap i<space> iW
 
 
 
-" cnoremap {{{2
+" cnoremap {{{3
 
 cnoremap  <C-b>  <Left>
 cnoremap  <C-f>  <Right>
 cnoremap  <C-a>  <Home>
 cnoremap  <C-e>  <End>
 
+cabbrev         vv;    $VIMFILES
+cabbrev         vV;    $VIMFILES/vimrc
+cabbrev         vs;    $VIMFILES/plugin
+cabbrev         va;    $VIMFILES/autoload
 
-" inoremap {{{2
-
-inoremap jj <ESC>
+cabbrev <expr>  ep;    expand('%:p:h')
 
 
+" inoremap {{{3
 
-" submode {{{1
+inoremap  jj  <ESC>
+
+inoremap  <Left>   <Nop>
+inoremap  <Right>  <Nop>
+inoremap  <Left>   <Nop>
+inoremap  <Left>   <Nop>
+
+inoremap  <expr>   <C-z>=  nr2char(10)..eval(getline('.'))
+
+
+" submodes {{{3
 "
+" gjk:    gj or gk
+" tab:    gt or gT
+" buffer: <Leader>b
+" win:    <Leader>w
+" scroll: <Leader>z
+" 
+" 
+
 
 nnoremap  <plug>(keytimeout-lock)    :<c-u>set timeout<cr>
 nnoremap  <plug>(keytimeout-unlock)  :<c-u>set notimeout<cr>
 nnoremap  <plug>(keytimeout-toggle)  :<c-u>set timeout!<cr>
 
+ 
 
-" submodes {{{2
-" submode-gjk {{{3
+" submode-gjk {{{4
 "
 
 call submode#enter_with( 'gjk', 'n', '', 'gj', 'gj' )
@@ -971,7 +1084,7 @@ call submode#map(        'gjk', 'n', '', 'j',  'gj' )
 call submode#map(        'gjk', 'n', '', 'k',  'gk' )
 
 
-" submode-scroll {{{3
+" submode-scroll {{{4
 
 let s:scroll_latest = reltime()
 let s:scroll_state = 0
@@ -997,9 +1110,12 @@ fun! Do_scroll()
   endif
 endfun
 
-  
 
-call submode#enter_with( 'scroll', 'n', '',  '<Leader>zz',     '<Nop>' )
+" 
+" 3:46:39
+
+
+call submode#enter_with( 'scroll', 'n', '',  '<Leader>z',      '<Nop>' )
 call submode#map(        'scroll', 'n', '',  'z',              ':<c-u>call Do_scroll()<cr>'   )
 "    上下スクロール
 call submode#map(        'scroll', 'n', '',  'j',              '<c-e>j'                       )
@@ -1012,18 +1128,18 @@ call submode#map(        'scroll', 'n', '',  'h',              'zh<bs>'         
 call submode#map(        'scroll', 'n', 'r', '<space><space>', '<plug>(keytimeout-toggle)'    )
 
 
-" submode-win {{{3
+" submode-win {{{4
 
 " TODO: close try n count
 " 関数を連続でN回以上コールしたときにクローズする。
 " 連続で実行したときの防止
 
-" function " {{{4
+" function " {{{5
 "
 "
 
 
-" keymap " {{{4
+" keymap " {{{5
 "
 "
 
@@ -1047,7 +1163,9 @@ call submode#map(        'Win', 'n', '', 'K',         '<C-w>K'           )
 call submode#map(        'Win', 'n', '', 'L',         '<C-w>L'           )
 
 
-" submode-tab {{{3
+" submode-tab {{{4
+
+
 call submode#enter_with( 'Tab', 'n', '',  'gt',             '<Nop>'                     )
 call submode#enter_with( 'Tab', 'n', '',  'gT',             '<Nop>'                     )
 " タブ移動
@@ -1068,21 +1186,42 @@ call submode#map(        'Tab', 'n', '',  'an',             ':<c-u>tabnew<cr>'  
 call submode#map(        'Tab', 'n', 'r', '<space><space>', '<plug>(keytimeout-toggle)' )
 
 
-" submode-buffer {{{3
+" submode-buffer {{{4
 "
-"
-"
+
+let s:buffer_move_action = {
+      \ 'buffer': { 'type': 'cmd', 'prev': '', 'next': '' },
+      \ 'fold':   { 'type': 'key', 'prev': '', 'next': '' },
+      \ 'qf':     { 'type': 'cmd', 'prev': '', 'next': '' }
+      \ }
+
+
+let s:buffer_move_mode = ''
+
+fun! s:init_buffer_mode()
+  let s:buffer_move_mode = ''
+endfun
+
+fun! s:do_buffer_move()
+  
+endfun
+
+
 
 call submode#enter_with( 'Buffer', 'n', '', '<Leader>b', '<Nop>'               )
 call submode#map(        'Buffer', 'n', '', 'h',         ':<c-u>bprevious<cr>' )
 call submode#map(        'Buffer', 'n', '', 'l',         ':<c-u>bnext<cr>'     )
+call submode#map(        'Buffer', 'n', '', 'j',         '<c-e>j'              )
+call submode#map(        'Buffer', 'n', '', 'k',         '<c-y>k'              )
+call submode#map(        'Buffer', 'n', '', 'n',         '10<c-e>10j'            )
+call submode#map(        'Buffer', 'n', '', 'p',         '10<c-y>10k'            )
 
 
 
 
 
 
-" {{{
+" plugin idea {{{2
 "
 " checkbox
 "
@@ -1114,7 +1253,7 @@ call submode#map(        'Buffer', 'n', '', 'l',         ':<c-u>bnext<cr>'     )
 " markdown info box   
 " :::note \%(info\|warn\|alert)
 " :::
-" 0xDFF4CF 0xFFF0B3 0xFFDBDB
+" #DFF4CF #FFF0B3 #FFDBDB
 "
 "  
 
