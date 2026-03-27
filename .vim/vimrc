@@ -16,6 +16,7 @@ endif
 
 
 
+
 " core ================================================ {{{2
 "
 "   基本的には編集機能に影響する設定と表示見た目に影響する
@@ -38,7 +39,7 @@ set belloff=all
 set backspace=indent,eol,start
 
 
- 
+
 " }}}
 " vi {{{2
 "
@@ -83,23 +84,23 @@ syntax on
 filetype indent on
 
 call plug#begin()
-  Plug 'vim-jp/vimdoc-ja'
-  Plug 'mattn/vim-sonictemplate'
+Plug 'vim-jp/vimdoc-ja'
+Plug 'mattn/vim-sonictemplate'
 
-  Plug 'kana/vim-operator-user'
+Plug 'kana/vim-operator-user'
 
-  Plug 'kana/vim-submode'
+Plug 'kana/vim-submode'
 
-  Plug 'junegunn/vim-easy-align'
-  Plug 'junegunn/fzf.vim'
+Plug 'junegunn/vim-easy-align'
+Plug 'junegunn/fzf.vim'
 
-  " textobj-user
-  " operator-user
-  " surround
-  " expand yank
-  " notification
-  " partedit
-  " ripgrep
+" textobj-user
+" operator-user
+" surround
+" expand yank
+" notification
+" partedit
+" ripgrep
 call plug#end()
 
 " }}}
@@ -270,12 +271,12 @@ set noequalalways
 set noautocomplete
 set autocompletedelay=300
 set autocompletetimeout=100
+set completetimeout=1000
 
 set complete=.,w,w,b,u
 set completefunc=
 set completeopt=menu,preview
 
-set completetimeout=1000
 
 
 
@@ -332,7 +333,7 @@ set wildoptions=exacttext
 " 'clipboard'   'cb'   無名レジスタ操作でクリップボードを使う
 " 'clipmethod'  'cpm'  使用するクリップボードのメソッドの順序を指定する
 "
- 
+
 set clipboard=unnamed,unnamedplus
 
 
@@ -514,7 +515,7 @@ set showmatch
 set showmode
 set showtabline=2
 
- 
+
 " 
 " }}}
 " gui {{{2
@@ -791,8 +792,8 @@ set tabline=%!MyTabline()
 
 " mattn/vim-sonictemplate {{{3
 let g:sonictemplate_vim_template_dir = [
-  \ '$HOME/.vim/template',
-  \ ]
+      \ '$HOME/.vim/template',
+      \ ]
 
 
 
@@ -809,19 +810,19 @@ function! s:build_quickfix_list(lines)
 endfunction
 
 let g:fzf_action = {
-  \ 'ctrl-q': function('s:build_quickfix_list'),
-  \ 'ctrl-t': 'tab split',
-  \ 'ctrl-x': 'split',
-  \ 'ctrl-v': 'vsplit'
-  \ }
+      \ 'ctrl-q': function('s:build_quickfix_list'),
+      \ 'ctrl-t': 'tab split',
+      \ 'ctrl-x': 'split',
+      \ 'ctrl-v': 'vsplit'
+      \ }
 
 let g:fzf_vim = {
-  \ 'buffers_jump':        1,
-  \ 'command_prefix':      s:fzf_prefix,
-  \ 'commits_log_options': '--graph --color=always --format="%C(auto)%h%d %s %C(black)%C(bold)%cr"',
-  \ 'grep_multi_line':     1,
-  \ 'tags_command':        'ctags -R'
-  \ }
+      \ 'buffers_jump':        1,
+      \ 'command_prefix':      s:fzf_prefix,
+      \ 'commits_log_options': '--graph --color=always --format="%C(auto)%h%d %s %C(black)%C(bold)%cr"',
+      \ 'grep_multi_line':     1,
+      \ 'tags_command':        'ctags -R'
+      \ }
 
 
 exec 'nnoremap  <Plug>(fzf-abbrev-cmd)  :<c-u>' .. s:fzf_prefix
@@ -1060,6 +1061,15 @@ inoremap  <expr>   <C-z>=  nr2char(10)..eval(getline('.'))
 
 " submodes {{{3
 "
+" ちょこっとだけキーマップを使いたいときにいちいちSubmodeに入るのが面倒なため、
+" なるべく機能の置き換えはしたくない。  
+" 例えば、<c-w>w とかをウィンドウ移動用のSubmodeに入れる設定にしてしまうと
+" ちょこっと隣に移動してバッファを移動したいだけなのに、hjklを押したときに
+" 別のウィンドウに移動してしまって意図とは別に動作してしまう。
+"
+" ただし、タブ移動とかはウィンドウを見えていない状態から移動だから
+" 良しとする。移動したあとに確定でキーを押せばいい。
+"
 " gjk:    gj or gk
 " tab:    gt or gT
 " buffer: <Leader>b
@@ -1073,7 +1083,7 @@ nnoremap  <plug>(keytimeout-lock)    :<c-u>set timeout<cr>
 nnoremap  <plug>(keytimeout-unlock)  :<c-u>set notimeout<cr>
 nnoremap  <plug>(keytimeout-toggle)  :<c-u>set timeout!<cr>
 
- 
+
 
 " submode-gjk {{{4
 "
@@ -1203,7 +1213,7 @@ fun! s:init_buffer_mode()
 endfun
 
 fun! s:do_buffer_move()
-  
+
 endfun
 
 
@@ -1215,6 +1225,7 @@ call submode#map(        'Buffer', 'n', '', 'j',         '<c-e>j'              )
 call submode#map(        'Buffer', 'n', '', 'k',         '<c-y>k'              )
 call submode#map(        'Buffer', 'n', '', 'n',         '10<c-e>10j'            )
 call submode#map(        'Buffer', 'n', '', 'p',         '10<c-y>10k'            )
+
 
 
 
@@ -1280,5 +1291,47 @@ call abbrev#commandline#add({
       \ })
 
 
+call ch_logfile('/tmp/vim-channel.log', 'w')
+fun! s:TestOut(ch, msg) abort
+  echom 'OUT=' . string(a:msg)
+endfun
+
+fun! s:TestErr(ch, msg) abort
+  echom 'ERR=' . string(a:msg)
+endfun
+
+fun! s:TestExit(job, status) abort
+  echom 'EXIT=' . string(a:status)
+endfun
+
+fun! TestRgJob() abort
+  let g:test_job = job_start(['python3', $VIMFILES..'/script/rg_rpc_async_proc.py'], {
+        \ 'out_cb': function('s:TestOut'),
+        \ 'err_cb': function('s:TestErr'),
+        \ 'exit_cb': function('s:TestExit'),
+        \ 'out_mode': 'nl',
+        \ 'err_mode': 'nl',
+        \ })
+  call ch_sendraw(job_getchannel(g:test_job), '{"jsonrpc":"2.0","id":42,"method":"get_status","params":{"id":42}}' .. "\n")
+endfun
+
+fun! TestRgSendraw() abort
+  let req = '{"jsonrpc":"2.0","id":100,"method":"search","params":{"pattern":"TODO","path":".","extra_args":["-n"]}}' .. "\n"
+  call ch_sendraw(job_getchannel(g:test_job), req)
+endfun
+
+
+fun! TestRgSendraw_status() abort
+  let req = '{"jsonrpc":"2.0","id":200,"method":"get_status","params":{"id":100}}' .. "\n"
+  call ch_sendraw(job_getchannel(g:test_job), req)
+endfun
+
+
+fun! TestRgSendraw_getresult() abort
+  let req = '{"jsonrpc":"2.0","id":201,"method":"get_result","params":{"id":100}}' .. "\n"
+  call ch_sendraw(job_getchannel(g:test_job), req)
+endfun
+
+
 " END: {{{1
-" vim: set ft=vim
+" vim: set ft=vim expandtab tabstop=2 :
