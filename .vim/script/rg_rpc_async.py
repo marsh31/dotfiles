@@ -254,6 +254,22 @@ class SearchServer:
             if job.state == "failed":
                 result["error_message"] = job.failure_message
 
+            # オプション指定時は Quickfix 向け配列も返す（任意）
+            fmt = job.options.get("format") if isinstance(job.options, dict) else None
+            if job.state == "succeeded" and fmt == "vim_qf":
+                qf_items: List[Dict[str, Any]] = []
+                for it in job.items:
+                    qf_items.append({
+                        "filename": it.get("path", ""),
+                        "lnum": it.get("line_number"),
+                        "end_lnum": it.get("line_number"),
+                        "col": it.get("start"),
+                        "end_col": it.get("end"),
+                        "text": it.get("text", ""),
+                        "type": "I",
+                    })
+                result["items_qf"] = qf_items
+
             return result
 
     def _handle_cancel(self, params: Dict[str, Any]) -> Dict[str, Any]:

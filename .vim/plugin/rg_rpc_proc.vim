@@ -66,10 +66,39 @@
 "
 
 
-let s:rg_jobid     = 0
-let s:rg_next_id   = 1
-let s:rg_history   = []
-let s:rg_req_queue = QueueNew()
+let s:rg_jobid       = 0
+let s:rg_next_id     = 1
+let s:rg_history     = []
+
+" id -> request(dict)
+let s:pending_by_id  = {}
+let g:rg_rpc_log_level = get(g:, 'rg_rpc_log_level', 'info')
+let g:rg_rpc_debug      = get(g:, 'rg_rpc_debug', 0)
+
+" ログレベルを数値化
+let s:LOG_LEVEL = { 'debug': 10, 'info': 20, 'warn': 30, 'error': 40 }
+
+function! s:log_enabled(level) abort
+  let l:cur = get(s:LOG_LEVEL, get(g:, 'rg_rpc_log_level', 'info'), 20)
+  let l:req = get(s:LOG_LEVEL, a:level, 20)
+  return l:req >= l:cur || (a:level ==# 'debug' && get(g:, 'rg_rpc_debug', 0))
+endfunction
+
+function! s:log_debug(msg) abort
+  if s:log_enabled('debug')
+    echom '[rg-rpc][DEBUG] ' . string(a:msg)
+  endif
+endfunction
+
+function! s:log_info(msg) abort
+  if s:log_enabled('info')
+    echom '[rg-rpc][INFO] ' . string(a:msg)
+  endif
+endfunction
+
+function! s:log_error(msg) abort
+  echoerr '[rg-rpc][ERROR] ' . string(a:msg)
+endfunction
 
 fun! s:next_id()
   let l:id = s:rg_next_id
@@ -78,65 +107,89 @@ fun! s:next_id()
 endfun
 
 fun! s:send(req)
-  let l:line = json_encode(a:req).."\n"
-  echom l:line
+  let l:line = json_encode(a:req) . "\n"
+  call s:log_debug({'send': a:req})
   call ch_sendraw(job_getchannel(s:rg_jobid), l:line)
-  call QueuePush(s:rg_req_queue, a:req)
+  let s:pending_by_id[a:req.id] = a:req
 endfun
 
 fun! s:on_stdout(ch, msg) abort
   try
-    let l:response = json_decode(a:msg)
-    let l:request  = QueuePop(s:rg_req_queue)
+    let l:resp = json_decode(a:msg)
+    call s:log_debug({'recv': l:resp})
 
-    if l:response.id ==# l:request.id 
-      
-      if l:request.method ==# 'search/start'
-        call add(s:rg_history, l:response.result.search_id)
+    if type(l:resp) != type({}) || !has_key(l:resp, 'id')
+      return
+    endif
 
-      elseif l:request.method ==# 'search/status'
-        echom printf("%s is %s", l:response.result.search_id, l:response.result.state)
+    if has_key(l:resp, 'error')
+      let l:err = l:resp.error
+      call s:log_error(l:err)
+      call remove(s:pending_by_id, l:resp.id)
+      return
+    endif
 
-      elseif l:request.method ==# 'search/result'
-        let id = l:response.result.search_id
-        let res_items = l:response.result.items
-        let items = []
+    let l:req = get(s:pending_by_id, l:resp.id, v:null)
+    if l:req is v:null
+      call s:log_debug('unknown response id: ' . string(l:resp.id))
+      return
+    endif
 
-        for res_item in res_items
-          call add(items, {
-                \ 'filename': res_item.path,
-                \ 'lnum': res_item.line_number,
-                \ 'end_lnum': res_item.line_number,
-                \ 'col' : res_item.start,
-                \ 'end_col' : res_item.end,
-                \ 'text': res_item.text,
+    call remove(s:pending_by_id, l:resp.id)
+
+    if l:req.method ==# 'search/start'
+      call add(s:rg_history, l:resp.result.search_id)
+      call s:log_info(printf('started %s', l:resp.result.search_id))
+
+    elseif l:req.method ==# 'search/status'
+      call s:log_info(printf('%s is %s', l:resp.result.search_id, l:resp.result.state))
+
+    elseif l:req.method ==# 'search/result'
+      let l:id = l:resp.result.search_id
+      let l:items_qf = get(l:resp.result, 'items_qf', v:null)
+      if type(l:items_qf) == type([])
+        let l:items = l:items_qf
+      else
+        " 後方互換: サーバーが items_qf を返さない場合、自前整形
+        let l:res_items = get(l:resp.result, 'items', [])
+        let l:items = []
+        for l:res_item in l:res_items
+          call add(l:items, {
+                \ 'filename': get(l:res_item,'path',''),
+                \ 'lnum': get(l:res_item,'line_number',0),
+                \ 'end_lnum': get(l:res_item,'line_number',0),
+                \ 'col' : get(l:res_item,'start',1),
+                \ 'end_col' : get(l:res_item,'end',1),
+                \ 'text': get(l:res_item,'text',''),
                 \ 'type': 'I'
                 \ })
         endfor
-
-        let what = {
-              \ 'title': 'qf result id: '..id,
-              \ 'items': items,
-              \}
-        call setqflist([], 'r', what)
       endif
+
+      let l:what = { 'title': 'qf result id: ' . l:id, 'items': l:items }
+      call setqflist([], 'r', l:what)
+      copen
     endif
   endtry
 endfun
 
 
 fun! s:on_stderr(ch, msg) abort
-  echom 'ERR=' . string(a:msg)
+  call s:log_error(a:msg)
 endfun
 
 
 fun! s:on_exit(job, status) abort
-  echom 'EXIT=' . string(a:status)
+  call s:log_info('server exit status=' . string(a:status))
 endfun
 
 
 fun! s:init() abort
-  let s:rg_jobid = job_start(['python3', $VIMFILES..'/script/rg_rpc_async.py'], {
+  " スクリプトの場所を <sfile> から相対解決
+  let l:plugdir = fnamemodify(expand('<sfile>:p'), ':h')
+  let l:root = fnamemodify(l:plugdir, ':h')
+  let l:server = l:root . '/script/rg_rpc_async.py'
+  let s:rg_jobid = job_start(['python3', l:server], {
         \ 'out_cb': function('s:on_stdout'),
         \ 'err_cb': function('s:on_stderr'),
         \ 'exit_cb': function('s:on_exit'),
@@ -147,8 +200,18 @@ endfun
 
 
 fun! RgRpcSearch(pattern, path, args)
-  let l:extra_args = get(a:000, 0, ['-n'])
   let l:id = s:next_id()
+
+  " path の解釈: 未指定は CWD。ファイル/ディレクトリの判定。
+  let l:path = a:path ==# '' ? getcwd() : a:path
+  let l:abs = fnamemodify(l:path, ':p')
+  if isdirectory(l:abs)
+    let l:root = l:abs
+    let l:file = ''
+  else
+    let l:root = fnamemodify(l:abs, ':h')
+    let l:file = l:abs
+  endif
 
   let l:req = {
         \ 'jsonrpc': '2.0',
@@ -156,10 +219,8 @@ fun! RgRpcSearch(pattern, path, args)
         \ 'method': 'search/start',
         \ 'params': {
         \   'query': a:pattern,
-        \   'options': {},
-        \   'context': {
-        \     'root': getcwd(),
-        \   },
+        \   'options': { 'format': 'vim_qf' },
+        \   'context': { 'root': l:root, 'file': l:file },
         \ },
         \ }
 
