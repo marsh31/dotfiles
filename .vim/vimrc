@@ -1266,6 +1266,7 @@ call submode#map(        'Buffer', 'n', '', 'p',         '10<c-y>10k'           
 " :::
 " #DFF4CF #FFF0B3 #FFDBDB
 "
+" 
 "  
 
 " Keep last position.
@@ -1291,18 +1292,7 @@ call abbrev#commandline#add({
       \ })
 
 
-call ch_logfile('/tmp/vim-channel.log', 'w')
-fun! s:TestOut(ch, msg) abort
-  echom 'OUT=' . string(a:msg)
-endfun
-
-fun! s:TestErr(ch, msg) abort
-  echom 'ERR=' . string(a:msg)
-endfun
-
-fun! s:TestExit(job, status) abort
-  echom 'EXIT=' . string(a:status)
-endfun
+" call ch_logfile('/tmp/vim-channel.log', 'w')
 
 fun! TestRgJob() abort
   let g:test_job = job_start(['python3', $VIMFILES..'/script/rg_rpc_async_proc.py'], {
