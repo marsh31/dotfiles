@@ -12,6 +12,9 @@ syn match  gfmMentions    "\%(^\|\s\)\@<=@[[:alnum:]-]\+"  display
 " tag
 syn match  gfmTag         "#\@<!#\S\+\>" display
 
+" note
+syn region mdNote         start=":::note" end="^:::$"
+
 " checkbox
 " syn match  myCheckbox     ""
 "
@@ -44,6 +47,12 @@ syn match mdCheckboxText        ".\+$" contained contains=gfmMentions,gfmTag
 syn match mdCheckboxStrikeText  ".\+$" contained contains=gfmMentions,gfmTag
 
 
+
+
+""""""""""""""""""""""""""""""""""""
+" highlight
+"
+
 hi def link gfmInlineCode    Constant
 hi def link gfmMentions      markdownLinkText
 hi def link gfmTag           markdownLinkText
@@ -61,3 +70,12 @@ hi! link mdCheckboxDone       ErrorMsg
 hi! link mdCheckboxCancel     Pmenu
 hi! link mdCheckboxText       Tag
 hi! link mdCheckboxStrikeText markdownStrike 
+
+hi! link mdNote               Directory
+
+
+
+
+
+" END: {{{1
+" vim: set ft=vim expandtab tabstop=2 :
