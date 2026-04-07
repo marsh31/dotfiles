@@ -2,19 +2,32 @@
 " File:       vimrc
 " Author:     marsh31
 " Updated_at: 2026-03-21T01:00:33
+" NOTE: 
+"
+" Plug 'vim-jp/vimdoc-ja'
+" Plug 'mattn/vim-sonictemplate'
+" 
+" Plug 'kana/vim-textobj-user'
+" Plug 'kana/vim-operator-user'
+" 
+" Plug 'kana/vim-submode'
+" 
+" Plug 'junegunn/vim-easy-align'
+" Plug 'junegunn/fzf.vim'
+" 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
 scriptencoding utf-8
-
 if v:version >= 900
   let $VIMFILES = expand('<script>:p:h')
 else
   let $VIMFILES = expand('<sfile>:p:h')
 endif
 
+let $MEMOS = expand('$HOME/til/doc/')
 
-
-
+let $SWAPS = expand('$VIMFILES/swap//')
+let $BACKS = expand('$VIMFILES/back//')
 
 
 " core ================================================ {{{2
@@ -87,6 +100,7 @@ call plug#begin()
 Plug 'vim-jp/vimdoc-ja'
 Plug 'mattn/vim-sonictemplate'
 
+Plug 'kana/vim-textobj-user'
 Plug 'kana/vim-operator-user'
 
 Plug 'kana/vim-submode'
@@ -268,17 +282,29 @@ set noequalalways
 " 重くなるため、削除。
 "
 
-set noautocomplete
-set autocompletedelay=300
-set autocompletetimeout=100
-set completetimeout=1000
+
+" ここらへんは、Vim9.1くらいで追加された。
+" 互換性とかのために存在チェック
+if exists('+autocomplete')
+  set noautocomplete
+endif
+
+if exists('+autocompletedelay')
+  set autocompletedelay=300
+endif
+
+if exists('+autocompletetimeout')
+  set autocompletetimeout=100
+endif
+
+if exists('+completetimeout')
+  set completetimeout=1000
+endif
+
 
 set complete=.,w,w,b,u
 set completefunc=
 set completeopt=menu,preview
-
-
-
 
 
 
@@ -428,7 +454,19 @@ set shiftwidth=0
 " 'backupext'        'bex'         バックアップファイル用の拡張子
 " 'backupskip'       'bsk'         指定のパターンに合致するファイルはバックアップしない
 " 'writebackup'      'wb'          上書きする時にはバックアップを作る
-"
+
+if has('writebackup')
+  set writebackup
+endif
+
+call mkdir(expand($BACKS), 'p')
+exec 'set backupdir='..$BACKS
+
+set backupcopy=auto
+set backupext=~
+
+set nobackup
+
 
 " }}}
 " swap {{{2
@@ -439,8 +477,23 @@ set shiftwidth=0
 " 'updatecount'      'uc'          この回数だけ入力するとスワップファイルを更新する
 " 'updatetime'       'ut'          この時間だけ入力がなければスワップファイルを更新
 "
+" リカバリーできるようにするのがいいので、この設定はOnにする。
+" そのかわり、専用ディレクトリに保存する設定にする。
+" また、専用フォルダは ~/.vim にする。
+" これによって .gitignore でスワップファイルがリポジトリに登録されるのを避ける。
 
+set swapfile
 
+call mkdir(expand($SWAPS), 'p')
+exec 'set directory='..$SWAPS
+set updatecount=100
+set updatetime=1000
+set swapsync=fsync
+
+augroup my_swap_policy
+  autocmd!
+  autocmd BufRead,BufNewFile /tmp/*,/private/tmp/*,COMMIT_EDITMSG,MERGE_MSG setlocal noswapfile
+augroup END
 
 " }}}
 " undo.txt {{{2
@@ -674,7 +727,7 @@ fun! MyStatusLine()
   "  percent
   return ' ' .. join([
         \ '%{GetModename()}',
-        \ '<%t>(%n)%m%r%h%w',
+        \ '%t(%n)%m%r%h%w',
         \ '%{exists("w:quickfix_title") ? w:quickfix_title : ""}',
         \ '%=',
         \ '%{&fileencoding}',
@@ -696,59 +749,140 @@ set statusline=%!MyStatusLine()
 
 set tabclose=left
 
-fun! MyTabLabel(n)
+function! MyTabLabel(n) abort
   let l:buflist = tabpagebuflist(a:n)
   let l:winnr   = tabpagewinnr(a:n)
-  let l:name    = fnamemodify(bufname(l:buflist[l:winnr - 1]), ':t')
+  let l:bufnr   = l:buflist[l:winnr - 1]
+  let l:name    = fnamemodify(bufname(l:bufnr), ':t')
 
-  if l:name ==# ''
-    let l:name  = '[No Name]'
+  if empty(l:name)
+    let l:name = '[No Name]'
   endif
 
-  return printf("%2d.%s", a:n, l:name)
-endfun
-
-fun! MyTabline()
-  let l:showmax    = 5
-  let l:ctabpagenr = tabpagenr()
-  let l:tabpagemax = tabpagenr('$')
-  let s = ''
-
-  " tab count
-  let s ..= '%#TabLine#'
-  let s ..= printf(' %2d/%d ', l:ctabpagenr, tabpagenr('$'))
-
-  " tab list
-  let l:tabstart   = l:ctabpagenr
-  let l:tabend     = min([(l:ctabpagenr+l:showmax-1), tabpagenr('$')])
-  if ((l:tabend - l:tabstart + 1) < l:showmax)
-    let l:tabstart -= (l:showmax - (l:tabend - l:tabstart + 1))
-    let l:tabstart = max([l:tabstart, 1])
-  endif
-  for i in range(l:tabstart, l:tabend)
-    if i == tabpagenr()
-      let s ..= '%#TabLineSel#'
-    else
-      let s ..= '%#TabLine#'
+  " タブ内に変更ありバッファがあるか
+  let l:modified = 0
+  for l:b in l:buflist
+    if getbufvar(l:b, '&modified')
+      let l:modified = 1
+      break
     endif
-
-    let s ..= '%' .. (i) .. 'T'
-    let s ..= ' %{MyTabLabel(' .. (i) .. ')} '
   endfor
 
+  let l:win_count = len(l:buflist)
 
-  " 最後のタブページの後は TabLineFill で埋め、タブページ番号をリセットする
-  let s ..= '%#TabLineFill#%T'
+  let l:label = printf('%d:%s', a:n, l:name)
+  if l:modified
+    let l:label ..= '+'
+  endif
+  if l:win_count > 1
+    let l:label ..= printf('(%d)', l:win_count)
+  endif
 
-  " カレントタブページを閉じるボタンのラベルを右添えで作成
-  " NOTE: 使わないため削除
-  " if tabpagenr('$') > 1
-  "   let s ..= '%=%#TabLine#%999Xclose'
-  " endif
+  " 長すぎるラベルは短縮
+  let l:max_label_width = 18
+  if strdisplaywidth(l:label) > l:max_label_width
+    let l:label = strcharpart(l:label, 0, l:max_label_width - 1) .. '…'
+  endif
 
-  return s
-endfun
+  return l:label
+endfunction
+
+function! MyTablineRight() abort
+  let l:cwd  = getcwd()
+  return l:cwd
+endfunction
+
+function! MyTabline() abort
+  let l:curtab    = tabpagenr()
+  let l:lasttab   = tabpagenr('$')
+  let l:right     = MyTablineRight()
+  let l:right_w   = strdisplaywidth(' ' .. l:right .. ' ')
+  let l:total_w   = &columns
+
+  " 右側のために最低限残したい幅
+  let l:right_reserve = max([25, l:right_w])
+
+  " 左側に使える幅
+  let l:left_limit = l:total_w - l:right_reserve
+  if l:left_limit < 20
+    let l:left_limit = 20
+  endif
+
+  let l:s = ''
+
+  " 左端: 現在/総数
+  let l:prefix = printf(' %d/%d )', l:curtab, l:lasttab)
+  let l:s ..= '%#TabLine#' .. l:prefix
+  let l:used = strdisplaywidth(l:prefix)
+
+  " まず現在タブを中心に表示候補を作る
+  let l:start = l:curtab
+  let l:end   = l:curtab
+
+  while 1
+    let l:changed = 0
+
+    " 左へ広げる
+    if l:start > 1
+      let l:test = ' ' .. MyTabLabel(l:start - 1) .. ' '
+      if l:used + strdisplaywidth(l:test) <= l:left_limit
+        let l:start -= 1
+        let l:used += strdisplaywidth(l:test)
+        let l:changed = 1
+      endif
+    endif
+
+    " 右へ広げる
+    if l:end < l:lasttab
+      let l:test = ' ' .. MyTabLabel(l:end + 1) .. ' '
+      if l:used + strdisplaywidth(l:test) <= l:left_limit
+        let l:end += 1
+        let l:used += strdisplaywidth(l:test)
+        let l:changed = 1
+      endif
+    endif
+
+    if !l:changed
+      break
+    endif
+  endwhile
+
+  " 左省略記号
+  if l:start > 1
+    let l:s ..= '%#TabLine#'
+    let l:s ..= ' … '
+  endif
+
+  " タブ一覧
+  for i in range(l:start, l:end)
+    let l:s ..= (i == l:curtab) ? '%#TabLineSel#' : '%#TabLine#'
+    let l:s ..= '%' .. i .. 'T'
+    let l:s ..= ' ' .. MyTabLabel(i) .. ' '
+  endfor
+
+  " 右省略記号
+  if l:end < l:lasttab
+    let l:s ..= '%#TabLine#'
+    let l:s ..= ' … '
+  endif
+
+  " 左右分離
+  let l:s ..= '%#TabLineFill#%T%='
+
+  " 右側
+  let l:s ..= '%#TabLine#'
+  let l:s ..= ' ( ' .. l:right .. ' '
+
+  return l:s
+endfunction
+
 set tabline=%!MyTabline()
+
+
+
+
+
+
 
 
 " }}}
@@ -908,10 +1042,14 @@ set scrolloff=2
 set emoji
 
 
-
-
-
 set matchpairs+=（:）,〔:〕,［:］,｛:｝,〈:〉,《:》,「:」,『:』,【:】,＜:＞
+
+
+set pumheight=10
+
+
+
+
 
 " }}}
 " term options {{{2
@@ -961,6 +1099,8 @@ command! Gfsp         split      | normal! gf
 command! Gfvs         vert split | normal! gf
 command! Gftab        tab split  | normal! gf
 
+
+command! Ls -nargs=* -complete=file Ls echo globpath('./<args>', '*', 1)
 
 
 
@@ -1079,9 +1219,9 @@ inoremap  <expr>   <C-z>=  nr2char(10)..eval(getline('.'))
 " 
 
 
-nnoremap  <plug>(keytimeout-lock)    :<c-u>set timeout<cr>
-nnoremap  <plug>(keytimeout-unlock)  :<c-u>set notimeout<cr>
-nnoremap  <plug>(keytimeout-toggle)  :<c-u>set timeout!<cr>
+nnoremap  <plug>(keytimeout-lock)    :<c-u>set timeout<cr>:<c-u>redrawstatus<cr>
+nnoremap  <plug>(keytimeout-unlock)  :<c-u>set notimeout<cr>:<c-u>redrawstatus<cr>
+nnoremap  <plug>(keytimeout-toggle)  :<c-u>set timeout!<cr>:<c-u>redrawstatus<cr>
 
 
 
@@ -1292,35 +1432,9 @@ call abbrev#commandline#add({
       \ })
 
 
+" NOTE: Vimのチャンネル周りの動作のデバッグのため
+" 普通は不要
 " call ch_logfile('/tmp/vim-channel.log', 'w')
-
-fun! TestRgJob() abort
-  let g:test_job = job_start(['python3', $VIMFILES..'/script/rg_rpc_async_proc.py'], {
-        \ 'out_cb': function('s:TestOut'),
-        \ 'err_cb': function('s:TestErr'),
-        \ 'exit_cb': function('s:TestExit'),
-        \ 'out_mode': 'nl',
-        \ 'err_mode': 'nl',
-        \ })
-  call ch_sendraw(job_getchannel(g:test_job), '{"jsonrpc":"2.0","id":42,"method":"get_status","params":{"id":42}}' .. "\n")
-endfun
-
-fun! TestRgSendraw() abort
-  let req = '{"jsonrpc":"2.0","id":100,"method":"search","params":{"pattern":"TODO","path":".","extra_args":["-n"]}}' .. "\n"
-  call ch_sendraw(job_getchannel(g:test_job), req)
-endfun
-
-
-fun! TestRgSendraw_status() abort
-  let req = '{"jsonrpc":"2.0","id":200,"method":"get_status","params":{"id":100}}' .. "\n"
-  call ch_sendraw(job_getchannel(g:test_job), req)
-endfun
-
-
-fun! TestRgSendraw_getresult() abort
-  let req = '{"jsonrpc":"2.0","id":201,"method":"get_result","params":{"id":100}}' .. "\n"
-  call ch_sendraw(job_getchannel(g:test_job), req)
-endfun
 
 
 " END: {{{1
